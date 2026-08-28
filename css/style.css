@@ -1093,3 +1093,116 @@ a.logotype { min-height: 44px; }
   color: var(--attention-text);
   font-weight: 500;
 }
+
+/* ── דף "מי עומד מאחורי זה" ────────────────────────────────
+   דף אישי, גוף ראשון. הכותרות ממורכזות עם הסימן מעליהן —
+   כלל הבעלים (28/08): אין תוכן בצד שמתמשק איתן.
+   הסיפור הוא הבלוק היחיד בגופן גדול; כל השאר נשען עליו. */
+.about {
+  max-width: 660px;
+  gap: 0;
+  align-items: center;
+  padding-bottom: 88px;
+}
+/* בעטיפת flex ממורכזת כל מיכל צריך רוחב מפורש, אחרת הוא
+   מתכווץ לרוחב התוכן שלו (אותו באג של .container ו-.page-main) */
+.about > * { width: 100%; }
+.about-mark {
+  width: 58px;
+  height: 58px;
+  display: block;
+  margin: 0 auto 16px;
+}
+.about h1 { margin-bottom: 14px; }
+.about .lead { max-width: 52ch; margin: 0 auto 34px; }
+
+/* הסיפור — כרטיס בעומק של כרטיסי היכולות, טקסט גדול ממה שסביבו */
+.about-story {
+  background: linear-gradient(168deg, #FFFFFF 0%, #FBFAF7 62%, #F5F3EE 100%);
+  border-radius: 24px;
+  padding: 34px 32px;
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(21, 18, 15, 0.05);
+}
+.about-story p {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.75;
+  color: var(--ink-mid);
+  text-align: center;
+}
+
+.about-block {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 42px;
+  margin-top: 42px;
+  border-top: 1px solid var(--line);
+}
+.about-block h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 1.3;
+  text-align: center;
+}
+.about-block p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--ink-mid);
+}
+.about-list {
+  margin: 0;
+  padding-inline-start: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--ink-mid);
+}
+.about-list li { display: flex; gap: 13px; align-items: baseline; }
+/* נקודה בצבע קול המאמן — הדף הזה מדבר אל מאמן */
+.about-list li::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--trainer);
+  flex: none;
+  transform: translateY(-3px);
+}
+.about-list strong { color: var(--ink); font-weight: 600; }
+.about-close { gap: 14px; }
+.about-close .mini-note { font-size: 17px; padding-inline: 0; }
+
+@media (max-width: 560px) {
+  .about { padding-bottom: 64px; }
+  .about-story { padding: 26px 20px; }
+  .about-story p { font-size: 17.5px; }
+  .about-block { padding-top: 34px; margin-top: 34px; }
+  .about-block h2 { font-size: 23px; }
+}
+
+/* קישור עדין לדף האישי, מתחת לכפתור בסיום דף הבית */
+.closing-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: -8px;
+  font-size: 15px;
+  color: var(--dark-soft);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(169, 163, 153, 0.5);
+}
+.closing-link:hover {
+  color: #FFFFFF;
+  text-decoration-color: rgba(255, 255, 255, 0.7);
+}
