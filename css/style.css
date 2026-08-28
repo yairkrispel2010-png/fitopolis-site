@@ -1207,25 +1207,24 @@ a.logotype { min-height: 44px; }
   text-decoration-color: rgba(255, 255, 255, 0.7);
 }
 
-/* ── תפריט הניווט (28/08, גרסה שלישית והסופית) ──────────────
-   שלושה קישורי טקסט שקטים בפינה הימנית העליונה, בלי מסגרת
-   ובלי רקע. הלוגו נשאר ממורכז. הגלולה המקובצת והכפתור נפסלו:
-   "מי עומד מאחורי זה" ארוך מדי לתפריט, ולכן התווית קוצרה
-   ל"עליי" — שם הדף וכתובתו לא השתנו.
+/* ── תפריט הניווט (28/08, גרסה רביעית) ─────────────────────
+   שורה משלו מתחת ללוגו, ממורכזת (הכרעת בעלים: "זה קטן ולא
+   ממורכז"). קודם הוא היה צמוד לימין וקטן.
+   התווית באמצע מקוצרת ל"עליי" — שם הדף וכתובתו לא השתנו.
    מחלקה נפרדת מ-.topbar-nav: דף ההזמנה לא מושפע. */
 .topbar .site-nav {
-  grid-column: 1;
-  grid-row: 1;              /* בלי זה הרשת דוחפת אותו לשורה שנייה */
-  justify-self: start;
+  grid-column: 1 / -1;      /* שורה שלמה, לא עמודה אחת ברשת */
+  grid-row: 2;
+  justify-self: center;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 26px;
 }
 .site-nav a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 500;
   color: var(--ink-soft);
   white-space: nowrap;
@@ -1237,29 +1236,13 @@ a.logotype { min-height: 44px; }
   color: var(--trainer-text);
   font-weight: 600;
   text-decoration: underline;
-  text-underline-offset: 6px;
+  text-underline-offset: 7px;
   text-decoration-thickness: 2px;
 }
 
 @media (max-width: 560px) {
-  .topbar-menu {
-    grid-template-columns: 1fr auto 1fr;
-    justify-items: stretch;
-    gap: 8px;
-    padding-block: 12px 8px;
-  }
-  .topbar-menu .logotype { grid-column: 2; justify-self: center; }
-  .topbar-menu .site-nav { grid-column: 1; justify-self: start; }
-  .topbar .site-nav { gap: 14px; }
-  .site-nav a { font-size: 14px; }
-}
-
-/* מתחת ל-370px אין מקום ללוגו ולתפריט באותה שורה — התפריט
-   יורד לשורה שנייה, צמוד לימין. */
-@media (max-width: 370px) {
-  .topbar-menu { grid-template-columns: 1fr; }
-  .topbar-menu .logotype { grid-column: 1; grid-row: 1; justify-self: center; }
-  .topbar-menu .site-nav { grid-column: 1; grid-row: 2; justify-self: start; }
+  .topbar .site-nav { gap: 22px; }
+  .site-nav a { font-size: 16.5px; }
 }
 
 /* ── מעבר בין דפים (28/08) ─────────────────────────────────
@@ -1279,4 +1262,11 @@ a.logotype { min-height: 44px; }
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*) { animation: none !important; }
+}
+
+/* סרגל דו-שורתי (לוגו מעל, תפריט מתחת) — ריפוד מהודק כדי
+   שהראש לא יבלע חלק מהמסך. דף ההזמנה חד-שורתי ולא מקבל את זה. */
+.topbar-menu { gap: 4px; padding-block: 22px 14px; }
+@media (max-width: 560px) {
+  .topbar-menu { gap: 2px; padding-block: 12px 6px; }
 }
