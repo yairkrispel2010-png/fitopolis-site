@@ -344,28 +344,45 @@ img, svg { max-width: 100%; }
 .ps-chip-swap > * { grid-area: 1 / 1; text-align: center; }
 /* בר הניווט — גלולה עם חמישה טאבים; הפעיל הוא גלולה מלאה עם תווית
    (כמו bottom_nav_with_fab.dart: רדיוס 30, פריט פעיל ברדיוס 22 + תווית 10px/700) */
+/* הגלולה מכווצת סביב הטאב הפעיל בלבד, ונפתחת בריחוף.
+   מונפש רוחב ההורה — הטאבים עצמם לא משנים גודל, רק נחשפים. */
 .ps-nav {
   margin-top: auto;
+  margin-inline: auto;
+  width: 56px;
+  overflow: hidden;
   border-radius: 30px;
-  background: var(--dark);
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(20, 20, 18, 0.12);
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 6px;
+  transition: width 0.42s cubic-bezier(0.22, 0.8, 0.35, 1);
 }
+.phone-frame:hover .ps-nav,
+.ps-nav.is-open { width: 200px; }
+/* מכווץ: רק הטאב הפעיל נראה. בריחוף — כולם נפתחים.
+   בדיוק כמו `show = navExpanded || isActive` ב-bottom_nav_with_fab.dart */
 .ps-tab {
   display: flex;
+  flex: none;
+  box-sizing: border-box;
   flex-direction: column;
   align-items: center;
   gap: 3px;
   padding: 7px 9px;
   border-radius: 22px;
   position: relative;
+  transition: opacity 0.3s ease;
 }
-.ps-tab svg { width: 18px; height: 18px; display: block; }
+.ps-tab.is-hidden { opacity: 0; }
+.phone-frame:hover .ps-tab.is-hidden,
+.ps-nav.is-open .ps-tab.is-hidden { opacity: 1; transition-delay: 0.08s; }
+.ps-tab svg { width: 18px; height: 18px; display: block; flex: none; }
 .ps-tab.active {
   background: var(--trainer);
-  padding-inline: 11px;
+  padding-inline: 12px;
 }
 .ps-tab.active .ps-tab-label {
   font-size: 9.5px;
@@ -375,13 +392,13 @@ img, svg { max-width: 100%; }
 }
 .ps-tab .badge {
   position: absolute;
-  top: 3px;
-  inset-inline-end: 4px;
+  top: 4px;
+  inset-inline-end: 5px;
   width: 7px;
   height: 7px;
   border-radius: 999px;
   background: var(--trainee);
-  border: 1.5px solid var(--dark);
+  border: 1.5px solid var(--surface-soft);
   opacity: 0;
 }
 .ps-toast {
@@ -768,6 +785,9 @@ img, svg { max-width: 100%; }
     animation: none !important;
   }
   .demo-stat-new { opacity: 0 !important; }
+  /* בלי תנועה — הבר פשוט פתוח, בלי הנפשה */
+  .ps-nav { width: 200px !important; transition: none; }
+  .ps-tab.is-hidden { opacity: 1; transition: none; }
   .logotype .o-mark, .logotype:hover .o-mark { transition: none; transform: none; }
   .demo-chip-new, .demo-toast, .demo-badge { opacity: 0 !important; }
   .demo-card { opacity: 1 !important; max-height: none !important; }

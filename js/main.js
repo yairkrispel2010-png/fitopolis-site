@@ -59,6 +59,25 @@
     schedule();
   }
 
+  // ── בר הניווט בטלפון: "הצצת גילוי" + פתיחה במגע ──────────
+  // מקבילה לאותה התנהגות באפליקציה (§2.6.8): הבר נפתח לרגע בכניסה
+  // כדי שיראו שיש שם עוד טאבים, ואז מתכווץ. בעכבר הריחוף פותח אותו.
+  var psNav = document.querySelector('.ps-nav');
+  if (psNav && !reduceMotion) {
+    var peekTimer = setTimeout(function () {
+      psNav.classList.add('is-open');
+      setTimeout(function () { psNav.classList.remove('is-open'); }, 1900);
+    }, 1600);
+
+    if (!finePointer) {
+      // בלי עכבר אין ריחוף — נגיעה פותחת וסוגרת
+      psNav.addEventListener('click', function () {
+        clearTimeout(peekTimer);
+        psNav.classList.toggle('is-open');
+      });
+    }
+  }
+
   // ── חשיפה בגלילה ──
   var revealEls = Array.prototype.slice.call(document.querySelectorAll('.scroll-reveal'));
   if (reduceMotion || !('IntersectionObserver' in window)) {
