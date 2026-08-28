@@ -745,19 +745,25 @@ img, svg { max-width: 100%; }
   font-weight: 500;
   color: var(--ink-soft);
 }
-/* הקוד הוא הדבר היחיד שהמתאמן צריך לקחת מהדף — הוא הכי בולט.
-   כתום כטקסט על לבן נותן 2.4:1 בלבד; לפי §2 🎨 צבע-תפקיד יושב על
-   מילוי מלא, והטקסט עליו הוא הדיו הכהה #331B04 — 5.85:1. */
+/* הקוד בדיו כהה — לפי הכלל: צבע-תפקיד חי על סמנים, לא על טקסט
+   ולא על רקעים. הכתום נשאר כסמן מתחת. 15.8:1 — הכי קריא בדף. */
 .invite-code {
   font-family: var(--font-digits);
-  font-size: clamp(34px, 8vw, 46px);
+  font-size: clamp(36px, 8.5vw, 50px);
   line-height: 1.1;
   letter-spacing: 0.14em;
+  color: var(--ink);
+  position: relative;
+  padding-bottom: 12px;
+}
+.invite-code::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  inset-inline: 8%;
+  height: 4px;
+  border-radius: 999px;
   background: var(--trainee);
-  color: var(--trainee-ink);
-  border-radius: 18px;
-  padding: 10px 22px 12px;
-  display: inline-block;
 }
 .invite-copy {
   appearance: none;
@@ -931,48 +937,83 @@ a.logotype { min-height: 44px; }
 }
 
 /* ── עמודים משפטיים (הצהרת נגישות וכו') ─────────────────── */
-.legal { max-width: 760px; text-align: start; }
+.legal {
+  max-width: 720px;
+  text-align: start;
+  gap: 0;                 /* המרווח מנוהל בתוך הסקשנים, לא ברווח אחיד */
+  padding-bottom: 96px;
+}
 .legal h1 { text-align: center; }
-.legal .lead { text-align: center; }
-.legal section { display: flex; flex-direction: column; gap: 14px; }
+.legal .lead {
+  text-align: center;
+  margin-block: 14px 8px;
+  max-width: 54ch;
+  margin-inline: auto;
+}
+.legal section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 44px;
+  margin-top: 44px;
+  border-top: 1px solid var(--line);
+}
 .legal h2 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 24px;
+  font-size: 25px;
+  line-height: 1.3;
 }
-.legal p { margin: 0; font-size: 16.5px; line-height: 1.7; color: var(--ink-mid); }
+.legal p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--ink-mid);
+  max-width: 62ch;
+}
 .legal ul {
   margin: 0;
   padding-inline-start: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  font-size: 16.5px;
-  line-height: 1.65;
+  gap: 18px;
+  font-size: 17px;
+  line-height: 1.75;
   color: var(--ink-mid);
+  max-width: 62ch;
 }
-.legal li { display: flex; gap: 11px; align-items: baseline; }
+.legal li { display: flex; gap: 13px; align-items: baseline; }
 .legal li::before {
   content: "";
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: var(--trainer);
+  background: var(--trainee);
   flex: none;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
+.legal li strong { color: var(--ink); }
+.legal .contact-card { margin-top: 4px; }
+.legal .mini-note { text-align: start; padding-inline: 0; }
 .legal-meta {
   margin: 0;
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 10px 18px;
-  font-size: 16px;
+  gap: 14px 22px;
+  font-size: 16.5px;
+  line-height: 1.6;
   background: var(--surface);
   border-radius: 20px;
-  padding: 22px 24px;
+  padding: 26px 28px;
   box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 .legal-meta dt { font-weight: 600; color: var(--ink); }
 .legal-meta dd { margin: 0; color: var(--ink-soft); }
+
+@media (max-width: 560px) {
+  .legal section { padding-top: 34px; margin-top: 34px; }
+  .legal-meta { grid-template-columns: 1fr; gap: 4px 0; }
+  .legal-meta dd { margin-bottom: 12px; }
+}
