@@ -1,0 +1,588 @@
+/* ═══════════════════════════════════════════════════════════
+   פיטופוליס · FITOPOLIS — fitopolis.co.il
+   השפה הנעולה: Fredoka (כותרות) · Rubik (טקסט) · Secular One (ספרות)
+   פלטת 7 התפקידים — אותם הקסים בבהיר ובכהה (PROJECT-STATE §2 🎨)
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* צבעי התפקידים */
+  --trainer: #12939D;        /* קול המאמן */
+  --trainer-deep: #0E767E;
+  --trainer-tint: #E7F2F3;
+  --trainee: #F07C1A;        /* קול המתאמן */
+  --trainee-ink: #331B04;    /* טקסט על כתום — כהה, לא לבן */
+  --attention: #C08A18;      /* דורש טיפול */
+  --attention-tint: #F6EFDD;
+  --positive: #37945F;       /* מגמה/תוצאה חיובית */
+  --positive-tint: #E9F3EC;
+  --negative: #CC5555;       /* שלילי */
+  --system: #B0599A;         /* מערכת */
+  --neutral: #8A8A8A;
+
+  /* משטחים ודיו */
+  --bg: #FBFAF7;
+  --surface: #FFFFFF;
+  --surface-soft: #F7F5F1;
+  --chip-bg: #F3EFE9;
+  --ink: #221E1A;
+  --ink-soft: #5C564E;
+  --ink-mid: #3C3830;
+  --line: #EFEAE2;
+  --dark: #211D1A;
+  --dark-soft: #B8B2A9;
+
+  --font-display: "Fredoka", "Rubik", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Rubik", "Segoe UI", system-ui, sans-serif;
+  --font-digits: "Secular One", "Rubik", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--trainer); text-decoration: none; }
+a:hover { color: var(--trainer-deep); }
+
+img, svg { max-width: 100%; }
+
+.container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* ── לוגוטייפ ─────────────────────────────────────────────── */
+.logotype {
+  display: inline-flex;
+  align-items: center;
+  direction: ltr;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 28px; /* מינימום 28px — כלל הלוגו הנעול */
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.logotype .fit { color: var(--trainer); }
+.logotype .polis { color: var(--trainee); }
+.logotype .o-mark {
+  width: 0.78em;
+  height: 0.78em;
+  margin: 0 0.03em;
+}
+
+/* ── סרגל עליון ───────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 22px;
+}
+.topbar a.nav-link {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.topbar a.nav-link:hover { color: var(--ink); }
+
+/* ── כפתורים — גלולות, כמו שפת הצורה ─────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 0 34px;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 600;
+  transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+}
+.btn-primary { background: var(--trainer); color: #FFFFFF; }
+.btn-primary:hover {
+  background: var(--trainer-deep);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(18, 147, 157, 0.28);
+}
+.btn-ghost { border: 1.5px solid #FFFFFF; color: #FFFFFF; }
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+.hero-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  padding-block: 48px 88px;
+}
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--chip-bg);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.hero-chip .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--attention);
+}
+.hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: 1.14;
+}
+.hero .sub {
+  font-size: clamp(17px, 1.6vw, 19px);
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 540px;
+}
+.hero .note { font-size: 14px; color: var(--neutral); }
+
+/* טבעות הרקע המרחפות */
+.ring-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ring-layer .ring, .ring-layer .blob { position: absolute; }
+.ring-layer .blob { border-radius: 999px; }
+
+/* ── הטלפון ───────────────────────────────────────────────── */
+.phone-col {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  perspective: 900px;
+}
+.phone-frame {
+  width: 300px;
+  background: var(--dark);
+  border-radius: 42px;
+  padding: 10px;
+  transition: transform 0.12s ease-out;
+  will-change: transform;
+}
+.phone-screen {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: 34px;
+  padding: 20px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 560px;
+}
+.phone-caption { font-size: 13px; color: var(--neutral); }
+
+.ps-head { display: flex; justify-content: space-between; align-items: center; }
+.ps-greeting { font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+.ps-avatar { width: 30px; height: 30px; border-radius: 999px; background: var(--chip-bg); }
+.ps-stats { display: flex; gap: 8px; }
+.ps-stat {
+  flex: 1;
+  background: var(--surface-soft);
+  border-radius: 16px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ps-stat .num { font-family: var(--font-digits); font-size: 22px; color: var(--ink); }
+.ps-stat .lbl { font-size: 11.5px; color: var(--neutral); }
+.ps-section { font-size: 13px; font-weight: 600; margin-top: 4px; }
+.ps-card {
+  background: var(--surface-soft);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.ps-card .marker {
+  width: 4px;
+  align-self: stretch;
+  border-radius: 999px;
+  flex: none;
+}
+.marker-trainer { background: var(--trainer); }
+.marker-trainee { background: var(--trainee); }
+.ps-card .t1 { font-size: 13.5px; font-weight: 600; }
+.ps-card .t2 { font-size: 12px; color: var(--ink-soft); }
+.ps-card .col { display: flex; flex-direction: column; gap: 2px; }
+.ps-chip {
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.chip-positive { background: var(--positive-tint); color: var(--positive); }
+.chip-attention { background: var(--attention-tint); color: var(--attention); }
+.ps-chip-swap { position: relative; margin-inline-start: auto; }
+.ps-chip-swap .over {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  padding: 0;
+}
+.ps-nav {
+  margin-top: auto;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 18px;
+}
+.ps-nav .nd { width: 9px; height: 9px; border-radius: 999px; background: #6B665F; position: relative; }
+.ps-nav .nd.active { background: var(--trainee); }
+.ps-nav .badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--trainee);
+  opacity: 0;
+}
+.ps-toast {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translate(-50%, -18px);
+  opacity: 0;
+  background: var(--dark);
+  color: #FFFFFF;
+  border-radius: 999px;
+  padding: 7px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* ── סקשנים ───────────────────────────────────────────────── */
+.section-title {
+  margin: 0 0 40px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(27px, 3vw, 34px);
+}
+.features {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding-block: 76px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.feat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg);
+  border-radius: 22px;
+  padding: 22px 20px;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.feat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(34, 30, 26, 0.08);
+}
+.feat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: var(--trainer-tint);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.feat-card h3 { margin: 0; font-size: 17px; font-weight: 600; font-family: var(--font-body); }
+.feat-card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }
+
+.sides { padding-block: 76px; }
+.sides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.side-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 30px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.side-card .voice-dot { width: 46px; height: 46px; border-radius: 999px; }
+.voice-trainer { background: var(--trainer); }
+.voice-trainee { background: var(--trainee); }
+.side-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+}
+.side-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 16px;
+  color: var(--ink-mid);
+}
+.side-card li { display: flex; gap: 10px; align-items: baseline; }
+.side-card li::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex: none;
+  transform: translateY(-2px);
+}
+.side-trainer li::before { background: var(--trainer); }
+.side-trainee li::before { background: var(--trainee); }
+
+/* ── סגירה + פוטר ─────────────────────────────────────────── */
+.closing {
+  background: var(--dark);
+  color: #FFFFFF;
+  padding-block: 72px 40px;
+}
+.closing-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 56px;
+  text-align: center;
+}
+.closing h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(25px, 3vw, 30px);
+}
+.closing .sub { font-size: 16px; color: var(--dark-soft); }
+.footer-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  padding-top: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-bar .links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 14px;
+  color: var(--dark-soft);
+}
+.footer-bar .links a { color: var(--dark-soft); }
+.footer-bar .links a:hover { color: #FFFFFF; }
+
+/* ── דף תמיכה + 404 ──────────────────────────────────────── */
+.page-main {
+  max-width: 660px;
+  margin-inline: auto;
+  padding: 40px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.page-main h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(34px, 4vw, 42px);
+}
+.page-main .lead { font-size: 18px; line-height: 1.65; color: var(--ink-soft); }
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.contact-card .icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  background: var(--trainer-tint);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.contact-card .label { font-size: 17px; font-weight: 600; }
+.contact-card .value { direction: ltr; font-size: 16px; color: var(--ink-soft); }
+.mini-note { font-size: 14px; color: var(--neutral); }
+.faq-placeholder {
+  border: 1.5px dashed #D8D2C8;
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  text-align: center;
+  color: var(--neutral);
+}
+.faq-placeholder .t {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+}
+.simple-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  padding-block: 22px;
+  font-size: 14px;
+  color: var(--neutral);
+}
+.simple-footer .container { display: flex; justify-content: space-between; align-items: center; }
+.simple-footer a { color: var(--neutral); }
+.simple-footer a:hover { color: var(--ink); }
+.page-wrap { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ═══ אנימציות ═══════════════════════════════════════════── */
+
+/* כניסה מדורגת בטעינה (Hero) */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal { animation: fadeUp 0.7s cubic-bezier(0.22, 0.8, 0.35, 1) both; }
+.reveal.d1 { animation-delay: 0.08s; }
+.reveal.d2 { animation-delay: 0.16s; }
+.reveal.d3 { animation-delay: 0.2s; }
+.reveal.d4 { animation-delay: 0.24s; }
+.reveal.d5 { animation-delay: 0.32s; }
+
+/* חשיפה בגלילה */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 0.8, 0.35, 1), transform 0.7s cubic-bezier(0.22, 0.8, 0.35, 1);
+}
+.scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* ריחוף הטבעות */
+@keyframes driftA { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes driftB { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+.drift-a { animation: driftA 9s ease-in-out infinite; }
+.drift-b { animation: driftB 12s ease-in-out -4s infinite; }
+.drift-c { animation: driftA 11s ease-in-out -7s infinite; }
+
+/* נשימת הטבעת בסגירה */
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+.breathe { animation: breathe 5s ease-in-out infinite; }
+
+/* דמו הטלפון — לופ 12 שניות: בוקר של מאמן */
+@keyframes demoChipOld { 0%, 16% { opacity: 1; } 20%, 96% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes demoChipNew {
+  0%, 16% { opacity: 0; transform: scale(0.7); }
+  21% { opacity: 1; transform: scale(1.12); }
+  25%, 94% { opacity: 1; transform: scale(1); }
+  98%, 100% { opacity: 0; transform: scale(0.7); }
+}
+@keyframes demoCard {
+  0%, 36% { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; transform: translateY(-10px); }
+  43%, 93% { opacity: 1; max-height: 90px; padding-top: 12px; padding-bottom: 12px; transform: translateY(0); }
+  99%, 100% { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; transform: translateY(-10px); }
+}
+@keyframes demoToast {
+  0%, 58% { opacity: 0; transform: translate(-50%, -18px); }
+  63%, 77% { opacity: 1; transform: translate(-50%, 0); }
+  82%, 100% { opacity: 0; transform: translate(-50%, -18px); }
+}
+@keyframes demoBadge {
+  0%, 62% { opacity: 0; transform: scale(0); }
+  66%, 94% { opacity: 1; transform: scale(1); }
+  98%, 100% { opacity: 0; transform: scale(0); }
+}
+.demo-chip-old { animation: demoChipOld 12s ease-in-out infinite; }
+.demo-chip-new { animation: demoChipNew 12s ease-in-out infinite; }
+.demo-card { overflow: hidden; animation: demoCard 12s ease-in-out infinite; }
+.demo-toast { animation: demoToast 12s ease-in-out infinite; }
+.demo-badge { animation: demoBadge 12s ease-in-out infinite; }
+
+/* ═══ רספונסיב ═══════════════════════════════════════════── */
+@media (max-width: 920px) {
+  .hero-inner { flex-direction: column; align-items: flex-start; gap: 44px; padding-block: 28px 56px; }
+  .phone-col { align-self: center; }
+  .hero-copy .btn { align-self: stretch; }
+  .footer-bar { flex-direction: column; }
+}
+
+/* ═══ הפחתת תנועה — נגישות ═══════════════════════════════── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal, .drift-a, .drift-b, .drift-c, .breathe,
+  .demo-chip-old, .demo-chip-new, .demo-card, .demo-toast, .demo-badge {
+    animation: none !important;
+  }
+  .demo-chip-new, .demo-toast, .demo-badge { opacity: 0 !important; }
+  .demo-card { opacity: 1 !important; max-height: none !important; }
+  .scroll-reveal { opacity: 1; transform: none; transition: none; }
+  .phone-frame { transition: none; }
+}

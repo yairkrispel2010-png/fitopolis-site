@@ -1,0 +1,7 @@
+# תוצר מורכב של הקנבס — נבנה מחדש מקבצי design/ בכל שינוי
+design/fitopolis-site.html
+design/_extract*/
+
+# מערכת
+Thumbs.db
+.DS_Store

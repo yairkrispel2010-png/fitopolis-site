@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Secular+One&display=swap">
+  <style>
+    body { margin: 0; background: #211D1A; font-family: Rubik, "Segoe UI", system-ui, sans-serif; }
+    a { color: #12939D; text-decoration: none; }
+    a:hover { color: #0E767E; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes driftA { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    .reveal { animation: fadeUp 0.7s cubic-bezier(0.22, 0.8, 0.35, 1) both; }
+    .drift-a { animation: driftA 9s ease-in-out infinite; }
+    .drift-b { animation: driftA 12s ease-in-out -5s infinite; }
+    .breathe { animation: breathe 5s ease-in-out infinite; }
+    @keyframes demoChipOld { 0%, 16% { opacity: 1; } 20%, 96% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes demoChipNew { 0%, 16% { opacity: 0; transform: scale(0.7); } 21% { opacity: 1; transform: scale(1.12); } 25%, 94% { opacity: 1; transform: scale(1); } 98%, 100% { opacity: 0; transform: scale(0.7); } }
+    @keyframes demoCard { 0%, 36% { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; transform: translateY(-10px); } 43%, 93% { opacity: 1; max-height: 84px; padding-top: 11px; padding-bottom: 11px; transform: translateY(0); } 99%, 100% { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; transform: translateY(-10px); } }
+    @keyframes demoToast { 0%, 58% { opacity: 0; transform: translate(-50%, -16px); } 63%, 77% { opacity: 1; transform: translate(-50%, 0); } 82%, 100% { opacity: 0; transform: translate(-50%, -16px); } }
+    @keyframes demoBadge { 0%, 62% { opacity: 0; transform: scale(0); } 66%, 94% { opacity: 1; transform: scale(1); } 98%, 100% { opacity: 0; transform: scale(0); } }
+    .demo-chip-old { animation: demoChipOld 12s ease-in-out infinite; }
+    .demo-chip-new { animation: demoChipNew 12s ease-in-out infinite; }
+    .demo-card { overflow: hidden; animation: demoCard 12s ease-in-out infinite; }
+    .demo-toast { animation: demoToast 12s ease-in-out infinite; }
+    .demo-badge { animation: demoBadge 12s ease-in-out infinite; }
+  </style>
+</helmet>
+<div dir="rtl" style="width: 390px; background: #FBFAF7; color: #221E1A; display: flex; flex-direction: column;">
+
+  <!-- סרגל עליון -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 18px 20px;">
+    <span dir="ltr" style="display: inline-flex; align-items: center; font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 28px; letter-spacing: 0.02em; line-height: 1;">
+      <span style="color: #12939D;">FIT</span>
+      <svg viewBox="0 0 100 100" style="width: 0.78em; height: 0.78em; margin: 0 0.03em;" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"></path><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"></path></svg>
+      <span style="color: #F07C1A;">POLIS</span>
+    </span>
+    <a href="#" style="font-size: 16px; font-weight: 500; color: #5C564E; min-height: 44px; display: inline-flex; align-items: center;">תמיכה</a>
+  </div>
+
+  <!-- Hero -->
+  <div style="position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px 20px 40px 20px;">
+    <span style="position: absolute; left: -30px; top: -24px; transform: rotate(-14deg); opacity: 0.08; pointer-events: none;"><svg viewBox="0 0 100 100" class="drift-a" style="width: 110px; height: 110px;" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"></path><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"></path></svg></span>
+    <span class="drift-b" style="position: absolute; left: 330px; top: 150px; width: 30px; height: 30px; border-radius: 999px; background: #F07C1A; opacity: 0.08; pointer-events: none;"></span>
+    <span class="reveal" style="display: inline-flex; align-items: center; gap: 8px; background: #F3EFE9; border-radius: 999px; padding: 8px 14px; font-size: 13.5px; font-weight: 500; color: #5C564E;">
+      <span style="width: 8px; height: 8px; border-radius: 999px; background: #C08A18;"></span>
+      בקרוב ב-Google Play וב-App Store
+    </span>
+    <div class="reveal" style="animation-delay: 0.08s; font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 38px; line-height: 1.16;">כל המתאמנים שלך.<br>אפליקציה אחת.</div>
+    <div class="reveal" style="animation-delay: 0.16s; font-size: 17px; line-height: 1.6; color: #5C564E;">תוכניות אימון ותזונה, פגישות, צ'אט ומעקב תשלומים — הניהול המלא של העסק שלך כמאמן, בעברית, במקום אחד.</div>
+    <a href="#" class="reveal" style="animation-delay: 0.24s; display: inline-flex; align-items: center; justify-content: center; height: 52px; padding: 0 30px; border-radius: 999px; background: #12939D; color: #FFFFFF; font-size: 17px; font-weight: 600; align-self: stretch;">צרו קשר</a>
+    <div class="reveal" style="animation-delay: 0.32s; font-size: 13.5px; color: #8A8A8A;">עוד אין הרשמה ואין רשימת המתנה — האפליקציה בהרצה עם מאמנים ראשונים.</div>
+  </div>
+
+  <!-- טלפון — איור מקום -->
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 0 20px 44px 20px;">
+    <div style="width: 270px; background: #211D1A; border-radius: 38px; padding: 9px;">
+      <div dir="rtl" style="position: relative; overflow: hidden; background: #FFFFFF; border-radius: 31px; padding: 18px 14px 12px 14px; display: flex; flex-direction: column; gap: 11px; min-height: 500px;">
+        <div class="demo-toast" style="position: absolute; top: 10px; left: 50%; transform: translate(-50%, -16px); opacity: 0; background: #211D1A; color: #FFFFFF; border-radius: 999px; padding: 6px 12px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; white-space: nowrap; z-index: 2;">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#F07C1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 0-3.1 6.3L20 19l-.9-3.2A7.9 7.9 0 0 0 20 12z"></path></svg>
+          הודעה חדשה מרותם
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 16.5px;">בוקר טוב, עדי</div>
+          <div style="width: 28px; height: 28px; border-radius: 999px; background: #F3EFE9;"></div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <div style="flex: 1; background: #F7F5F1; border-radius: 14px; padding: 9px 11px; display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-family: 'Secular One', Rubik, sans-serif; font-size: 20px; color: #221E1A;">12</span>
+            <span style="font-size: 11px; color: #8A8A8A;">מתאמנים</span>
+          </div>
+          <div style="flex: 1; background: #F7F5F1; border-radius: 14px; padding: 9px 11px; display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-family: 'Secular One', Rubik, sans-serif; font-size: 20px; color: #221E1A;">3</span>
+            <span style="font-size: 11px; color: #8A8A8A;">פגישות היום</span>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; font-weight: 600; color: #221E1A; margin-top: 2px;">היום</div>
+        <div style="background: #F7F5F1; border-radius: 14px; padding: 11px; display: flex; gap: 9px; align-items: center;">
+          <span style="width: 4px; align-self: stretch; border-radius: 999px; background: #12939D;"></span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 12.5px; font-weight: 600;">17:30 · אימון כוח</span>
+            <span style="font-size: 11.5px; color: #5C564E;">דנה לוי</span>
+          </div>
+          <span style="margin-inline-start: auto; background: #E9F3EC; color: #37945F; font-size: 10.5px; font-weight: 600; border-radius: 999px; padding: 4px 9px;">אישרה הגעה</span>
+        </div>
+        <div style="background: #F7F5F1; border-radius: 14px; padding: 11px; display: flex; gap: 9px; align-items: center;">
+          <span style="width: 4px; align-self: stretch; border-radius: 999px; background: #12939D;"></span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 12.5px; font-weight: 600;">19:00 · ליווי תזונה</span>
+            <span style="font-size: 11.5px; color: #5C564E;">יוסי מזרחי</span>
+          </div>
+          <span style="position: relative; margin-inline-start: auto;">
+            <span class="demo-chip-old" style="display: inline-flex; background: #F6EFDD; color: #C08A18; font-size: 10.5px; font-weight: 600; border-radius: 999px; padding: 4px 9px;">ממתין לאישור</span>
+            <span class="demo-chip-new" style="position: absolute; inset: 0; display: inline-flex; align-items: center; justify-content: center; background: #E9F3EC; color: #37945F; font-size: 10.5px; font-weight: 600; border-radius: 999px; opacity: 0;">אישר הגעה</span>
+          </span>
+        </div>
+        <div class="demo-card" style="background: #F7F5F1; border-radius: 14px; padding: 11px; display: flex; gap: 9px; align-items: center;">
+          <span style="width: 4px; align-self: stretch; border-radius: 999px; background: #F07C1A;"></span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 12.5px; font-weight: 600;">רותם סימנה אימון</span>
+            <span style="font-size: 11.5px; color: #5C564E;">רגליים · לפני 20 דק'</span>
+          </div>
+        </div>
+        <div style="margin-top: auto; height: 44px; border-radius: 999px; background: #211D1A; display: flex; align-items: center; justify-content: space-around; padding: 0 16px;">
+          <span style="width: 8px; height: 8px; border-radius: 999px; background: #F07C1A;"></span>
+          <span style="position: relative; width: 8px; height: 8px; border-radius: 999px; background: #6B665F;"><span class="demo-badge" style="position: absolute; top: -3px; right: -3px; width: 6px; height: 6px; border-radius: 999px; background: #F07C1A; opacity: 0;"></span></span>
+          <span style="width: 8px; height: 8px; border-radius: 999px; background: #6B665F;"></span>
+          <span style="width: 8px; height: 8px; border-radius: 999px; background: #6B665F;"></span>
+        </div>
+      </div>
+    </div>
+    <div style="font-size: 12.5px; color: #8A8A8A;">להמחשה בלבד — צילומי מסך אמיתיים ייכנסו כאן</div>
+  </div>
+
+  <!-- מה יש בפנים -->
+  <div style="background: #FFFFFF; border-top: 1px solid #EFEAE2; border-bottom: 1px solid #EFEAE2; padding: 44px 20px; display: flex; flex-direction: column; gap: 22px;">
+    <div style="font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 27px;">מה יש בפנים</div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; gap: 14px; align-items: center; background: #FBFAF7; border-radius: 18px; padding: 14px 16px;">
+        <span style="width: 44px; height: 44px; border-radius: 999px; background: #E7F2F3; display: inline-flex; align-items: center; justify-content: center; flex: none;">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#12939D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8v8M17 8v8M4 10v4M20 10v4M7 12h10"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 16px; font-weight: 600;">תוכניות אימון</span>
+          <span style="font-size: 13.5px; line-height: 1.45; color: #5C564E;">בונים תבנית פעם אחת, מתאימים לכל מתאמן.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center; background: #FBFAF7; border-radius: 18px; padding: 14px 16px;">
+        <span style="width: 44px; height: 44px; border-radius: 999px; background: #E7F2F3; display: inline-flex; align-items: center; justify-content: center; flex: none;">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#12939D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14a7 7 0 0 1-14 0z"></path><path d="M9 8c0-1.5 1-2 1-3M14 8c0-1.5 1-2 1-3"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 16px; font-weight: 600;">תזונה</span>
+          <span style="font-size: 13.5px; line-height: 1.45; color: #5C564E;">תפריטים אישיים ומעקב ארוחות יומי.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center; background: #FBFAF7; border-radius: 18px; padding: 14px 16px;">
+        <span style="width: 44px; height: 44px; border-radius: 999px; background: #E7F2F3; display: inline-flex; align-items: center; justify-content: center; flex: none;">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#12939D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="14" rx="3"></rect><path d="M8 3v5M16 3v5M4 11h16"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 16px; font-weight: 600;">פגישות</span>
+          <span style="font-size: 13.5px; line-height: 1.45; color: #5C564E;">תיאום, אישורי הגעה ותזכורות.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center; background: #FBFAF7; border-radius: 18px; padding: 14px 16px;">
+        <span style="width: 44px; height: 44px; border-radius: 999px; background: #E7F2F3; display: inline-flex; align-items: center; justify-content: center; flex: none;">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#12939D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 0-3.1 6.3L20 19l-.9-3.2A7.9 7.9 0 0 0 20 12z"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 16px; font-weight: 600;">צ'אט</span>
+          <span style="font-size: 13.5px; line-height: 1.45; color: #5C564E;">כל התקשורת עם המתאמנים, בפנים.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center; background: #FBFAF7; border-radius: 18px; padding: 14px 16px;">
+        <span style="width: 44px; height: 44px; border-radius: 999px; background: #E7F2F3; display: inline-flex; align-items: center; justify-content: center; flex: none;">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#12939D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21z"></path><path d="M9.5 8h5M9.5 12h5"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 16px; font-weight: 600;">תשלומים</span>
+          <span style="font-size: 13.5px; line-height: 1.45; color: #5C564E;">מי שילם ומי באיחור — בלי אקסל.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- שני צדדים -->
+  <div style="padding: 44px 20px; display: flex; flex-direction: column; gap: 22px;">
+    <div style="font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 27px;">אתה מנהל. הם מתאמנים.</div>
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #EFEAE2; border-radius: 22px; padding: 22px 20px; display: flex; flex-direction: column; gap: 14px;">
+        <span style="width: 42px; height: 42px; border-radius: 999px; background: #12939D;"></span>
+        <span style="font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 20px;">הצד שלך</span>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.5; color: #3C3830;">
+          <div style="display: flex; gap: 9px; align-items: baseline;"><span style="width: 7px; height: 7px; border-radius: 999px; background: #12939D; flex: none; transform: translateY(-2px);"></span>תמונת מצב של כל המתאמנים במבט אחד</div>
+          <div style="display: flex; gap: 9px; align-items: baseline;"><span style="width: 7px; height: 7px; border-radius: 999px; background: #12939D; flex: none; transform: translateY(-2px);"></span>עריכת תוכניות ותפריטים מכל מקום</div>
+          <div style="display: flex; gap: 9px; align-items: baseline;"><span style="width: 7px; height: 7px; border-radius: 999px; background: #12939D; flex: none; transform: translateY(-2px);"></span>רואים מיד מה דורש טיפול</div>
+        </div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #EFEAE2; border-radius: 22px; padding: 22px 20px; display: flex; flex-direction: column; gap: 14px;">
+        <span style="width: 42px; height: 42px; border-radius: 999px; background: #F07C1A;"></span>
+        <span style="font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 20px;">הצד של המתאמן שלך</span>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.5; color: #3C3830;">
+          <div style="display: flex; gap: 9px; align-items: baseline;"><span style="width: 7px; height: 7px; border-radius: 999px; background: #F07C1A; flex: none; transform: translateY(-2px);"></span>האימון והתפריט של היום, ברור ופשוט</div>
+          <div style="display: flex; gap: 9px; align-items: baseline;"><span style="width: 7px; height: 7px; border-radius: 999px; background: #F07C1A; flex: none; transform: translateY(-2px);"></span>סימון ביצוע בלחיצה אחת</div>
+          <div style="display: flex; gap: 9px; align-items: baseline;"><span style="width: 7px; height: 7px; border-radius: 999px; background: #F07C1A; flex: none; transform: translateY(-2px);"></span>צ'אט ישיר אליך כשצריך אותך</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- סגירה + פוטר -->
+  <div style="background: #211D1A; color: #FFFFFF; padding: 48px 20px 28px 20px; display: flex; flex-direction: column;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding-bottom: 36px; text-align: center;">
+      <svg viewBox="0 0 100 100" class="breathe" style="width: 48px; height: 48px;" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"></path><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"></path></svg>
+      <div style="font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 25px;">פיטופוליס יוצא בקרוב.</div>
+      <div style="font-size: 15px; color: #B8B2A9;">רוצים להיות מהמאמנים הראשונים? דברו איתי.</div>
+      <a href="#" style="display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 28px; border-radius: 999px; border: 1.5px solid #FFFFFF; color: #FFFFFF; font-size: 16px; font-weight: 600;">צרו קשר</a>
+    </div>
+    <div style="border-top: 1px solid rgba(255,255,255,0.14); padding-top: 20px; display: flex; flex-direction: column; gap: 12px; align-items: center;">
+      <span dir="ltr" style="display: inline-flex; align-items: center; font-family: Fredoka, Rubik, sans-serif; font-weight: 600; font-size: 28px; letter-spacing: 0.02em; line-height: 1;">
+        <span style="color: #12939D;">FIT</span>
+        <svg viewBox="0 0 100 100" style="width: 0.78em; height: 0.78em; margin: 0 0.03em;" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"></path><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"></path></svg>
+        <span style="color: #F07C1A;">POLIS</span>
+      </span>
+      <div style="display: flex; align-items: center; gap: 18px; font-size: 13.5px; color: #B8B2A9;">
+        <a href="#" style="color: #B8B2A9;">תמיכה</a>
+        <span>© 2026 פיטופוליס</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
