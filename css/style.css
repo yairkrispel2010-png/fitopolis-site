@@ -1080,3 +1080,16 @@ a.logotype { min-height: 44px; }
   }
   .closing-inner { padding-block: 52px 44px; }
 }
+
+
+/* מקומות שממתינים למילוי — מסומנים בבירור כדי שהדף לא יישלח כך */
+.todo {
+  display: block;
+  background: #F6EFDD;
+  border-inline-start: 4px solid var(--attention);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 16px;
+  color: var(--attention-text);
+  font-weight: 500;
+}
