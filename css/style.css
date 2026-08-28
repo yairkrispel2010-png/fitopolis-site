@@ -504,6 +504,70 @@ img, svg { max-width: 100%; }
 .simple-footer a:hover { color: var(--ink); }
 .page-wrap { min-height: 100vh; display: flex; flex-direction: column; }
 
+/* ── דף ההזמנה ────────────────────────────────────────────
+   הדף היחיד באתר שהקהל שלו הוא המתאמן — ולכן הוא לובש את
+   קול המתאמן (כתום) ולא את קול המאמן. */
+.invite-main { align-items: center; text-align: center; }
+.invite-mark { display: inline-block; width: 68px; height: 68px; }
+.invite-mark svg { width: 100%; height: 100%; }
+.invite-code-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+.invite-code-label { font-size: 14px; color: var(--neutral); }
+.invite-code {
+  font-family: var(--font-digits);
+  font-size: clamp(30px, 7vw, 40px);
+  letter-spacing: 0.12em;
+  color: var(--trainee);
+}
+.invite-copy {
+  appearance: none;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  border-radius: 999px;
+  min-height: 44px;
+  padding: 0 22px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+.invite-copy:hover { border-color: var(--trainee); color: var(--trainee); }
+.store-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; align-self: stretch; }
+.store-btn {
+  flex: 1 1 200px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: var(--dark);
+  color: #FFFFFF;
+}
+.store-btn.is-soon { opacity: 0.42; cursor: default; }
+.store-btn .col { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; }
+.store-btn .s1 { font-size: 12px; }
+.store-btn .s2 { font-size: 17px; font-weight: 600; font-family: var(--font-display); }
+.invite-help {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
 /* ═══ אנימציות ═══════════════════════════════════════════── */
 
 /* כניסה מדורגת בטעינה (Hero) */
@@ -536,6 +600,15 @@ img, svg { max-width: 100%; }
 /* נשימת הטבעת בסגירה */
 @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
 .breathe { animation: breathe 5s ease-in-out infinite; }
+
+/* ה-O בסרגל העליון — סיבוב אחד בכניסה, ועוד אחד בריחוף */
+@keyframes oSpin {
+  from { transform: rotate(-180deg) scale(0.72); opacity: 0; }
+  to   { transform: rotate(0deg) scale(1); opacity: 1; }
+}
+.logotype .o-mark { transition: transform 0.6s cubic-bezier(0.22, 0.8, 0.35, 1); }
+.topbar .logotype .o-mark { animation: oSpin 0.9s cubic-bezier(0.22, 0.8, 0.35, 1) 0.15s both; }
+.logotype:hover .o-mark { transform: rotate(180deg); }
 
 /* דמו הטלפון — לופ 12 שניות: בוקר של מאמן */
 @keyframes demoChipOld { 0%, 16% { opacity: 1; } 20%, 96% { opacity: 0; } 100% { opacity: 1; } }
@@ -578,9 +651,11 @@ img, svg { max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal, .drift-a, .drift-b, .drift-c, .breathe,
-  .demo-chip-old, .demo-chip-new, .demo-card, .demo-toast, .demo-badge {
+  .demo-chip-old, .demo-chip-new, .demo-card, .demo-toast, .demo-badge,
+  .topbar .logotype .o-mark {
     animation: none !important;
   }
+  .logotype .o-mark, .logotype:hover .o-mark { transition: none; transform: none; }
   .demo-chip-new, .demo-toast, .demo-badge { opacity: 0 !important; }
   .demo-card { opacity: 1 !important; max-height: none !important; }
   .scroll-reveal { opacity: 1; transform: none; transition: none; }

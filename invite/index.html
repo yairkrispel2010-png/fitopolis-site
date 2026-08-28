@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>הוזמנת לפיטופוליס</title>
+  <meta name="description" content="המאמן שלך הזמין אותך לפיטופוליס. הורידו את האפליקציה וקוד ההזמנה יחכה לכם.">
+  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="הוזמנת לפיטופוליס">
+  <meta property="og:description" content="המאמן שלך הזמין אותך. הורידו את האפליקציה כדי להתחיל.">
+  <meta property="og:image" content="https://fitopolis.co.il/assets/og-image.png">
+  <meta property="og:locale" content="he_IL">
+  <meta name="theme-color" content="#F07C1A">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Secular+One&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-wrap">
+
+<header class="container topbar">
+  <a href="../index.html" class="logotype" aria-label="FITOPOLIS">
+    <span class="fit">FIT</span>
+    <svg class="o-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg>
+    <span class="polis">POLIS</span>
+  </a>
+</header>
+
+<main class="page-main invite-main">
+  <span class="invite-mark" aria-hidden="true">
+    <svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg>
+  </span>
+
+  <h1>הוזמנת לפיטופוליס</h1>
+  <p class="lead">המאמן שלך מנהל את האימונים והתזונה שלך בפיטופוליס. הורידו את האפליקציה — וקוד ההזמנה כבר יחכה לכם בפנים.</p>
+
+  <div class="invite-code-card" data-invite-card hidden>
+    <span class="invite-code-label">קוד ההזמנה שלך</span>
+    <span class="invite-code" data-invite-code dir="ltr"></span>
+    <button class="invite-copy" type="button" data-invite-copy>העתקת הקוד</button>
+  </div>
+
+  <div class="store-row">
+    <span class="store-btn is-soon">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v17a1 1 0 0 0 1.5.87l14-8.5a1 1 0 0 0 0-1.74l-14-8.5A1 1 0 0 0 4 3.5z"/></svg>
+      <span class="col"><span class="s1">בקרוב ב-</span><span class="s2">Google Play</span></span>
+    </span>
+    <span class="store-btn is-soon">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7c1-2.2 2.8-3 4.4-2.8.2 1.7-.6 3.3-1.7 4.2M7.5 21c-1.8 0-3.5-3.2-3.5-6.4C4 11 6 9.2 8 9.2c1.2 0 2.1.7 3 .7.9 0 1.6-.8 3.1-.8 1.6 0 3.1.9 3.9 2.4-2.5 1.5-2.3 5 .3 6.1-.8 2-2.2 4.4-3.9 4.4-1.2 0-2-.7-3.2-.7-1.2 0-2.1.7-3.7.7z"/></svg>
+      <span class="col"><span class="s1">בקרוב ב-</span><span class="s2">App Store</span></span>
+    </span>
+  </div>
+
+  <p class="mini-note">האפליקציה עדיין בהרצה עם מאמנים ראשונים. ברגע שהיא תעלה לחנויות, הכפתורים כאן יפעלו — שמרו את הקישור.</p>
+
+  <div class="invite-help">
+    <span>לא יודעים מה זה? <a href="../index.html">כאן מסבירים מה זה פיטופוליס</a></span>
+    <span>משהו לא עובד? <a href="../support.html">תמיכה</a></span>
+  </div>
+</main>
+
+<footer class="simple-footer">
+  <div class="container">
+    <span>© 2026 פיטופוליס</span>
+    <a href="../index.html">לדף הבית</a>
+  </div>
+</footer>
+
+<script>
+// קוד ההזמנה מגיע מהכתובת: /invite/?c=CODE  (או #CODE).
+// אירוח סטטי לא יודע לקרוא /invite/CODE, ולכן זו הצורה שהאפליקציה צריכה לייצר.
+(function () {
+  'use strict';
+  var raw = new URLSearchParams(location.search).get('c') || location.hash.replace('#', '');
+  var code = (raw || '').trim().toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 24);
+  if (!code) { return; }
+
+  var card = document.querySelector('[data-invite-card]');
+  var slot = document.querySelector('[data-invite-code]');
+  slot.textContent = code;
+  card.hidden = false;
+
+  var btn = document.querySelector('[data-invite-copy]');
+  btn.addEventListener('click', function () {
+    var done = function () {
+      btn.textContent = 'הקוד הועתק ✓';
+      setTimeout(function () { btn.textContent = 'העתקת הקוד'; }, 2200);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(done, function () {});
+    } else {
+      var r = document.createRange();
+      r.selectNodeContents(slot);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(r);
+      try { document.execCommand('copy'); done(); } catch (e) {}
+    }
+  });
+})();
+</script>
+</body>
+</html>
