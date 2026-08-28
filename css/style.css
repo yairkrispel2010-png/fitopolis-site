@@ -20,15 +20,15 @@
   --neutral: #8A8A8A;
 
   /* משטחים ודיו */
-  --bg: #EBE5D8;
-  --bg-deep: #DED6C4;
+  --bg: #F0EFEC;
+  --bg-deep: #E4E2DD;
   --surface: #FFFFFF;
-  --surface-soft: #F4F1E9;
-  --chip-bg: #E1D9C8;
-  --ink: #15120F;
-  --ink-soft: #4C4740;
-  --ink-mid: #2E2A25;
-  --line: #D2C9B5;
+  --surface-soft: #F5F4F1;
+  --chip-bg: #E6E4DF;
+  --ink: #141412;
+  --ink-soft: #4A4844;
+  --ink-mid: #2B2A27;
+  --line: #D8D5CE;
   --dark: #1C1917;
   --dark-2: #292421;
   --dark-line: rgba(255, 255, 255, 0.11);
@@ -155,10 +155,11 @@ img, svg { max-width: 100%; }
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 80% 65% at 28% 2%, #F8F4EA 0%, rgba(248,244,234,0) 60%),
+    radial-gradient(ellipse 80% 65% at 28% 2%, #FCFCFB 0%, rgba(252,252,251,0) 60%),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
 }
-/* שכבת גרעין — יושבת מעל הרקע ומתחת לתוכן */
+/* שכבת גרעין — בלי mix-blend-mode: הוא כפה קומפוזיטינג מחדש בכל פריים
+   וזה מה שהפך את מעקב-העכבר ללאגי */
 .hero::after,
 .features::after,
 .sides::after {
@@ -166,11 +167,10 @@ img, svg { max-width: 100%; }
   position: absolute;
   inset: 0;
   background-image: var(--grain);
-  opacity: 0.055;
+  opacity: 0.032;
   pointer-events: none;
-  mix-blend-mode: multiply;
 }
-.sides::after { mix-blend-mode: overlay; opacity: 0.09; }
+.sides::after { opacity: 0.05; }
 .features { position: relative; }
 .sides { position: relative; }
 .hero > *, .features > *, .sides > * { position: relative; z-index: 1; }
@@ -227,6 +227,7 @@ img, svg { max-width: 100%; }
   position: absolute;
   inset: 0;
   pointer-events: none;
+  will-change: transform;   /* מרים את השכבה לקומפוזיטור — בלי זה יש לאג */
 }
 .ring-layer .ring, .ring-layer .blob { position: absolute; }
 .ring-layer .blob { border-radius: 999px; }
@@ -239,7 +240,6 @@ img, svg { max-width: 100%; }
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  perspective: 900px;
 }
 .phone-frame {
   width: 300px;
@@ -264,14 +264,18 @@ img, svg { max-width: 100%; }
 .phone-caption { font-size: 13px; color: var(--neutral); }
 
 /* הסרגל העליון של האפליקציה — אווטאר ריבוע-מעוגל עם טבעת עבה (v188) */
-.ps-head { display: flex; justify-content: space-between; align-items: center; }
-.ps-daylabel { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.ps-head { display: flex; justify-content: space-between; align-items: center; padding-inline: 2px; }
+.ps-daylabel { font-family: var(--font-display); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; }
 .ps-avatar {
-  width: 30px; height: 30px;
-  border-radius: 10px;
-  background: var(--chip-bg);
+  width: 32px; height: 32px;
+  border-radius: 11px;
+  background: var(--trainer-tint);
   border: 2.5px solid var(--trainer);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.ps-avatar svg { width: 17px; height: 17px; }
 
 /* ארבעת כרטיסי מסך הבית */
 .ps-hcard {
@@ -283,7 +287,7 @@ img, svg { max-width: 100%; }
   gap: 7px;
 }
 .ps-hcard .hc-top { display: flex; align-items: center; gap: 7px; }
-.ps-hcard .hc-title { font-size: 13px; font-weight: 600; }
+.ps-hcard .hc-title { font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em; }
 .ps-hcard .hc-count {
   margin-inline-start: auto;
   font-family: var(--font-digits);
@@ -299,7 +303,7 @@ img, svg { max-width: 100%; }
 .swap-stack > * { grid-area: 1 / 1; }
 .count-trainee { background: var(--trainee); color: var(--trainee-ink); }
 .count-attention { background: var(--attention-tint); color: var(--attention); }
-.ps-hcard .hc-link { font-size: 11px; font-weight: 600; color: var(--trainer); }
+.ps-hcard .hc-link { font-size: 11.5px; font-weight: 700; color: var(--trainer); }
 .ps-hcard .hc-icon { width: 15px; height: 15px; flex: none; }
 
 .ps-card {
@@ -318,8 +322,8 @@ img, svg { max-width: 100%; }
 }
 .marker-trainer { background: var(--trainer); }
 .marker-trainee { background: var(--trainee); }
-.ps-card .t1 { font-size: 12.5px; font-weight: 600; }
-.ps-card .t2 { font-size: 11px; color: var(--ink-soft); }
+.ps-card .t1 { font-size: 13px; font-weight: 600; letter-spacing: -0.005em; }
+.ps-card .t2 { font-size: 11.5px; color: var(--ink-soft); }
 .ps-card .col { display: flex; flex-direction: column; gap: 1px; }
 .ps-chip {
   font-size: 10px;
@@ -338,26 +342,46 @@ img, svg { max-width: 100%; }
   justify-items: stretch;
 }
 .ps-chip-swap > * { grid-area: 1 / 1; text-align: center; }
+/* בר הניווט — גלולה עם חמישה טאבים; הפעיל הוא גלולה מלאה עם תווית
+   (כמו bottom_nav_with_fab.dart: רדיוס 30, פריט פעיל ברדיוס 22 + תווית 10px/700) */
 .ps-nav {
   margin-top: auto;
-  height: 48px;
-  border-radius: 999px;
+  border-radius: 30px;
   background: var(--dark);
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding: 0 18px;
+  justify-content: space-between;
+  padding: 6px;
 }
-.ps-nav .nd { width: 9px; height: 9px; border-radius: 999px; background: #6B665F; position: relative; }
-.ps-nav .nd.active { background: var(--trainee); }
-.ps-nav .badge {
+.ps-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 9px;
+  border-radius: 22px;
+  position: relative;
+}
+.ps-tab svg { width: 18px; height: 18px; display: block; }
+.ps-tab.active {
+  background: var(--trainer);
+  padding-inline: 11px;
+}
+.ps-tab.active .ps-tab-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1;
+  color: #FFFFFF;
+}
+.ps-tab .badge {
   position: absolute;
-  top: -3px;
-  right: -3px;
+  top: 3px;
+  inset-inline-end: 4px;
   width: 7px;
   height: 7px;
   border-radius: 999px;
   background: var(--trainee);
+  border: 1.5px solid var(--dark);
   opacity: 0;
 }
 .ps-toast {

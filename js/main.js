@@ -11,29 +11,35 @@
   // הטלפון מיטה את עצמו לכיוון הסמן. הכול מתבטל ב-prefers-reduced-motion.
   if (!reduceMotion) {
     var layers = Array.prototype.slice.call(document.querySelectorAll('[data-depth]'));
+    var depths = layers.map(function (el) { return parseFloat(el.getAttribute('data-depth')) || 0; });
     var tilt = document.querySelector('[data-tilt]');
     var hero = document.querySelector('.hero');
     var raf = null;
     var mx = 0;
     var my = 0;
+    // נמדד פעם אחת ולא בכל פריים — קריאת offsetHeight בתוך rAF מכריחה
+    // חישוב-פריסה מחדש ומייצרת בדיוק את הלאג
+    var heroH = hero ? hero.offsetHeight : 1;
+    window.addEventListener('resize', function () {
+      heroH = hero ? hero.offsetHeight : 1;
+    }, { passive: true });
 
     function paint() {
       raf = null;
-      // הגלילה מזיזה כל שכבה ביחס לעומק שלה — רק כל עוד ה-Hero על המסך
-      var sy = window.scrollY || 0;
-      var heroH = hero ? hero.offsetHeight : 1;
-      var progress = Math.min(sy / heroH, 1);
+      var progress = Math.min((window.scrollY || 0) / heroH, 1);
 
-      layers.forEach(function (el) {
-        var d = parseFloat(el.getAttribute('data-depth')) || 0;
+      for (var i = 0; i < layers.length; i++) {
+        var el = layers[i];
+        var d = depths[i];
         var mouseX = finePointer ? -mx * d : 0;
         var mouseY = finePointer ? -my * d : 0;
         var scrollShift = progress * d * 2.2;
-        el.style.transform = 'translate(' + mouseX.toFixed(1) + 'px,' + (mouseY + scrollShift).toFixed(1) + 'px)';
-      });
+        // translate3d מכריח שכבת GPU — זול משמעותית מ-translate רגיל
+        el.style.transform = 'translate3d(' + mouseX.toFixed(1) + 'px,' + (mouseY + scrollShift).toFixed(1) + 'px,0)';
+      }
 
       if (tilt && finePointer) {
-        tilt.style.transform = 'rotateX(' + (my * -5).toFixed(2) + 'deg) rotateY(' + (mx * 7).toFixed(2) + 'deg)';
+        tilt.style.transform = 'perspective(900px) rotateX(' + (my * -5).toFixed(2) + 'deg) rotateY(' + (mx * 7).toFixed(2) + 'deg)';
       }
     }
 
