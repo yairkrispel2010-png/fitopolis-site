@@ -1207,48 +1207,88 @@ a.logotype { min-height: 44px; }
   text-decoration-color: rgba(255, 255, 255, 0.7);
 }
 
-/* ── תפריט הניווט הראשי (28/08, בקשת בעלים) ────────────────
-   גלולה מקובצת בפינה הימנית העליונה, הלוגו נשאר במרכז.
+/* ── כפתור התפריט (28/08, בקשת בעלים: "כפתור שפותח את התפריט") ──
+   <details> — עובד בלי JavaScript בכלל. הסקריפט הקטן רק סוגר
+   ב-Escape ובלחיצה בחוץ.
    מחלקה נפרדת מ-.topbar-nav בכוונה: דף ההזמנה שומר על הקישור
-   הבודד שלו בקול המתאמן ואינו מושפע מהתפריט הזה. */
+   הבודד שלו בקול המתאמן ואינו מושפע. */
 .topbar .site-nav {
   grid-column: 1;
+  grid-row: 1;              /* בלי זה הרשת דוחפת אותו לשורה שנייה */
   justify-self: start;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.66);
-  border: 1px solid var(--line);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
 }
-.site-nav a {
+.site-nav > summary {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  list-style: none;          /* בלי המשולש של ברירת המחדל */
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+}
+.site-nav > summary::-webkit-details-marker { display: none; }
+.site-nav > summary:hover { background: var(--surface); }
+.site-nav[open] > summary {
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.site-nav .bars { display: flex; flex-direction: column; gap: 4px; }
+.site-nav .bars i {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink-mid);
+}
+/* הפאנל — נפתח מתחת לכפתור, צמוד לימין כמוהו */
+.site-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-start: 0;
+  min-width: 196px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 20;
+}
+.site-menu a {
+  display: flex;
   align-items: center;
   min-height: 44px;
   padding-inline: 14px;
-  border-radius: 999px;
-  font-size: 14.5px;
+  border-radius: 12px;
+  font-size: 15.5px;
   font-weight: 500;
   color: var(--ink-soft);
   white-space: nowrap;
-  transition: background 0.18s ease, color 0.18s ease;
 }
-.site-nav a:hover {
-  color: var(--trainer-text);
-  background: rgba(255, 255, 255, 0.9);
-}
-/* הדף שבו אנחנו נמצאים — גלולה לבנה מלאה, בצבע קול המאמן */
-.site-nav a[aria-current="page"] {
-  background: var(--surface);
+.site-menu a:hover { background: var(--surface-soft); color: var(--trainer-text); }
+/* הדף שבו אנחנו נמצאים */
+.site-menu a[aria-current="page"] {
+  background: var(--trainer-tint);
   color: var(--trainer-text);
   font-weight: 600;
-  box-shadow: var(--shadow-sm);
 }
 
 @media (max-width: 560px) {
-  /* שלושה פריטים חייבים להיכנס ל-272px (רוחב תוכן במסך 320) */
-  .site-nav a { font-size: 13.5px; padding-inline: 11px; }
-  .topbar .site-nav { gap: 2px; }
+  /* עם כפתור אחד קטן אין צורך בשתי שורות — הלוגו נשאר ממורכז
+     והכפתור יושב לצידו מימין. הסרגל חוזר להיות נמוך. */
+  .topbar-menu {
+    grid-template-columns: 1fr auto 1fr;
+    justify-items: stretch;
+    gap: 8px;
+    padding-block: 12px 8px;
+  }
+  .topbar-menu .logotype { grid-column: 2; justify-self: center; }
+  .topbar-menu .site-nav { grid-column: 1; justify-self: start; }
 }
