@@ -1017,3 +1017,20 @@ a.logotype { min-height: 44px; }
   .legal-meta { grid-template-columns: 1fr; gap: 4px 0; }
   .legal-meta dd { margin-bottom: 12px; }
 }
+
+/* ── ביצועים ───────────────────────────────────────────────
+   הלאג בגלילה נבע משלושה מקורות: אנימציות אינסופיות שרצות גם
+   כשלא רואים אותן, צללים גדולים שמצוירים מחדש בכל גלילה,
+   ומאזין גלילה שכתב טרנספורמים גם אחרי שהפתיח יצא מהמסך. */
+
+/* כל סקשן מצויר בנפרד — שינוי באחד לא מכריח ציור מחדש של האחרים */
+.hero, .features, .sides, .closing { contain: paint; }
+
+/* הטלפון על שכבה משלו, כדי שהצל העמוק שלו לא יצויר מחדש בגלילה */
+.phone-frame { transform: translateZ(0); }
+
+/* אנימציות נעצרות כשהאלמנט לא על המסך */
+.anim-paused,
+.anim-paused *,
+.anim-paused *::before,
+.anim-paused *::after { animation-play-state: paused !important; }

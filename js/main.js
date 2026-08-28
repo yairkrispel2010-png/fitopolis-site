@@ -43,8 +43,18 @@
       }
     }
 
+    // מפסיקים לצייר ברגע שהפתיח יצא מהמסך — אין טעם להזיז שכבות
+    // שאף אחד לא רואה, וזה מה שהעמיס את הגלילה בהמשך הדף
+    var heroVisible = true;
+    if ('IntersectionObserver' in window && hero) {
+      new IntersectionObserver(function (es) {
+        heroVisible = es[0].isIntersecting;
+        if (heroVisible) { schedule(); }
+      }, { rootMargin: '80px' }).observe(hero);
+    }
+
     function schedule() {
-      if (raf) { return; }
+      if (raf || !heroVisible) { return; }
       raf = requestAnimationFrame(paint);
     }
 
@@ -57,6 +67,19 @@
     }
     window.addEventListener('scroll', schedule, { passive: true });
     schedule();
+  }
+
+  // ── עצירת אנימציות שיוצאות מהמסך ────────────────────────
+  // לופ הדמו בטלפון והטבעות המרחפות רצים בלי סוף. בלי זה הם
+  // ממשיכים לצרוך ציור גם כשגוללים הרחק מהם.
+  if ('IntersectionObserver' in window) {
+    var animated = document.querySelectorAll('.phone-screen, .hero, .closing');
+    var pauseObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        e.target.classList.toggle('anim-paused', !e.isIntersecting);
+      });
+    }, { rootMargin: '120px' });
+    [].forEach.call(animated, function (el) { pauseObserver.observe(el); });
   }
 
   // ── בר הניווט בטלפון: "הצצת גילוי" + פתיחה במגע ──────────
