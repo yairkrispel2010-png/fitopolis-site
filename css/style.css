@@ -630,6 +630,8 @@ img, svg { max-width: 100%; }
 
 /* ── דף תמיכה + 404 ──────────────────────────────────────── */
 .page-main {
+  width: 100%;          /* בלי זה, אותו באג של .container: בתוך עטיפת flex
+                           האזור מתנפח לרוחב התוכן ולא גולש שורה */
   max-width: 660px;
   margin-inline: auto;
   padding: 40px 24px 80px;
@@ -1034,3 +1036,22 @@ a.logotype { min-height: 44px; }
 .anim-paused *,
 .anim-paused *::before,
 .anim-paused *::after { animation-play-state: paused !important; }
+
+/* ── דף התמיכה בטלפון ────────────────────────────────────── */
+@media (max-width: 560px) {
+  .page-main { padding: 28px 20px 64px; }
+  /* כרטיס המייל נערם: אייקון מעל, כתובת מתחת — כתובת מייל ארוכה
+     לא נדחסת לחצי רוחב ולא נחתכת */
+  .contact-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 26px 20px;
+  }
+  .contact-card .value {
+    font-size: 15.5px;
+    overflow-wrap: anywhere;   /* כתובת ארוכה שוברת שורה במקום לגלוש */
+  }
+  .faq-placeholder { padding: 26px 20px; }
+}
