@@ -156,8 +156,17 @@ img, svg { max-width: 100%; }
 .nav-link:hover .arrow { transform: translateX(-3px); }
 
 @media (max-width: 560px) {
-  .topbar { grid-template-columns: 1fr; justify-items: center; gap: 10px; }
+  /* בטלפון הלוגו והניווט נערמים — אבל בריפוד של דסקטופ זה בלע 128px.
+     מהודק ל-~86 בלי לוותר על מירכוז הלוגו ועל יעד מגע של 44px. */
+  .topbar {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 2px;
+    padding-block: 14px 6px;
+  }
   .topbar .logotype, .topbar-nav { grid-column: 1; justify-self: center; }
+  .topbar .logotype { font-size: 29px; }
+  .nav-link { font-size: 15px; }
 }
 
 /* ── כפתורים — גלולות, כמו שפת הצורה ─────────────────────── */
@@ -1054,4 +1063,18 @@ a.logotype { min-height: 44px; }
     overflow-wrap: anywhere;   /* כתובת ארוכה שוברת שורה במקום לגלוש */
   }
   .faq-placeholder { padding: 26px 20px; }
+}
+
+/* ── פוטר בטלפון ─────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .inner-footer { padding-bottom: 26px; }
+  .inner-footer .footer-bar { padding-top: 28px; }
+  .footer-bar { gap: 8px; }
+  .footer-bar .logotype { font-size: 28px; }
+  .footer-bar .links {
+    gap: 0 20px;            /* בלי רווח בין שורות — הן ממילא בגובה 44 */
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .closing-inner { padding-block: 52px 44px; }
 }
