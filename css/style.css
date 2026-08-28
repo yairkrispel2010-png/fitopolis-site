@@ -673,7 +673,12 @@ img, svg { max-width: 100%; }
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     inset 0 -1px 0 rgba(21, 18, 15, 0.05);
 }
-.invite-code-card { box-shadow: var(--shadow-sm); }
+.invite-code-card {
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(21, 18, 15, 0.05);
+}
 
 /* ── דף ההזמנה ────────────────────────────────────────────
    הדף היחיד באתר שהקהל שלו הוא המתאמן — ולכן הוא לובש את
@@ -681,39 +686,51 @@ img, svg { max-width: 100%; }
 .invite-main { align-items: center; text-align: center; }
 .invite-mark { display: inline-block; width: 68px; height: 68px; }
 .invite-mark svg { width: 100%; height: 100%; }
+/* כרטיס הקוד — אותו עומק כמו כרטיסי היכולות */
 .invite-code-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: linear-gradient(168deg, #FFFFFF 0%, #FBFAF7 62%, #F5F3EE 100%);
   border-radius: 24px;
-  padding: 24px 28px;
+  padding: 28px 28px 26px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   align-self: stretch;
 }
-.invite-code-label { font-size: 14px; color: var(--neutral); }
+.invite-code-label {
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
 .invite-code {
   font-family: var(--font-digits);
-  font-size: clamp(30px, 7vw, 40px);
-  letter-spacing: 0.12em;
+  font-size: clamp(38px, 9vw, 52px);
+  line-height: 1.05;
+  letter-spacing: 0.14em;
+  /* הקוד הוא הדבר היחיד שהמתאמן צריך לקחת מהדף — הוא הכי בולט */
   color: var(--trainee);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 .invite-copy {
   appearance: none;
   border: 1.5px solid var(--line);
-  background: transparent;
+  background: var(--surface);
   border-radius: 999px;
-  min-height: 44px;
-  padding: 0 22px;
+  min-height: 46px;
+  padding: 0 24px;
   font-family: var(--font-body);
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink-soft);
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink-mid);
   cursor: pointer;
-  transition: border-color 0.18s ease, color 0.18s ease;
+  box-shadow: 0 1px 2px rgba(21, 18, 15, 0.05);
+  transition: border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
-.invite-copy:hover { border-color: var(--trainee); color: var(--trainee); }
+.invite-copy:hover {
+  border-color: var(--trainee);
+  color: var(--trainee);
+  transform: translateY(-1px);
+}
 .store-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; align-self: stretch; }
 .store-btn {
   flex: 1 1 200px;
@@ -734,10 +751,11 @@ img, svg { max-width: 100%; }
 .invite-help {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 15px;
+  gap: 10px;
+  font-size: 15.5px;
   color: var(--ink-soft);
 }
+.invite-help a { font-weight: 600; }
 
 /* ═══ אנימציות ═══════════════════════════════════════════── */
 
