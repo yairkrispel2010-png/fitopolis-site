@@ -427,6 +427,16 @@ img, svg { max-width: 100%; }
   font-weight: 600;
   font-size: clamp(27px, 3vw, 34px);
 }
+/* כותרת ממורכזת עם הסימן מעליה */
+.section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.section-head .section-title { margin: 0; text-align: center; }
+.section-mark { width: 38px; height: 38px; display: block; }
 /* הכרטיסים הלבנים יושבים על הרקע העמוק — שם הם באמת מתרוממים */
 .features {
   background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg) 100%);
@@ -441,28 +451,42 @@ img, svg { max-width: 100%; }
 .feat-card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: var(--surface);
+  align-items: center;
+  text-align: center;
+  gap: 13px;
+  /* עומק פנימי: המשטח עצמו נוטה מלבן לצל קל, עם קו-אור בקצה העליון */
+  background: linear-gradient(168deg, #FFFFFF 0%, #FBFAF7 62%, #F5F3EE 100%);
   border-radius: 22px;
-  padding: 26px 22px;
-  box-shadow: var(--shadow-sm);
+  padding: 30px 22px 28px;
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(21, 18, 15, 0.05);
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 .feat-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(21, 18, 15, 0.05);
 }
 .feat-icon {
-  width: 46px;
-  height: 46px;
+  width: 54px;
+  height: 54px;
   border-radius: 999px;
-  background: var(--trainer-tint);
+  /* האייקון יושב בתוך גומה — לא סתם עיגול שטוח */
+  background: linear-gradient(160deg, #EAF4F5 0%, #D6E9EA 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(18, 147, 157, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.8),
+    0 3px 8px rgba(18, 147, 157, 0.12);
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
-.feat-card h3 { margin: 0; font-size: 17px; font-weight: 600; font-family: var(--font-body); }
-.feat-card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }
+.feat-card h3 { margin: 0; font-size: 17.5px; font-weight: 600; font-family: var(--font-body); }
+.feat-card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); max-width: 24ch; }
 
 /* שני הקולות יושבים על כהה — שם הטורקיז והכתום באמת קופצים */
 .sides {
