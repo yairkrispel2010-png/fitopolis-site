@@ -549,9 +549,11 @@ img, svg { max-width: 100%; }
   background: var(--dark-2);
   border: 1px solid var(--dark-line);
   border-radius: 26px;
-  padding: 30px 28px;
+  padding: 32px 28px;
   display: flex;
   flex-direction: column;
+  align-items: center;   /* סמן, כותרת וטקסט על ציר אחד */
+  text-align: center;
   gap: 18px;
 }
 .side-card .voice-dot { width: 46px; height: 46px; border-radius: 999px; }
@@ -570,11 +572,11 @@ img, svg { max-width: 100%; }
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   font-size: 16px;
   color: var(--dark-ink);
 }
-.side-card li { display: flex; gap: 10px; align-items: baseline; }
+.side-card li { display: flex; gap: 11px; align-items: baseline; justify-content: center; }
 .side-card li::before {
   content: "";
   width: 7px;
