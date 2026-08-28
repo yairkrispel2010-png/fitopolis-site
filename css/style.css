@@ -1270,3 +1270,11 @@ a.logotype { min-height: 44px; }
 @media (max-width: 560px) {
   .topbar-menu { gap: 2px; padding-block: 12px 6px; }
 }
+
+/* דף פנימי שקיבל פס סיום כהה (28/08) — הפוטר חוזר להיראות
+   בדיוק כמו בדף הבית: קו מפריד בין הפס לשורת הקישורים.
+   .inner-footer עדיין דוחף את הפוטר לתחתית בדפים קצרים. */
+.has-closing .footer-bar {
+  border-top: 1px solid var(--dark-line);
+  padding-top: 30px;
+}
