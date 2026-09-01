@@ -76,6 +76,9 @@ a { color: var(--trainer-text); text-decoration: none; }
 
 @media (hover: hover) and (pointer: fine) {
   a:hover { color: #0B6068; }
+  /* הכלל שמעל נועד לרקע בהיר. קישור הדילוג יושב על --dark, ובלי החריגה
+     הזאת הריחוף היה צובע אותו ב-#0B6068 על #1C1917 — יחס 2.4:1. */
+  .skip-link:hover { color: #FFFFFF; }
 }
 
 /* ── פוקוס נראה — בלי זה משתמש מקלדת לא יודע איפה הוא ─────── */
