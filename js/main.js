@@ -73,7 +73,7 @@
   // לופ הדמו בטלפון והטבעות המרחפות רצים בלי סוף. בלי זה הם
   // ממשיכים לצרוך ציור גם כשגוללים הרחק מהם.
   if ('IntersectionObserver' in window) {
-    var animated = document.querySelectorAll('.dp-screen, .features, .hero, .closing');
+    var animated = document.querySelectorAll('.hero, .closing');
     var pauseObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         e.target.classList.toggle('anim-paused', !e.isIntersecting);

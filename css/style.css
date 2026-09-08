@@ -329,6 +329,7 @@ img, svg { max-width: 100%; }
 }
 
 .section-head .section-title { margin: 0; text-align: center; }
+.section-intro { margin: -4px 0 0; max-width: 560px; text-align: center; font-size: 17px; line-height: 1.6; color: var(--ink-soft); }
 .section-mark { width: 38px; height: 38px; display: block; }
 /* הכרטיסים הלבנים יושבים על הרקע העמוק — שם הם באמת מתרוממים */
 .features {
@@ -370,76 +371,6 @@ img, svg { max-width: 100%; }
   }
 }
 
-.feat-card { justify-content: flex-start; padding: 16px 16px 26px; gap: 10px; }
-.feat-card h3 { margin-top: 8px; }
-/* פיסת הממשק: משטח בצבעי האפליקציה, לא בצבעי האתר */
-.feat-ui {
-  --k: 0.82;
-  width: 100%;
-  min-height: 150px;
-  padding: 12px;
-  border-radius: 16px;
-  background: var(--pf-bg, #F2F5F6);
-  border: 1px solid #DCE3E7;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-  color: #14212A;
-  text-align: start;
-  font-family: var(--font-body);
-}
-.feat-ui svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-.fu-row {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  background: #FFFFFF;
-  border: 1px solid #DCE3E7;
-  border-radius: 12px;
-  padding: 9px 11px;
-  font-size: 12.5px;
-  min-width: 0;
-}
-.fu-row .fu-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.fu-row .fu-t { font-weight: 500; line-height: 1.25; }
-.fu-row .fu-m { font-family: var(--font-digits); font-size: 11px; color: #5C6B75; white-space: nowrap; }
-.fu-row .fu-chk { width: 16px; height: 16px; flex: none; color: #C1CBD1; }
-.fu-row .fu-chk.v-trainee { color: var(--trainee); }
-.fu-row.dim { color: #93A1AA; }
-.fu-row .av { width: 28px; height: 28px; border-radius: 8px; font-size: 10.5px; }
-.fu-chat .bub.mine { background: var(--coach); color: #FFFFFF; }
-.fu-chat .bub.theirs { background: var(--trainee); color: var(--on-trainee); }
-.fu-meal { display: flex; flex-direction: column; gap: 3px; padding: 0 2px; }
-.fu-name { font-family: var(--font-display); font-weight: 600; font-size: 16px; }
-.fu-time { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: #5C6B75; }
-.fu-time svg { width: 12px; height: 12px; }
-.feat-ui .macros { margin: 0; gap: 5px; }
-.feat-ui .mc { background: #E9EEF0; border-radius: 10px; padding: 6px 2px; }
-.feat-ui .mc small { font-size: 9px; color: #5C6B75; }
-.feat-ui .mc b { font-size: 14px; font-family: var(--font-digits); font-weight: 400; }
-.feat-ui .mc i { font-size: 9px; color: #5C6B75; }
-.fu-eat { align-self: center; margin-top: 2px; min-height: 28px; font-size: 12px; padding-inline: 12px; }
-.fu-status { justify-items: start; }
-.chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 9px;
-  flex: none;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-.chip-positive { background: #E7F2EC; color: var(--positive-text); }
-.chip-attention { background: #F6EFDD; color: var(--attention-text); }
-.chip-negative { background: #F9EBEB; color: var(--negative-text); }
-.fu-status .s-old { animation: fu-old 7s infinite; }
-.fu-status .s-new { animation: fu-new 7s infinite; }
-@keyframes fu-old { 0%, 40% { opacity: 1; } 46%, 92% { opacity: 0; } 98%, 100% { opacity: 1; } }
-@keyframes fu-new { 0%, 40% { opacity: 0; } 46%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
-.fu-chat { justify-content: center; }
-.fu-chat .bub { --k: 0.82; max-width: 92%; }
 .feat-icon {
   width: 54px;
   height: 54px;
@@ -852,6 +783,10 @@ a.logotype { min-height: 44px; }
 }
 
 /* ═══ רספונסיב ═══════════════════════════════════════════── */
+@media (max-width: 600px) {
+  .hero h1 { text-wrap: balance; }   /* בלי שבירה כפויה — השורות מתאזנות לבד */
+  .hero h1 br { display: none; }
+}
 @media (max-width: 920px) {
   .hero-inner { flex-direction: column; align-items: flex-start; gap: 44px; padding-block: 28px 56px; }
   .phone-col { align-self: center; }
@@ -1221,50 +1156,84 @@ a.logotype { min-height: 44px; }
   padding-top: 30px;
 }
 
-/* ═══ דמו הטלפונים — שני הממשקים (08/09/2026) ═══════════════════
-   שני מכשירים שמריצים, בלולאה של 16 שניות, יום אחד משני הצדדים:
-   המאמן בפתיח (בית ← צ'אט ← בית), המתאמן בסקשן "שני הצדדים"
-   (היום ← סימון ארוחה ← הודעה חדשה מהמאמן). מה שהמאמן שולח בשנייה
-   10.4 מגיע למתאמן באותה שנייה.
 
-   נאמנות: הכול נגזר מהקוד של האפליקציה אחרי העיצוב מחדש —
-   סולם הניטרלים הקר (app_palette.dart), שבעת התפקידים, סולם
-   הטיפוגרפיה הנעול (app_theme.dart), רדיוסים (app_radius) והמבנה
-   של כל מסך. --k הוא יחס המסך: 280px תוכן מול 360dp במכשיר.
-   כל גודל כתוב כ-calc(<גודל באפליקציה> * var(--k)) — כך אפשר לבדוק
-   אותו מול הקוד בלי לנחש.
-
-   תנועה: transform · opacity · clip-path בלבד. הכול נעצר מחוץ למסך
-   (anim-paused, main.js) ומכבד צמצום תנועה (מצב סופי סטטי). */
+/* ═══ אב-הטיפוס האינטראקטיבי — שני הממשקים בתוך הטלפונים (09/09/2026) ═══
+   אין לולאות אנימציה. המסכים מצוירים ב-js/demo.js מ-state משותף לכל
+   הטלפונים בדף; תנועה רק כתגובה ללחיצה (פתיחת הבר, סיבוב הממשק).
+   הנאמנות כמו קודם: הפלטה הקרה, שבעת התפקידים, הסולם הנעול, הרדיוסים —
+   כל גודל = calc(<גודל באפליקציה> × var(--k)). */
 
 :root {
-  --pf-bg: #F2F5F6; --pf-card: #FFFFFF; --pf-alt: #E9EEF0; --pf-ink: #14212A; --pf-muted: #5C6B75; --pf-faint: #93A1AA; --pf-border: #DCE3E7; --pf-strong: #C1CBD1;
-  --coach: #12939D; --on-trainee: #331B04;
+  --pf-bg: #F2F5F6; --pf-card: #FFFFFF; --pf-alt: #E9EEF0; --pf-ink: #14212A; --pf-on-ink: #F2F5F6;
+  --pf-muted: #5C6B75; --pf-faint: #93A1AA; --pf-border: #DCE3E7; --pf-strong: #C1CBD1;
+  --pf-shadow: rgba(20, 33, 42, 0.07);
+  --coach: #12939D; --trainee: #F07C1A; --on-trainee: #331B04; --system: #B0599A; --attention: #C08A18;
+  --positive: #37945F; --negative: #CC5555;
 }
+
+/* ── העטיפה: פרספקטיבה לסיבוב, כפתור המעבר מתחת ─────────── */
+.dp-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  perspective: 1500px;
+}
+.dp-wrap::before {                /* זוהר עדין שמרים את המכשיר מהרקע */
+  content: "";
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  width: 460px;
+  height: 460px;
+  margin-left: -230px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(18, 147, 157, 0.14) 0%, rgba(18, 147, 157, 0.05) 38%, rgba(18, 147, 157, 0) 68%);
+  z-index: 0;
+  pointer-events: none;
+}
+.sides .dp-wrap::before { background: radial-gradient(circle, rgba(255, 244, 232, 0.16) 0%, rgba(255, 244, 232, 0.06) 40%, rgba(0, 0, 0, 0) 70%); }
+.flip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px 0 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.16s ease, box-shadow 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+.flip-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--system); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.7s cubic-bezier(0.68, -0.4, 0.32, 1.4); }
+.flip-btn:active { transform: scale(0.97); }
+.dp-wrap.is-flipping .flip-btn svg { transform: rotate(180deg); }
+.sides .flip-btn { background: var(--dark-2); border-color: var(--dark-line); color: #FFFFFF; }
+.demo-hint { font-size: 13.5px; color: var(--ink-soft); text-align: center; max-width: 300px; position: relative; z-index: 1; }
+.demo-hint .reset-btn { background: none; border: 0; padding: 0 4px; min-height: 44px; font: inherit; font-size: 13.5px; color: var(--trainer-text); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.sides .demo-hint { color: var(--dark-soft); }
+.sides .demo-hint .reset-btn { color: #FFFFFF; }
+
+@media (hover: hover) and (pointer: fine) {
+  .flip-btn:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+}
+
+/* ── המכשיר ──────────────────────────────────────────────── */
 .dp {
   --k: 0.78;
-  --pf-bg: #F2F5F6;       /* AppCx.light.bg */
-  --pf-card: #FFFFFF;
-  --pf-alt: #E9EEF0;      /* cardAlt */
-  --pf-ink: #14212A;
-  --pf-on-ink: #F2F5F6;
-  --pf-muted: #5C6B75;
-  --pf-faint: #93A1AA;
-  --pf-border: #DCE3E7;
-  --pf-strong: #C1CBD1;   /* borderStrong — הקו שרואים */
-  --pf-shadow: rgba(20, 33, 42, 0.07);
-  --coach: #12939D;
-  --trainee: #F07C1A;
-  --on-trainee: #331B04;
-  --system: #B0599A;
-  --attention: #C08A18;
-  --loop: 16s;
-
   position: relative;
+  z-index: 1;
   width: 300px;
   padding: 9px;
   border-radius: 46px;
-  /* גוף המכשיר: גרפיט עם אור מלמעלה-משמאל, וקו-אור דק על הקצה */
   background: linear-gradient(155deg, #34383d 0%, #16181b 38%, #0f1113 70%, #1d2024 100%);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.14),
@@ -1273,14 +1242,12 @@ a.logotype { min-height: 44px; }
     0 1px 2px rgba(0, 0, 0, 0.3),
     0 18px 36px -10px rgba(21, 18, 15, 0.45),
     0 60px 90px -28px rgba(21, 18, 15, 0.4);
-  transform: translateZ(0);     /* שכבה משלו — הצל העמוק לא מצויר מחדש בגלילה */
-  transition: transform 0.12s ease-out;
-  will-change: transform;
+  transform: translateZ(0);
   font-family: var(--font-body);
   color: var(--pf-ink);
   text-align: start;
+  transform-style: preserve-3d;
 }
-/* כפתורי הצד: הפעלה מימין, עוצמה משמאל — בולטים מהגוף במילימטר */
 .dp::before, .dp::after {
   content: "";
   position: absolute;
@@ -1291,7 +1258,7 @@ a.logotype { min-height: 44px; }
 }
 .dp::before { right: -3px; top: 132px; height: 52px; }
 .dp::after  { left: -3px; top: 112px; height: 34px; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 46px 0 0 #2a2d31; }
-.dp-trainee {
+.sides .dp {
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.2),
     inset 0 0 0 4px #0a0b0c,
@@ -1300,6 +1267,22 @@ a.logotype { min-height: 44px; }
     0 22px 40px -10px rgba(0, 0, 0, 0.6),
     0 70px 100px -30px rgba(0, 0, 0, 0.55);
 }
+/* הסיבוב בין הממשקים: חצי סיבוב החוצה, החלפת התוכן, חצי סיבוב פנימה */
+.dp.flip-out { animation: dp-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) both; }
+.dp.flip-in  { animation: dp-flip-in 0.4s cubic-bezier(0, 0, 0.2, 1) both; }
+/* הטלפון קופץ מעט ומסתובב על צירו; התוכן מתחלף כשהוא על הצד */
+@keyframes dp-flip-out { from { transform: rotateY(0) translateY(0) scale(1); } to { transform: rotateY(-90deg) translateY(-14px) scale(0.9); } }
+@keyframes dp-flip-in  { from { transform: rotateY(90deg) translateY(-14px) scale(0.9); } to { transform: rotateY(0) translateY(0) scale(1); } }
+
+:where(.dp) button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; text-align: start; }
+.dp button:disabled { cursor: default; }
+.dp button:focus-visible { outline: 2px solid var(--coach); outline-offset: 2px; }
+.dp svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.v-coach { color: var(--coach); }
+.v-trainee { color: var(--trainee); }
+.v-system { color: var(--system); }
+.v-attention { color: var(--attention); }
+.v-muted { color: var(--pf-muted); }
 
 .dp-screen {
   position: relative;
@@ -1313,8 +1296,7 @@ a.logotype { min-height: 44px; }
   line-height: 1.35;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
 }
-/* חור המצלמה — במרכז שורת הסטטוס, כמו במכשיר */
-.dp-screen::before {
+.dp-screen::before {              /* חור המצלמה */
   content: "";
   position: absolute;
   top: 8px;
@@ -1327,8 +1309,7 @@ a.logotype { min-height: 44px; }
   box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.35), inset 0 0 2px rgba(255, 255, 255, 0.18);
   z-index: 6;
 }
-/* ברק עדין מאוד על הזכוכית — לא מפריע לקריאה */
-.dp-screen::after {
+.dp-screen::after {               /* ברק עדין על הזכוכית */
   content: "";
   position: absolute;
   inset: 0;
@@ -1336,15 +1317,6 @@ a.logotype { min-height: 44px; }
   pointer-events: none;
   z-index: 5;
 }
-.dp svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-/* עקומה מותאמת לכל קטע בלולאה — לא ה-ease של ברירת המחדל (emil-design-eng) */
-.dp-screen, .dp-screen * { animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1); }
-.v-coach { color: var(--coach); }
-.v-trainee { color: var(--trainee); }
-.v-system { color: var(--system); }
-.v-attention { color: var(--attention); }
-
-/* ── שורת הסטטוס של הטלפון ─────────────────────────────────── */
 .dp-status {
   height: 28px;
   padding: 7px 20px 0;
@@ -1357,22 +1329,24 @@ a.logotype { min-height: 44px; }
 .dp-status-icons { display: flex; gap: 4px; color: var(--pf-ink); }
 .dp-status-icons svg { width: 12px; height: 12px; }
 
-/* ── הסרגל העליון (app_topbar.dart) ────────────────────────── */
+/* הסרגל העליון — הלוגו בגודל שרואים, לא בשארית המקום */
 .dp-topbar {
   display: flex;
   align-items: center;
   gap: calc(4px * var(--k));
-  padding: calc(10px * var(--k)) calc(20px * var(--k)) calc(12px * var(--k));
+  padding: calc(8px * var(--k)) calc(18px * var(--k)) calc(10px * var(--k));
 }
 .dp-wm {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 0.06em;
+  gap: 0.07em;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 13.5px;      /* הסימן נמתח ל-150dp במכשיר; כאן ~117px */
+  font-size: 20px;                /* כמו TopBarWordmark באפליקציה (רוחב ~150 מתוך 390) */
   line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 .dp-wm .fit { color: var(--coach); }
 .dp-wm .polis { color: var(--trainee); }
@@ -1386,46 +1360,49 @@ a.logotype { min-height: 44px; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: none;
+  box-sizing: border-box;
 }
 .dp-tbtn svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
+/* אזור הלחיצה של כפתורי הסרגל וכפתור החזרה גדול מהעיגול המצויר */
+.dp-tbtn, .dp-chead .back { position: relative; }
+.dp-tbtn::before, .dp-chead .back::before { content: ""; position: absolute; inset: -5px; border-radius: inherit; }
 .dp-me {
   width: calc(48px * var(--k));
   height: calc(48px * var(--k));
   margin-inline-start: calc(4px * var(--k));
-  border-radius: calc(48px * var(--k) * 22 / 72);   /* squircleRatio */
+  border-radius: calc(48px * var(--k) * 22 / 72);
   background: var(--pf-alt);
   color: var(--coach);
   font-weight: 700;
-  font-size: calc(16px * var(--k));
+  font-size: calc(15px * var(--k));
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: none;
   box-sizing: border-box;
 }
 .ring-coach { border: 2px solid var(--coach); }
 .ring-trainee { border: 2px solid var(--trainee); }
 
-/* ── הבמה: הדפים מוחלפים כאן, בר הניווט צף מעליהם ─────────── */
-.dp-stage { position: relative; flex: 1; overflow: hidden; }
-.dp-stage::after {              /* התוכן נבלע בעדינות מתחת לבר */
-  content: "";
+/* הבמה: המסך הנוכחי, גולל באמת */
+.dp-stage { position: relative; flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
+.dp-stage::-webkit-scrollbar { display: none; }
+.dp-page { padding: 0 calc(16px * var(--k)) 92px; min-height: 100%; box-sizing: border-box; }
+.dp-page.dp-chat { padding: 0; display: flex; flex-direction: column; min-height: 100%; }
+.dp-navwrap {                     /* התוכן נבלע בעדינות מתחת לבר */
   position: absolute;
   inset: auto 0 0 0;
-  height: 64px;
-  background: linear-gradient(180deg, rgba(242, 245, 246, 0) 0%, var(--pf-bg) 85%);
+  height: 84px;
+  background: linear-gradient(180deg, rgba(242, 245, 246, 0) 0%, var(--pf-bg) 60%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 14px;
   pointer-events: none;
-}
-.dp-page {
-  position: absolute;
-  inset: 0 0 auto 0;
-  padding: 0 calc(16px * var(--k)) 96px;
-  will-change: transform, opacity;
+  z-index: 3;
 }
 
-/* ── בית המאמן (trainer_home_screen.dart) ──────────────────── */
-.dp-stitle {                    /* ScreenTitle: קו — כותרת — קו */
+/* ── טיפוגרפיה ואטומים ──────────────────────────────────── */
+.dp-stitle {
   display: flex;
   align-items: center;
   gap: calc(12px * var(--k));
@@ -1436,6 +1413,20 @@ a.logotype { min-height: 44px; }
   line-height: 1.2;
 }
 .dp-stitle i { flex: 1; height: 1px; background: var(--pf-border); }
+.dp-ghead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(4px * var(--k));
+  margin: calc(8px * var(--k)) 0 calc(12px * var(--k));
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: calc(22px * var(--k));
+  line-height: 1.2;
+}
+.dp-ghead i { width: calc(56px * var(--k)); height: 3px; border-radius: 999px; background: var(--pf-strong); }
+.dp-sub { font-size: calc(13px * var(--k)); font-weight: 700; color: var(--pf-muted); margin: calc(6px * var(--k)) 0 calc(8px * var(--k)); }
+.dp-count { font-size: calc(12px * var(--k)); color: var(--pf-faint); margin-bottom: calc(8px * var(--k)); }
 .dp-card {
   background: var(--pf-card);
   border: 1px solid var(--pf-strong);
@@ -1448,22 +1439,13 @@ a.logotype { min-height: 44px; }
   text-align: center;
 }
 .dp-card + .dp-card { margin-top: calc(16px * var(--k)); }
-.dp-ct {                        /* כותרת הכרטיס: אייקון בקול + Fredoka 20 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: calc(10px * var(--k));
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: calc(20px * var(--k));
-  line-height: 1.2;
-}
-.dp-ct .ic { width: calc(24px * var(--k)); height: calc(24px * var(--k)); flex: none; }
+.dp-ct { display: flex; align-items: center; justify-content: center; gap: calc(10px * var(--k)); font-family: var(--font-display); font-weight: 600; font-size: calc(20px * var(--k)); line-height: 1.2; }
+.dp .ic { width: calc(24px * var(--k)); height: calc(24px * var(--k)); }
 .dp-body { margin-top: calc(12px * var(--k)); font-size: calc(15px * var(--k)); line-height: 1.4; color: var(--pf-muted); }
 .dp-note { margin-top: calc(6px * var(--k)); font-size: calc(12px * var(--k)); color: var(--pf-muted); }
-.dp-label { margin-top: calc(4px * var(--k)); font-size: calc(13px * var(--k)); font-weight: 700; color: var(--pf-ink); }
+.dp-label { margin-top: calc(14px * var(--k)); font-size: calc(13px * var(--k)); font-weight: 700; color: var(--pf-ink); }
 .dp-avs { display: flex; justify-content: center; gap: calc(10px * var(--k)); margin-top: calc(14px * var(--k)); }
-.av {                           /* ClientAvatar: ריבוע מעוגל, ראשי תיבות על צבע */
+.av {
   width: calc(46px * var(--k));
   height: calc(46px * var(--k));
   border-radius: calc(12px * var(--k));
@@ -1473,15 +1455,17 @@ a.logotype { min-height: 44px; }
   font-size: calc(16px * var(--k));
   font-weight: 700;
   box-sizing: border-box;
-  border: 1.5px solid var(--trainee);   /* הטבעת = קול המתאמן (מפת השפה, יב) */
+  border: 1.5px solid var(--trainee);
   flex: none;
 }
 .av.sm { width: calc(38px * var(--k)); height: calc(38px * var(--k)); border-radius: calc(10px * var(--k)); font-size: calc(13px * var(--k)); }
+.av.md { width: calc(46px * var(--k)); height: calc(46px * var(--k)); border-radius: calc(13px * var(--k)); }
+.av.lg { width: calc(72px * var(--k)); height: calc(72px * var(--k)); border-radius: calc(22px * var(--k)); font-size: calc(22px * var(--k)); }
 .av-blue { background: #DBEAFE; color: #1A3A6B; }
 .av-green { background: #D1FAE5; color: #065F46; }
 .av-amber { background: #FEF3C7; color: #92400E; }
 .av-purple { background: #F3E8FF; color: #6D28D9; }
-.dp-obtn {                      /* SecondaryButton: מתאר על רקע הכרטיס */
+.dp-obtn {
   width: 100%;
   margin-top: calc(16px * var(--k));
   min-height: calc(44px * var(--k));
@@ -1495,8 +1479,10 @@ a.logotype { min-height: 44px; }
   font-weight: 500;
   color: var(--pf-ink);
   box-sizing: border-box;
+  transition: transform 0.14s ease, background 0.14s ease;
 }
-.dp-mrow {                      /* שורת פגישה: cardAlt + borderStrong */
+.dp-obtn:active { transform: scale(0.97); background: var(--pf-alt); }
+.dp-mrow {
   width: 100%;
   margin-top: calc(10px * var(--k));
   padding: calc(11px * var(--k)) calc(10px * var(--k));
@@ -1506,170 +1492,60 @@ a.logotype { min-height: 44px; }
   display: flex;
   align-items: center;
   gap: calc(10px * var(--k));
-  text-align: start;
   box-sizing: border-box;
 }
-.dp-mrow + .dp-mrow { margin-top: calc(10px * var(--k)); }
+.dp-mrow:active { transform: scale(0.99); }
 .dp-mrow .mtxt { flex: 1; font-size: calc(15px * var(--k)); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dp-mrow .chev { width: calc(20px * var(--k)); height: calc(20px * var(--k)); color: var(--pf-faint); }
-.dp-mrow + .dp-label { margin-top: calc(14px * var(--k)); }
 
-/* ── שרשור הצ'אט (chat_message_bubble.dart: הבועה בקול הכותב) ── */
-.dp-chat { inset: 0; padding: 0; display: flex; flex-direction: column; }
-.dp-chead {
-  display: flex;
-  align-items: center;
-  gap: calc(10px * var(--k));
-  padding: calc(8px * var(--k)) calc(16px * var(--k)) calc(12px * var(--k));
-  border-bottom: 1px solid var(--pf-border);
-}
-.dp-chead .back { width: calc(24px * var(--k)); height: calc(24px * var(--k)); color: var(--pf-muted); }
-.dp-chead .cname { font-size: calc(16px * var(--k)); font-weight: 700; }
-.dp-bubbles {
-  flex: 1;
+/* כרטיס שורה (לקוח / צ'אט / תשלום / אימון) */
+.dp-ccard {
+  width: 100%;
+  margin-bottom: calc(12px * var(--k));
   padding: calc(14px * var(--k)) calc(16px * var(--k));
-  display: flex;
-  flex-direction: column;
-  gap: calc(10px * var(--k));
-}
-.bub {
-  max-width: 82%;
-  padding: calc(9px * var(--k)) calc(12px * var(--k));
-  border-radius: calc(16px * var(--k));
-  font-size: calc(15px * var(--k));
-  line-height: 1.4;
-  display: flex;
-  align-items: flex-end;
-  gap: calc(8px * var(--k));
-}
-.bub time { font-size: calc(12px * var(--k)); opacity: 0.78; white-space: nowrap; }
-.bub.theirs { background: var(--trainee); color: var(--on-trainee); align-self: flex-start; }
-.bub.mine { background: var(--coach); color: #FFFFFF; align-self: flex-end; }
-.dp-input {
-  display: flex;
-  align-items: center;
-  gap: calc(8px * var(--k));
-  padding: calc(8px * var(--k)) calc(16px * var(--k)) 88px;
-}
-.dp-input .field {
-  flex: 1;
-  height: calc(40px * var(--k));
-  border-radius: 999px;
-  background: var(--pf-card);
-  border: 1.2px solid var(--pf-border);
-  display: flex;
-  align-items: center;
-  padding-inline: calc(14px * var(--k));
-  color: var(--pf-faint);
-  font-size: calc(15px * var(--k));
-  box-sizing: border-box;
-}
-.dp-input .send {
-  width: calc(36px * var(--k));
-  height: calc(36px * var(--k));
-  border-radius: 999px;
-  background: var(--coach);
-  color: #FFFFFF;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-}
-.dp-input .send svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
-
-/* ── בר הניווט (bottom_nav_with_fab / trainee_bottom_nav) ────── */
-/* גלולה שמכווצת סביב הטאב הפעיל ונפתחת לרגע ("הצצת הגילוי").
-   הכיווץ ב-clip-path + transform בלבד — בלי הנפשת רוחב. הגאומטריה
-   קבועה: 220px, ריפוד 5, טאב פעיל 46, טאב רגיל 38, רווח 3. */
-.dp-nav {
-  --clip-all: inset(0 0 0 0 round 24px);
-  --clip-home: inset(0 0 0 162px round 24px);      /* הטאב הראשון (ימין): 0–58 מהקצה */
-  --clip-chat: inset(0 90px 0 82px round 24px);    /* הטאב השלישי: 90–148 מהקצה */
-  --center-home: translateX(-81px);                /* מרכז הפרוסה (29) → מרכז הבר (110) */
-  --center-chat: translateX(4px);
-  position: absolute;
-  bottom: 14px;
-  left: 50%;
-  margin-left: -110px;
-  width: 220px;
-  padding: 5px;
-  box-sizing: border-box;
-  border-radius: 24px;
-  background: var(--pf-card);
-  border: 1px solid var(--pf-border);
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  clip-path: var(--clip-home);
-  transform: var(--center-home);
-  will-change: transform, clip-path;
-}
-/* אצל המאמן גם "צ'אט" רחב (הוא נהיה פעיל בסצנה השנייה): 230px */
-.dp-nav-trainer {
-  --clip-home: inset(0 0 0 172px round 24px);
-  --center-home: translateX(-86px);
-  width: 230px;
-  margin-left: -115px;
-}
-.dp-tab {
-  width: 38px;
-  padding: 7px 0;
-  border-radius: 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  color: var(--pf-faint);
-  flex: none;
-  box-sizing: border-box;
-}
-.dp-tab svg { width: 16px; height: 16px; }
-.dp-tab b { display: none; font-size: 8px; font-weight: 700; line-height: 1; }
-.dp-tab.t-home, .dp-tab.t-chat { width: 46px; }
-.dp-tab.t-home b, .dp-tab.t-chat b { display: block; }
-/* הטאב הפעיל: אצל המאמן בקול המתאמן (הכרעת בעלים על v320), אצל המתאמן בדיו */
-.dp-nav-trainer .dp-tab.is-on { background: var(--trainee); color: var(--on-trainee); }
-.dp-nav-trainee .dp-tab.is-on { background: var(--pf-ink); color: var(--pf-on-ink); }
-.dp-nav-trainee .dp-tab.t-home { width: 46px; }
-.dp-nav-trainee .dp-tab:not(.t-home) b { display: none; }
-
-/* ── היום של המתאמן (today_screen.dart) ─────────────────────── */
-.dp-ghead {                     /* כותרת קבוצה: Fredoka 22 + קו 56×3 */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(4px * var(--k));
-  margin: calc(8px * var(--k)) 0 calc(12px * var(--k));
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: calc(22px * var(--k));
-  line-height: 1.2;
-}
-.dp-ghead i { width: calc(56px * var(--k)); height: 3px; border-radius: 999px; background: var(--pf-strong); }
-.dp-tcard {                     /* TraineeCard: קו-שיער, לא borderStrong */
   background: var(--pf-card);
   border: 1px solid var(--pf-border);
   border-radius: calc(18px * var(--k));
   box-shadow: 0 calc(4px * var(--k)) calc(12px * var(--k)) var(--pf-shadow);
-  padding: calc(16px * var(--k));
-  box-sizing: border-box;
-}
-.dp-tcard + .dp-tcard, .dp-tcard + .dp-ghead { margin-top: calc(16px * var(--k)); }
-.dp-row {
-  min-height: calc(56px * var(--k));
-  padding: calc(12px * var(--k)) calc(4px * var(--k));
   display: flex;
   align-items: center;
-  gap: calc(16px * var(--k));
+  gap: calc(12px * var(--k));
+  box-sizing: border-box;
+  transition: transform 0.14s ease;
 }
-.dp-row + .dp-row { border-top: 1px solid var(--pf-border); }
-.dp-row .ic { width: calc(24px * var(--k)); height: calc(24px * var(--k)); flex: none; }
-.dp-row .col { flex: 1; display: flex; flex-direction: column; gap: calc(4px * var(--k)); min-width: 0; }
-.dp-row .lbl, .meal-split .lbl, .dp-graph .lbl { font-size: calc(13px * var(--k)); font-weight: 700; color: var(--pf-muted); line-height: 1.3; }
-.dp-row .val { font-size: calc(16px * var(--k)); font-weight: 500; line-height: 1.35; }
-.dp-row .sub { display: flex; gap: calc(4px * var(--k)); align-items: flex-start; font-size: calc(12px * var(--k)); line-height: 1.35; }
-.dp-row .sub svg { width: calc(13px * var(--k)); height: calc(13px * var(--k)); flex: none; margin-top: 2px; }
-.dp-row .badge {
+.dp-ccard:not(:disabled):active { transform: scale(0.985); }
+.dp-ccard .col, .dp-req .col, .dp-mealrow .col, .dp-ex .col, .dp-meetcard .col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: calc(3px * var(--k)); }
+.dp-ccard b, .dp-req b, .dp-mealrow b, .dp-ex b, .dp-meetcard b { font-size: calc(16px * var(--k)); font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dp-ccard small, .dp-req small, .dp-mealrow small, .dp-ex small, .dp-meetcard small { font-size: calc(13px * var(--k)); color: var(--pf-muted); line-height: 1.35; display: flex; align-items: center; gap: 4px; }
+.dp-ccard small svg, .dp-mealrow small svg { width: calc(13px * var(--k)); height: calc(13px * var(--k)); }
+.dp-ccard .meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+.dp-ccard .meta time { font-size: calc(12px * var(--k)); color: var(--pf-faint); }
+.badge-needs, .badge-ok, .badge-noinfo {
+  flex: none;
+  padding: calc(6px * var(--k)) calc(12px * var(--k));
+  border-radius: 999px;
+  font-size: calc(12px * var(--k));
+  font-weight: 800;
+  white-space: nowrap;
+}
+.badge-needs { background: #F9EBEB; color: var(--negative); }
+.badge-ok { background: #E7F2EC; color: var(--positive); }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  flex: none;
+}
+.chip-positive { background: #E7F2EC; color: var(--positive-text); }
+.chip-attention { background: #F6EFDD; color: var(--attention-text); }
+.chip-negative { background: #F9EBEB; color: var(--negative-text); }
+.chip-neutral { background: var(--pf-alt); color: var(--pf-muted); }
+.chip-coach { background: var(--coach); color: #FFFFFF; }
+.badge {
   min-width: calc(24px * var(--k));
   height: calc(24px * var(--k));
   padding-inline: calc(7px * var(--k));
@@ -1682,55 +1558,87 @@ a.logotype { min-height: 44px; }
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  flex: none;
 }
-
-/* כרטיס הארוחה — המצב המלא והמפוצל מונחים באותו תא ומוחלפים בשקיפות */
-.dp-meal { display: grid; padding: calc(20px * var(--k)); }
-.dp-meal > * { grid-area: 1 / 1; }
-.meal-full { display: flex; flex-direction: column; align-items: flex-start; gap: calc(8px * var(--k)); }
-.vpill {                        /* _VoicePill: מסגרת 2px בקול, טקסט בדיו */
-  display: inline-flex;
+.badge-trainee { background: var(--trainee); color: var(--on-trainee); }
+.dp-search {
+  display: flex;
   align-items: center;
-  gap: calc(6px * var(--k));
-  padding: calc(4px * var(--k)) calc(11px * var(--k));
-  border-radius: 999px;
-  border: 2px solid currentColor;
-  font-size: calc(13px * var(--k));
-  font-weight: 700;
+  gap: 8px;
+  height: calc(44px * var(--k));
+  padding-inline: calc(14px * var(--k));
+  border-radius: calc(14px * var(--k));
+  background: var(--pf-card);
+  border: 1.2px solid var(--pf-border);
+  color: var(--pf-faint);
+  font-size: calc(15px * var(--k));
+  margin-bottom: calc(10px * var(--k));
 }
-.vpill svg { width: calc(13px * var(--k)); height: calc(13px * var(--k)); }
-.vpill.v-coach { color: var(--coach); }
-.vpill.v-coach::after { content: ""; }
-.vpill span, .vpill { color: var(--pf-ink); border-color: var(--coach); }
-.vpill svg { color: var(--coach); }
+.dp-search svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
+.dp-filter, .dp-tabs { display: flex; gap: 4px; padding: 3px; background: var(--pf-alt); border-radius: 999px; margin-bottom: calc(10px * var(--k)); }
+.dp-filter span, .dp-tabs span { flex: 1; text-align: center; padding: calc(7px * var(--k)) 0; border-radius: 999px; font-size: calc(13px * var(--k)); font-weight: 700; color: var(--pf-muted); }
+.dp-filter span.on, .dp-tabs span.on { background: var(--pf-card); color: var(--pf-ink); box-shadow: 0 1px 3px rgba(20, 33, 42, 0.12); }
+
+/* פרופיל המתאמן (profile_hero_header: אווטאר, עובדות, תגיות) */
+.dp-chead { display: flex; align-items: center; gap: calc(10px * var(--k)); padding: calc(6px * var(--k)) calc(16px * var(--k)) calc(12px * var(--k)); border-bottom: 1px solid var(--pf-border); }
+.dp-page:not(.dp-chat) .dp-chead { margin: 0 calc(-16px * var(--k)) calc(12px * var(--k)); }
+.dp-chead .back { width: calc(34px * var(--k)); height: calc(34px * var(--k)); display: inline-flex; align-items: center; justify-content: center; color: var(--pf-muted); }
+.dp-chead .back svg { width: calc(24px * var(--k)); height: calc(24px * var(--k)); }
+.dp-chead .cname { font-size: calc(17px * var(--k)); font-weight: 700; flex: 1; }
+.dp-hero { display: grid; grid-template-columns: auto 1fr; gap: calc(6px * var(--k)) calc(14px * var(--k)); align-items: start; margin-bottom: calc(12px * var(--k)); }
+.dp-hero .av { grid-row: 1 / 3; }
+.dp-hero .facts { display: flex; flex-direction: column; gap: 2px; font-size: calc(13px * var(--k)); }
+.dp-hero .facts b { font-weight: 700; color: var(--pf-muted); margin-inline-end: 6px; }
+.dp-hero .tags { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.dp-hero .tags i { width: 1px; height: 18px; background: var(--pf-border); }
+.tag-set { padding: 4px 10px; border-radius: 999px; background: var(--pf-alt); color: var(--pf-muted); font-size: calc(12px * var(--k)); font-weight: 700; }
+
+/* שורות מסך היום / הפרופיל (_TodayRow) */
+.dp-tcard {
+  background: var(--pf-card);
+  border: 1px solid var(--pf-border);
+  border-radius: calc(18px * var(--k));
+  box-shadow: 0 calc(4px * var(--k)) calc(12px * var(--k)) var(--pf-shadow);
+  padding: calc(16px * var(--k));
+  box-sizing: border-box;
+  width: 100%;
+}
+.dp-tcard + .dp-tcard, .dp-tcard + .dp-ghead, .dp-sub + .dp-tcard { margin-top: calc(12px * var(--k)); }
+.dp-row {
+  width: 100%;
+  min-height: calc(56px * var(--k));
+  padding: calc(12px * var(--k)) calc(4px * var(--k));
+  display: flex;
+  align-items: center;
+  gap: calc(16px * var(--k));
+  box-sizing: border-box;
+  border-radius: calc(14px * var(--k));
+}
+button.dp-row:active { background: var(--pf-alt); }
+.dp-row + .dp-row { border-top: 1px solid var(--pf-border); border-radius: 0; }
+.dp-row .col { flex: 1; display: flex; flex-direction: column; gap: calc(4px * var(--k)); min-width: 0; }
+.dp-row .lbl, .meal-split .lbl, .dp-graph .lbl, .sheet-card .lbl { font-size: calc(13px * var(--k)); font-weight: 700; color: var(--pf-muted); line-height: 1.3; }
+.dp-row .val { font-size: calc(16px * var(--k)); font-weight: 500; line-height: 1.35; }
+.dp-row .sub { display: flex; gap: calc(4px * var(--k)); align-items: flex-start; font-size: calc(12px * var(--k)); line-height: 1.35; }
+.dp-row .sub svg { width: calc(13px * var(--k)); height: calc(13px * var(--k)); margin-top: 2px; }
+
+/* כרטיס הארוחה */
+.dp-meal { padding: calc(20px * var(--k)); }
+.meal-full { display: flex; flex-direction: column; align-items: flex-start; gap: calc(8px * var(--k)); }
+.vpill { display: inline-flex; align-items: center; gap: calc(6px * var(--k)); padding: calc(4px * var(--k)) calc(11px * var(--k)); border-radius: 999px; border: 2px solid var(--coach); font-size: calc(13px * var(--k)); font-weight: 700; color: var(--pf-ink); white-space: nowrap; }
+.vpill svg { width: calc(13px * var(--k)); height: calc(13px * var(--k)); color: var(--coach); }
 .mname { font-family: var(--font-display); font-weight: 600; font-size: calc(20px * var(--k)); line-height: 1.2; margin-top: calc(2px * var(--k)); }
 .mname.muted { color: var(--pf-muted); }
 .mtime { display: flex; align-items: center; gap: calc(5px * var(--k)); font-size: calc(15px * var(--k)); color: var(--pf-muted); }
 .mtime svg { width: calc(15px * var(--k)); height: calc(15px * var(--k)); }
 .msrc { font-size: calc(15px * var(--k)); line-height: 1.4; }
 .msrc.muted { color: var(--pf-muted); }
-.macros {                       /* MealMacroCells: ארבעה תאים שווים על cardAlt */
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: calc(6px * var(--k));
-  margin-top: calc(4px * var(--k));
-}
-.mc {
-  background: var(--pf-alt);
-  border-radius: calc(14px * var(--k));
-  padding: calc(8px * var(--k)) calc(4px * var(--k));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-}
+.macros { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(6px * var(--k)); margin-top: calc(4px * var(--k)); }
+.mc { background: var(--pf-alt); border-radius: calc(14px * var(--k)); padding: calc(8px * var(--k)) calc(4px * var(--k)); display: flex; flex-direction: column; align-items: center; gap: 1px; }
 .mc small { font-size: calc(11px * var(--k)); font-weight: 700; color: var(--pf-muted); }
 .mc b { font-family: var(--font-digits); font-weight: 400; font-size: calc(17px * var(--k)); line-height: 1.1; }
 .mc i { font-style: normal; font-size: calc(11px * var(--k)); color: var(--pf-muted); min-height: 1em; }
-.dp-eat {                       /* "סמן שאכלת" — הפעולה של המתאמן, בקול שלו */
-  position: relative;
-  overflow: hidden;
+.dp-eat {
   width: 100%;
   min-height: calc(44px * var(--k));
   margin-top: calc(6px * var(--k));
@@ -1744,224 +1652,228 @@ a.logotype { min-height: 44px; }
   justify-content: center;
   gap: calc(6px * var(--k));
   box-sizing: border-box;
-  transform-origin: center;
+  transition: transform 0.14s ease, opacity 0.2s ease;
 }
+.dp-eat:active { transform: scale(0.97); }
 .dp-eat svg { width: calc(20px * var(--k)); height: calc(20px * var(--k)); }
-.dp-eat.compact { min-height: calc(32px * var(--k)); font-size: calc(13px * var(--k)); width: auto; padding-inline: calc(12px * var(--k)); }
-.dp-eat .ripple {               /* הגל של הלחיצה (InkWell) */
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 40px; height: 40px;
-  margin: -20px 0 0 -20px;
-  border-radius: 999px;
-  background: rgba(51, 27, 4, 0.14);
-  transform: scale(0);
-  opacity: 0;
-}
-.meal-split {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: calc(12px * var(--k));
-  align-items: stretch;
-  opacity: 0;
-}
+.dp-eat.compact { min-height: calc(32px * var(--k)); font-size: calc(13px * var(--k)); width: auto; padding-inline: calc(12px * var(--k)); margin: 0; flex: none; }
+.dp-eat.dim { opacity: 0.45; }
+.meal-split { display: grid; grid-template-columns: 1fr auto 1fr; gap: calc(12px * var(--k)); align-items: stretch; }
 .meal-split .half { display: flex; flex-direction: column; align-items: flex-start; gap: calc(6px * var(--k)); justify-content: center; min-width: 0; }
-.meal-split .vpill { white-space: nowrap; font-size: calc(12px * var(--k)); padding-inline: calc(8px * var(--k)); }
+.meal-split .vpill { font-size: calc(12px * var(--k)); padding-inline: calc(8px * var(--k)); }
 .meal-split .mtime { font-size: calc(13px * var(--k)); }
 .meal-split .vdiv { width: 1px; background: var(--pf-border); }
 .meal-split .done { display: flex; align-items: center; gap: calc(6px * var(--k)); font-size: calc(15px * var(--k)); font-weight: 700; }
 .meal-split .done svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
+.meal-done { display: flex; gap: 8px; align-items: flex-start; font-size: calc(15px * var(--k)); font-weight: 500; line-height: 1.4; }
+.meal-done svg { width: 20px; height: 20px; }
+.dp-mealrow { display: flex; align-items: center; gap: calc(10px * var(--k)); }
+.dp-mealrow.eaten b { color: var(--pf-muted); }
+.dp-mini { display: inline-flex; align-items: center; gap: 4px; min-height: calc(32px * var(--k)); padding-inline: calc(10px * var(--k)); border-radius: 999px; font-size: calc(13px * var(--k)); font-weight: 700; flex: none; }
+.dp-mini svg { width: calc(16px * var(--k)); height: calc(16px * var(--k)); }
+.v-coach-fill { background: var(--coach); color: #FFFFFF; }
+.v-trainee-text { color: var(--pf-ink); }
+.dp-req { display: flex; align-items: center; gap: calc(10px * var(--k)); }
+.dp-meetcard { display: flex; align-items: center; gap: calc(10px * var(--k)); }
+.dp-note-ok { display: flex; align-items: center; gap: 6px; margin-top: calc(12px * var(--k)); font-size: calc(14px * var(--k)); font-weight: 700; }
+.dp-note-ok svg { width: 18px; height: 18px; }
 
-/* גרף ההתקדמות — רמז לקרוסלה, לא הקרוסלה עצמה */
+/* ביצוע אימון (workout_execution): סטים כעיגולים שמסמנים */
+.dp-ex { display: flex; align-items: center; gap: calc(10px * var(--k)); }
+.dp-ex .dots { display: flex; gap: 5px; flex: none; }
+.dp-tcard.dp-ex .col b, .dp[data-side="trainee"] .dp-ccard b { white-space: normal; overflow: visible; }   /* שם תרגיל ארוך נשבר לשתי שורות, לא נקטע */
+.setdot {
+  width: calc(32px * var(--k) + 7px);
+  height: calc(32px * var(--k) + 7px);
+  border-radius: 999px;
+  border: 1.5px solid var(--pf-strong);
+  background: var(--pf-card);
+  color: var(--pf-muted);
+  font-family: var(--font-digits);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease;
+}
+.setdot.on { background: var(--trainee); border-color: var(--trainee); color: var(--on-trainee); }
+.setdot:active { transform: scale(0.9); }
+.dp-ex + .dp-ex { margin-top: calc(10px * var(--k)); }
+.dp-ex + .dp-eat { margin-top: calc(14px * var(--k)); }
+
+/* הגרף */
 .dp-graph { display: flex; flex-direction: column; gap: calc(6px * var(--k)); }
-.dp-graph .big { display: flex; align-items: baseline; gap: calc(4px * var(--k)); }
-.dp-graph .big b { font-family: var(--font-digits); font-weight: 400; font-size: calc(34px * var(--k)); line-height: 1.1; }
-.dp-graph .big i { font-style: normal; font-size: calc(12px * var(--k)); color: var(--pf-muted); }
+.dp-graph .big, .sheet-card .big { display: flex; align-items: baseline; gap: calc(4px * var(--k)); }
+.dp-graph .big b, .sheet-card .big b { font-family: var(--font-digits); font-weight: 400; font-size: calc(34px * var(--k)); line-height: 1.1; }
+.dp-graph .big i, .sheet-card .big i { font-style: normal; font-size: calc(12px * var(--k)); color: var(--pf-muted); }
 .dp-graph .line { width: 100%; height: calc(64px * var(--k)); stroke-width: 0; }
 
-/* ── ההחלפות (swap): שתי שכבות באותו תא ─────────────────────── */
-.dp-swap { display: grid; }
-.dp-swap > * { grid-area: 1 / 1; }
-.s-new { opacity: 0; }
-.av-late, .badge-late, .bub-late { opacity: 0; }
+/* הצ'אט */
+.dp-bubbles { flex: 1; padding: calc(14px * var(--k)) calc(16px * var(--k)); display: flex; flex-direction: column; gap: calc(10px * var(--k)); }
+.bub { max-width: 82%; padding: calc(9px * var(--k)) calc(12px * var(--k)); border-radius: calc(16px * var(--k)); font-size: calc(15px * var(--k)); line-height: 1.4; display: flex; align-items: flex-end; gap: calc(8px * var(--k)); }
+.bub time { font-size: calc(12px * var(--k)); opacity: 0.78; white-space: nowrap; }
+.bub.theirs { align-self: flex-start; }
+.bub.mine { align-self: flex-end; }
+.dp[data-side="trainer"] .bub.mine, .dp[data-side="trainee"] .bub.theirs { background: var(--coach); color: #FFFFFF; }
+.dp[data-side="trainer"] .bub.theirs, .dp[data-side="trainee"] .bub.mine { background: var(--trainee); color: var(--on-trainee); }
+.dp-input { display: flex; align-items: center; gap: calc(8px * var(--k)); padding: calc(8px * var(--k)) calc(16px * var(--k)) 96px; }
+.dp-input .field { flex: 1; min-height: calc(40px * var(--k)); border-radius: 999px; background: var(--pf-card); border: 1.2px solid var(--pf-border); display: flex; align-items: center; padding-inline: calc(14px * var(--k)); color: var(--pf-muted); font-size: calc(14px * var(--k)); box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dp-input .send { width: calc(38px * var(--k)); height: calc(38px * var(--k)); border-radius: 999px; background: var(--coach); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; transition: transform 0.12s ease; }
+.dp-input .send:active { transform: scale(0.9); }
+.dp-input .send svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
+.dp[data-side="trainee"] .dp-input .send { background: var(--trainee); color: var(--on-trainee); }
 
-/* ═══ הכוריאוגרפיה — לולאה של 16 שניות ══════════════════════════
-   0.0s  בית · הבר מכווץ
-   1.2s  הצצת הגילוי: הבר נפתח ל-1.7 שניות ומתכווץ
-   3.4s  הודעה שלישית נכנסת (מאמן) / —
-   4.0s  — / המתאמן גולל לכרטיס הארוחה
-   5.8s  המאמן גולל למטה — פגישות ובקשות / המתאמן לוחץ "סמן שאכלת"
-   9.3s  — / המתאמן חוזר למעלה
-   9.7s  המאמן פותח את הצ'אט עם דניאל
-   10.4s המאמן שולח "שלחתי לך את התכנית המעודכנת" ← המתאמן מקבל אותה
-   13.4s המאמן חוזר לבית
-   16.0s מתחילים מחדש */
-.dp-nav-trainer { animation: dp-nav-trainer var(--loop) infinite; }
-.dp-nav-trainee { animation: dp-nav-trainee var(--loop) infinite; }
-.dp-nav-trainer .dp-tab.t-home { animation: dp-tab-home var(--loop) infinite; }
-.dp-nav-trainer .dp-tab.t-chat { animation: dp-tab-chat var(--loop) infinite; }
-.dp-nav-trainer .dp-tab:not(.t-home):not(.t-chat),
-.dp-nav-trainee .dp-tab:not(.t-home) { animation: dp-tab-rest var(--loop) infinite; }
-.dp-nav-trainee .dp-tab.t-home { animation: none; }
+/* הגיליון של הזנת המשקל */
+.dp-sheet { position: absolute; inset: 0; z-index: 7; background: rgba(0, 0, 0, 0.45); display: flex; align-items: flex-end; }
+.dp-sheet[hidden] { display: none; }
+.sheet-card { width: 100%; background: var(--pf-bg); border-radius: calc(26px * var(--k)) calc(26px * var(--k)) 0 0; padding: calc(20px * var(--k)) calc(20px * var(--k)) calc(24px * var(--k)); display: flex; flex-direction: column; gap: calc(8px * var(--k)); box-sizing: border-box; }
+.sheet-card .hint { font-size: calc(12px * var(--k)); color: var(--pf-muted); }
+.sheet-btns { display: flex; gap: 8px; align-items: center; margin-top: calc(8px * var(--k)); }
+.sheet-btns .dp-obtn { margin: 0; flex: 1; }
 
-@keyframes dp-nav-trainer {
-  0%, 7.5%    { clip-path: var(--clip-home); transform: var(--center-home); }
-  10%, 18%    { clip-path: var(--clip-all);  transform: translateX(0); }
-  21%, 58%    { clip-path: var(--clip-home); transform: var(--center-home); }
-  60.5%, 62%  { clip-path: var(--clip-all);  transform: translateX(0); }
-  64.5%, 84%  { clip-path: var(--clip-chat); transform: var(--center-chat); }
-  87%, 100%   { clip-path: var(--clip-home); transform: var(--center-home); }
-}
-@keyframes dp-nav-trainee {
-  0%, 7.5%    { clip-path: var(--clip-home); transform: var(--center-home); }
-  10%, 18%    { clip-path: var(--clip-all);  transform: translateX(0); }
-  21%, 100%   { clip-path: var(--clip-home); transform: var(--center-home); }
-}
-/* התווית מופיעה רק על הטאב הפעיל — כמו באפליקציה */
-.dp-nav-trainer .dp-tab.t-home b { animation: dp-lbl-home var(--loop) infinite; }
-.dp-nav-trainer .dp-tab.t-chat b { animation: dp-lbl-chat var(--loop) infinite; }
-@keyframes dp-lbl-home { 0%, 62% { opacity: 1; } 64.5%, 84% { opacity: 0; } 87%, 100% { opacity: 1; } }
-@keyframes dp-lbl-chat { 0%, 62% { opacity: 0; } 64.5%, 84% { opacity: 1; } 87%, 100% { opacity: 0; } }
-@keyframes dp-tab-rest {
-  0%, 8%     { opacity: 0; }
-  10.5%, 18% { opacity: 1; }
-  20.5%, 59% { opacity: 0; }
-  61%, 62%   { opacity: 1; }
-  64.5%, 100% { opacity: 0; }
-}
-/* הטאב הפעיל אצל המאמן: בית עד 62%, צ'אט עד 87%, ובחזרה */
-@keyframes dp-tab-home {
-  0%, 62%    { background: var(--trainee); color: var(--on-trainee); opacity: 1; }
-  64.5%, 84% { background: transparent;   color: var(--pf-faint);   opacity: 0; }
-  87%, 100%  { background: var(--trainee); color: var(--on-trainee); opacity: 1; }
-}
-@keyframes dp-tab-chat {
-  0%, 8%      { background: transparent; color: var(--pf-faint); opacity: 0; }
-  10.5%, 18%  { background: transparent; color: var(--pf-faint); opacity: 1; }
-  20.5%, 59%  { opacity: 0; }
-  61%, 62%    { background: transparent; color: var(--pf-faint); opacity: 1; }
-  64.5%, 84%  { background: var(--trainee); color: var(--on-trainee); opacity: 1; }
-  87%, 100%   { background: transparent; color: var(--pf-faint); opacity: 0; }
-}
-
-/* הדפים */
-.dp-trainer .dp-home { animation: dp-home-trainer var(--loop) infinite; }
-.dp-trainer .dp-chat { animation: dp-chat-trainer var(--loop) infinite; }
-.dp-trainee .dp-today { animation: dp-today var(--loop) infinite; }
-@keyframes dp-home-trainer {
-  0%, 34%    { transform: translate3d(0, 0, 0); opacity: 1; }
-  38%, 58%   { transform: translate3d(0, var(--home-scroll, -410px), 0); opacity: 1; }
-  61%, 84%   { transform: translate3d(28px, var(--home-scroll, -410px), 0); opacity: 0; }
-  87%, 100%  { transform: translate3d(0, 0, 0); opacity: 1; }
-}
-@keyframes dp-chat-trainer {
-  0%, 58%    { transform: translate3d(-28px, 0, 0); opacity: 0; visibility: hidden; }
-  61%, 84%   { transform: translate3d(0, 0, 0); opacity: 1; visibility: visible; }
-  87%, 100%  { transform: translate3d(-28px, 0, 0); opacity: 0; visibility: hidden; }
-}
-@keyframes dp-today {
-  0%, 25%    { transform: translate3d(0, 0, 0); }
-  30%, 56%   { transform: translate3d(0, var(--today-scroll, -150px), 0); }
-  60%, 100%  { transform: translate3d(0, 0, 0); }
-}
-
-/* ההחלפות */
-.dp-trainer .s-old { animation: dp-old-trainer var(--loop) infinite; }
-.dp-trainer .s-new { animation: dp-new-trainer var(--loop) infinite; }
-.dp-trainer .av-late { animation: dp-avlate var(--loop) infinite; }
-.bub-late { animation: dp-bublate var(--loop) infinite; }
-@keyframes dp-old-trainer { 0%, 21% { opacity: 1; } 22.5%, 86% { opacity: 0; } 87.5%, 100% { opacity: 1; } }
-@keyframes dp-new-trainer { 0%, 21% { opacity: 0; } 22.5%, 86% { opacity: 1; } 87.5%, 100% { opacity: 0; } }
-@keyframes dp-avlate {
-  0%, 21.5%   { opacity: 0; transform: scale(0.9); }
-  23.5%, 86%  { opacity: 1; transform: scale(1); }
-  87.5%, 100% { opacity: 0; transform: scale(0.9); }
-}
-@keyframes dp-bublate {
-  0%, 65%     { opacity: 0; transform: translateY(8px); }
-  66.5%, 84%  { opacity: 1; transform: translateY(0); }
-  87%, 100%   { opacity: 0; transform: translateY(8px); }
-}
-
-.dp-trainee .meal-full { animation: dp-mealfull var(--loop) infinite; }
-.dp-trainee .meal-split { animation: dp-mealsplit var(--loop) infinite; }
-.dp-trainee .dp-eat .ripple { animation: dp-ripple var(--loop) infinite; }
-.dp-trainee .meal-full .dp-eat { animation: dp-press var(--loop) infinite; }
-.dp-trainee .s-old { animation: dp-old-trainee var(--loop) infinite; }
-.dp-trainee .s-new { animation: dp-new-trainee var(--loop) infinite; }
-.dp-trainee .badge-late { animation: dp-badge var(--loop) infinite; }
-@keyframes dp-press { 0%, 36% { transform: scale(1); } 37% { transform: scale(0.97); } 38.5%, 100% { transform: scale(1); } }
-@keyframes dp-ripple {
-  0%, 36%   { transform: scale(0); opacity: 0; }
-  36.5%     { transform: scale(0.4); opacity: 1; }
-  40%, 100% { transform: scale(7); opacity: 0; }
-}
-@keyframes dp-mealfull { 0%, 40% { opacity: 1; } 42%, 97% { opacity: 0; } 99%, 100% { opacity: 1; } }
-@keyframes dp-mealsplit { 0%, 41% { opacity: 0; } 43%, 97% { opacity: 1; } 99%, 100% { opacity: 0; } }
-@keyframes dp-old-trainee { 0%, 65% { opacity: 1; } 66.5%, 97% { opacity: 0; } 99%, 100% { opacity: 1; } }
-@keyframes dp-new-trainee { 0%, 65% { opacity: 0; } 66.5%, 97% { opacity: 1; } 99%, 100% { opacity: 0; } }
-@keyframes dp-badge {
-  0%, 65.5%   { opacity: 0; transform: scale(0.9); }
-  67.5%, 97%  { opacity: 1; transform: scale(1); }
-  99%, 100%   { opacity: 0; transform: scale(0.9); }
-}
-
-/* ── סקשן "שני הצדדים": הכרטיסים + הטלפון של המתאמן ────────── */
-.sides-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 56px;
+/* ── בר הניווט: גלולה שמכווצת סביב הטאב הפעיל ונפתחת בלחיצה ── */
+.dp-nav {
+  pointer-events: auto;
+  display: flex;
   align-items: center;
+  gap: 3px;
+  padding: 5px;
+  border-radius: 24px;
+  background: var(--pf-card);
+  border: 1px solid var(--pf-border);
+  box-shadow: 0 8px 24px rgba(20, 33, 42, 0.14);
+  transition: clip-path 0.26s cubic-bezier(0.22, 0.8, 0.35, 1), transform 0.26s cubic-bezier(0.22, 0.8, 0.35, 1);
 }
-.sides-cards { display: grid; gap: 24px; }
-.sides-phone { display: flex; flex-direction: column; align-items: center; gap: 14px; }
-/* עמודת הטלפון בפתיח (הכלל הישן הלך עם המוקאפ הישן) */
-.phone-col {
-  position: relative;
-  z-index: 1;
+.dp-tab {
+  width: 38px;
+  min-height: 40px;
+  justify-content: center;
+  padding: 4px 0;
+  border-radius: 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 2px;
+  color: var(--pf-faint);
+  flex: none;
+  box-sizing: border-box;
+  transition: opacity 0.2s ease;
+}
+.dp-tab svg { width: 16px; height: 16px; }
+.dp-tab b { display: none; font-size: 8px; font-weight: 700; line-height: 1; }
+.dp-tab.is-on { width: 46px; }
+.dp-tab.is-on b { display: block; }
+.dp-nav[data-side="trainer"] .dp-tab.is-on { background: var(--trainee); color: var(--on-trainee); }
+.dp-nav[data-side="trainee"] .dp-tab.is-on { background: var(--pf-ink); color: var(--pf-on-ink); }
+/* מכווץ: רק הפעיל נראה. הגאומטריה מחושבת ב-JS דרך משתנים */
+.dp-nav:not(.is-open) .dp-tab:not(.is-on) { opacity: 0; pointer-events: none; }
+.dp-nav:not(.is-open) { clip-path: var(--clip, inset(0 round 24px)); transform: var(--shift, none); }
+
+/* ── כרטיסי המבנה (סקשן 2) ───────────────────────────────── */
+.struct-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.struct-card {
+  background: linear-gradient(168deg, #FFFFFF 0%, #FBFAF7 62%, #F5F3EE 100%);
+  border-radius: 24px;
+  padding: 18px 18px 28px;
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(21, 18, 15, 0.05);
+  display: flex;
+  flex-direction: column;
   gap: 14px;
 }
-.phone-col::before, .sides-phone::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 460px;
-  height: 460px;
-  margin: -250px 0 0 -230px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(18, 147, 157, 0.14) 0%, rgba(18, 147, 157, 0.05) 38%, rgba(18, 147, 157, 0) 68%);
-  z-index: -1;
-  pointer-events: none;
+.struct-card h3 { margin: 8px 6px 0; font-family: var(--font-display); font-weight: 600; font-size: 24px; text-align: center; }
+.struct-card p { margin: 0 8px; font-size: 16px; line-height: 1.65; color: var(--ink-mid); text-align: center; }
+.struct-ui {
+  --k: 0.82;
+  width: 100%;
+  min-height: 210px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--pf-bg);
+  border: 1px solid var(--pf-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  color: var(--pf-ink);
+  text-align: start;
+  font-family: var(--font-body);
+  box-sizing: border-box;
 }
-.sides-phone { position: relative; }
-.sides-phone::before {
-  background: radial-gradient(circle, rgba(255, 244, 232, 0.16) 0%, rgba(255, 244, 232, 0.06) 40%, rgba(0, 0, 0, 0) 70%);
-}
-.phone-caption { max-width: 300px; text-align: center; }
-.sides .phone-caption { color: var(--dark-soft); }
+.struct-ui svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.struct-ui .ic { width: 20px; height: 20px; }
+.struct-ui .dp-row .sub svg { width: 11px; height: 11px; }
+.struct-ui .dp-tcard { padding: 12px; }
+.struct-ui .dp-row { min-height: 44px; padding: 9px 2px; }
+.struct-ui .dp-hero { margin-bottom: 8px; }
+/* התבניות: שלוש ספריות, וקו שמראה שהן מוקצות למתאמנים */
+.tpl { display: flex; align-items: center; gap: 10px; background: var(--pf-card); border: 1px solid var(--pf-border); border-radius: 14px; padding: 10px 12px; }
+.tpl .ic { width: 20px; height: 20px; color: var(--coach); }
+.tpl .col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tpl b { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tpl small { font-size: 11.5px; color: var(--pf-muted); font-family: var(--font-digits); }
+.tpl .linked { display: flex; }
+.tpl .linked .av { width: 22px; height: 22px; border-radius: 7px; font-size: 9px; margin-inline-start: -6px; border-color: var(--pf-card); }
+.tpl .linked .av:first-child { margin-inline-start: 0; }
+.tpl .linked .more { width: 22px; height: 22px; border-radius: 7px; background: var(--pf-alt); color: var(--pf-muted); font-size: 9px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; margin-inline-start: -6px; }
+/* המיתוג: הלוגו + צבעי התפקידים */
+.brand-ui .logo-slot { display: flex; align-items: center; gap: 10px; background: var(--pf-card); border: 1.5px dashed var(--pf-strong); border-radius: 14px; padding: 10px 12px; }
+.brand-ui .logo-slot .mark { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #1F6F8B, #29A19C); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: 0.02em; }
+.brand-ui .logo-slot .col { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.brand-ui .logo-slot b { font-size: 13.5px; }
+.brand-ui .logo-slot small { font-size: 11.5px; color: var(--pf-muted); }
+.brand-ui .roles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.brand-ui .role { display: flex; align-items: center; gap: 8px; background: var(--pf-card); border: 1px solid var(--pf-border); border-radius: 12px; padding: 8px 10px; font-size: 12.5px; font-weight: 700; }
+.brand-ui .role i { width: 18px; height: 18px; border-radius: 999px; flex: none; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08); }
+.brand-ui .role small { display: block; font-weight: 400; font-size: 11px; color: var(--pf-muted); }
+.brand-ui .caption { font-size: 11.5px; color: var(--pf-muted); text-align: center; }
+/* תיאומים ותקופות: זרימה של שלושה צעדים */
+.flow { display: flex; align-items: center; gap: 6px; }
+.flow .step { flex: 1; min-width: 0; background: var(--pf-card); border: 1px solid var(--pf-border); border-radius: 12px; padding: 9px 8px; text-align: center; font-size: 12px; font-weight: 700; line-height: 1.3; }
+.flow .step small { display: block; font-weight: 400; font-size: 10.5px; color: var(--pf-muted); margin-top: 2px; }
+.flow .arr { width: 14px; height: 14px; color: var(--pf-faint); flex: none; transform: scaleX(-1); }
+.flow .step.who-trainee { border-color: var(--trainee); }
+.flow .step.who-trainer { border-color: var(--coach); }
+.flow-label { font-size: 11.5px; font-weight: 700; color: var(--pf-muted); margin: 0 2px -4px; }
+
+/* ── סנכרון: הפריסה של הסקשן הכהה ─────────────────────────── */
+.sides-layout { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 56px; align-items: center; }
+.sides-cards { display: grid; gap: 24px; }
+.sides-intro { max-width: 560px; margin: -24px auto 40px; text-align: center; font-size: 18px; line-height: 1.6; color: var(--dark-soft); }
 @media (max-width: 920px) {
   .sides-layout { grid-template-columns: 1fr; gap: 44px; justify-items: center; }
+  .sides-phone { order: -1; }         /* במובייל הטלפון קודם — הוא ההדגמה */
   .sides-cards { width: 100%; }
-  .sides-phone { order: -1; }
+  .struct-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .struct-card { padding: 14px 14px 24px; }
+  .struct-card h3 { font-size: 22px; }
+  .brand-ui .roles { grid-template-columns: 1fr; }
 }
 
-/* ── צמצום תנועה: המצב הסופי, בלי לולאה ─────────────────────── */
+/* טוסט קטן בתוך הטלפון (למשל "סמן את כל הסטים קודם") */
+.dp-toast {
+  position: absolute;
+  bottom: 78px;
+  left: 50%;
+  transform: translate(-50%, 6px);
+  background: var(--pf-ink);
+  color: var(--pf-on-ink);
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.dp-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── צמצום תנועה ──────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .dp *, .dp *::before, .dp *::after { animation: none !important; }
-  .dp { transition: none; }
-  .dp-nav { clip-path: var(--clip-all) !important; transform: none !important; }
-  .dp-tab b { opacity: 1 !important; }
-  .dp-nav-trainer .dp-tab.t-chat b { opacity: 0 !important; }
-  .dp-tab { opacity: 1 !important; }
-  .dp-nav-trainer .dp-tab.t-home { background: var(--trainee) !important; color: var(--on-trainee) !important; }
-  .dp-chat { display: none !important; }
-  .dp-page { transform: none !important; opacity: 1 !important; }
-  .s-old { opacity: 0 !important; }
-  .s-new, .av-late, .badge-late { opacity: 1 !important; transform: none !important; }
-  .meal-full { opacity: 1 !important; }
-  .meal-split { opacity: 0 !important; }
+  .dp.flip-out, .dp.flip-in { animation: none !important; }
+  .dp-nav { transition: none; }
+  .flip-btn svg { transition: none; }
 }
