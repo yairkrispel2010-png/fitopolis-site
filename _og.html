@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#F0EFEC}iframe{border:0;display:block}</style></head>
+<body><script>
+const f=document.createElement('iframe'); f.width=1200; f.height=630; f.src='/?og=1';
+f.onload=()=>{const d=f.contentDocument, s=d.createElement('style');
+ s.textContent=`
+  .reveal,.dp-screen,.dp-screen *,.breathe,.drift-a,.drift-b,.drift-c{animation-play-state:paused !important;animation-delay:-0.3s !important}
+  header.topbar,.features,.sides,footer,.hero-chip,.note,.phone-caption,.hero .btn{display:none !important}
+  html{overflow:hidden} body{overflow:hidden} .hero::after{display:none !important}
+  .hero{height:630px;overflow:hidden}
+  .hero-inner{padding:0 !important;height:630px;align-items:center;gap:40px}
+  .hero-copy{gap:26px;padding-inline-start:16px;margin-top:40px}
+  .hero h1{font-size:64px !important;line-height:1.12}
+  .hero .sub{font-size:20px;max-width:520px}
+  .hero .btn{font-size:19px;min-height:58px}
+  .phone-col{animation:none !important;opacity:1 !important;transform:scale(0.82) !important;transform-origin:center}
+  .og-mark{position:absolute;top:34px;right:48px;font-family:Fredoka,sans-serif;font-weight:600;font-size:34px;display:flex;gap:.06em;align-items:center;direction:ltr}
+  .og-mark .fit{color:#12939D}.og-mark .polis{color:#F07C1A}.og-mark svg{width:.98em;height:.98em}
+ `;
+ d.head.appendChild(s);
+ const m=d.createElement('div'); m.className='og-mark'; m.innerHTML='<b class="fit">FIT</b><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg><b class="polis">POLIS</b>';
+ d.querySelector('.hero').appendChild(m);
+ d.querySelectorAll('.scroll-reveal').forEach(e=>e.classList.add('is-visible'));
+};
+document.body.appendChild(f);
+</script></body></html>

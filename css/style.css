@@ -1933,13 +1933,13 @@ a.logotype { min-height: 44px; }
   height: 460px;
   margin: -250px 0 0 -230px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(18, 147, 157, 0.22) 0%, rgba(18, 147, 157, 0.08) 38%, rgba(18, 147, 157, 0) 68%);
+  background: radial-gradient(circle, rgba(18, 147, 157, 0.14) 0%, rgba(18, 147, 157, 0.05) 38%, rgba(18, 147, 157, 0) 68%);
   z-index: -1;
   pointer-events: none;
 }
 .sides-phone { position: relative; }
 .sides-phone::before {
-  background: radial-gradient(circle, rgba(240, 124, 26, 0.26) 0%, rgba(18, 147, 157, 0.12) 40%, rgba(0, 0, 0, 0) 70%);
+  background: radial-gradient(circle, rgba(255, 244, 232, 0.16) 0%, rgba(255, 244, 232, 0.06) 40%, rgba(0, 0, 0, 0) 70%);
 }
 .phone-caption { max-width: 300px; text-align: center; }
 .sides .phone-caption { color: var(--dark-soft); }
