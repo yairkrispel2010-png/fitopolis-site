@@ -370,6 +370,76 @@ img, svg { max-width: 100%; }
   }
 }
 
+.feat-card { justify-content: flex-start; padding: 16px 16px 26px; gap: 10px; }
+.feat-card h3 { margin-top: 8px; }
+/* פיסת הממשק: משטח בצבעי האפליקציה, לא בצבעי האתר */
+.feat-ui {
+  --k: 0.82;
+  width: 100%;
+  min-height: 150px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--pf-bg, #F2F5F6);
+  border: 1px solid #DCE3E7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  color: #14212A;
+  text-align: start;
+  font-family: var(--font-body);
+}
+.feat-ui svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.fu-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #FFFFFF;
+  border: 1px solid #DCE3E7;
+  border-radius: 12px;
+  padding: 9px 11px;
+  font-size: 12.5px;
+  min-width: 0;
+}
+.fu-row .fu-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.fu-row .fu-t { font-weight: 500; line-height: 1.25; }
+.fu-row .fu-m { font-family: var(--font-digits); font-size: 11px; color: #5C6B75; white-space: nowrap; }
+.fu-row .fu-chk { width: 16px; height: 16px; flex: none; color: #C1CBD1; }
+.fu-row .fu-chk.v-trainee { color: var(--trainee); }
+.fu-row.dim { color: #93A1AA; }
+.fu-row .av { width: 28px; height: 28px; border-radius: 8px; font-size: 10.5px; }
+.fu-chat .bub.mine { background: var(--coach); color: #FFFFFF; }
+.fu-chat .bub.theirs { background: var(--trainee); color: var(--on-trainee); }
+.fu-meal { display: flex; flex-direction: column; gap: 3px; padding: 0 2px; }
+.fu-name { font-family: var(--font-display); font-weight: 600; font-size: 16px; }
+.fu-time { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: #5C6B75; }
+.fu-time svg { width: 12px; height: 12px; }
+.feat-ui .macros { margin: 0; gap: 5px; }
+.feat-ui .mc { background: #E9EEF0; border-radius: 10px; padding: 6px 2px; }
+.feat-ui .mc small { font-size: 9px; color: #5C6B75; }
+.feat-ui .mc b { font-size: 14px; font-family: var(--font-digits); font-weight: 400; }
+.feat-ui .mc i { font-size: 9px; color: #5C6B75; }
+.fu-eat { align-self: center; margin-top: 2px; min-height: 28px; font-size: 12px; padding-inline: 12px; }
+.fu-status { justify-items: start; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  flex: none;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.chip-positive { background: #E7F2EC; color: var(--positive-text); }
+.chip-attention { background: #F6EFDD; color: var(--attention-text); }
+.chip-negative { background: #F9EBEB; color: var(--negative-text); }
+.fu-status .s-old { animation: fu-old 7s infinite; }
+.fu-status .s-new { animation: fu-new 7s infinite; }
+@keyframes fu-old { 0%, 40% { opacity: 1; } 46%, 92% { opacity: 0; } 98%, 100% { opacity: 1; } }
+@keyframes fu-new { 0%, 40% { opacity: 0; } 46%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
+.fu-chat { justify-content: center; }
+.fu-chat .bub { --k: 0.82; max-width: 92%; }
 .feat-icon {
   width: 54px;
   height: 54px;
@@ -414,14 +484,19 @@ img, svg { max-width: 100%; }
   gap: 18px;
 }
 
-.side-card .voice-dot { width: 46px; height: 46px; border-radius: 999px; }
-.voice-trainer { background: var(--trainer); box-shadow: 0 0 0 8px rgba(18, 147, 157, 0.16); }
-.voice-trainee { background: var(--trainee); box-shadow: 0 0 0 8px rgba(240, 124, 26, 0.16); }
+.side-card {
+  background: linear-gradient(170deg, #302a27 0%, var(--dark-2) 60%);
+  gap: 16px;
+  padding: 28px 26px;
+}
+.side-card .voice-dot { width: 14px; height: 14px; border-radius: 999px; margin-bottom: -6px; }
+.voice-trainer { background: var(--trainer); box-shadow: 0 0 0 5px rgba(18, 147, 157, 0.22); }
+.voice-trainee { background: var(--trainee); box-shadow: 0 0 0 5px rgba(240, 124, 26, 0.22); }
 .side-card h3 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 22px;
+  font-size: 24px;
   color: #FFFFFF;
 }
 
@@ -1162,6 +1237,10 @@ a.logotype { min-height: 44px; }
    תנועה: transform · opacity · clip-path בלבד. הכול נעצר מחוץ למסך
    (anim-paused, main.js) ומכבד צמצום תנועה (מצב סופי סטטי). */
 
+:root {
+  --pf-bg: #F2F5F6; --pf-card: #FFFFFF; --pf-alt: #E9EEF0; --pf-ink: #14212A; --pf-muted: #5C6B75; --pf-faint: #93A1AA; --pf-border: #DCE3E7; --pf-strong: #C1CBD1;
+  --coach: #12939D; --on-trainee: #331B04;
+}
 .dp {
   --k: 0.78;
   --pf-bg: #F2F5F6;       /* AppCx.light.bg */
@@ -1183,10 +1262,17 @@ a.logotype { min-height: 44px; }
 
   position: relative;
   width: 300px;
-  background: var(--dark);
-  border-radius: 42px;
-  padding: 10px;
-  box-shadow: var(--shadow-lg);
+  padding: 9px;
+  border-radius: 46px;
+  /* גוף המכשיר: גרפיט עם אור מלמעלה-משמאל, וקו-אור דק על הקצה */
+  background: linear-gradient(155deg, #34383d 0%, #16181b 38%, #0f1113 70%, #1d2024 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+    inset 0 0 0 4px #0a0b0c,
+    inset 0 0 0 5px rgba(255, 255, 255, 0.04),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 18px 36px -10px rgba(21, 18, 15, 0.45),
+    0 60px 90px -28px rgba(21, 18, 15, 0.4);
   transform: translateZ(0);     /* שכבה משלו — הצל העמוק לא מצויר מחדש בגלילה */
   transition: transform 0.12s ease-out;
   will-change: transform;
@@ -1194,18 +1280,61 @@ a.logotype { min-height: 44px; }
   color: var(--pf-ink);
   text-align: start;
 }
-.dp-trainee { background: var(--dark-2); box-shadow: var(--shadow-lg), 0 0 0 1px var(--dark-line); }
+/* כפתורי הצד: הפעלה מימין, עוצמה משמאל — בולטים מהגוף במילימטר */
+.dp::before, .dp::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #3a3e43, #17191c);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+.dp::before { right: -3px; top: 132px; height: 52px; }
+.dp::after  { left: -3px; top: 112px; height: 34px; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 46px 0 0 #2a2d31; }
+.dp-trainee {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 0 0 4px #0a0b0c,
+    inset 0 0 0 5px rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 22px 40px -10px rgba(0, 0, 0, 0.6),
+    0 70px 100px -30px rgba(0, 0, 0, 0.55);
+}
 
 .dp-screen {
   position: relative;
   height: 592px;
-  border-radius: 34px;
+  border-radius: 38px;
   background: var(--pf-bg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   contain: paint;
   line-height: 1.35;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+/* חור המצלמה — במרכז שורת הסטטוס, כמו במכשיר */
+.dp-screen::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 40% 35%, #2a2f36 0%, #0a0c0e 55%);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.35), inset 0 0 2px rgba(255, 255, 255, 0.18);
+  z-index: 6;
+}
+/* ברק עדין מאוד על הזכוכית — לא מפריע לקריאה */
+.dp-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(118deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 22%, rgba(255, 255, 255, 0) 40%);
+  pointer-events: none;
+  z-index: 5;
 }
 .dp svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 /* עקומה מותאמת לכל קטע בלולאה — לא ה-ease של ברירת המחדל (emil-design-eng) */
@@ -1217,8 +1346,8 @@ a.logotype { min-height: 44px; }
 
 /* ── שורת הסטטוס של הטלפון ─────────────────────────────────── */
 .dp-status {
-  height: 26px;
-  padding: 6px 18px 0;
+  height: 28px;
+  padding: 7px 20px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1370,7 +1499,7 @@ a.logotype { min-height: 44px; }
 .dp-mrow {                      /* שורת פגישה: cardAlt + borderStrong */
   width: 100%;
   margin-top: calc(10px * var(--k));
-  padding: calc(12px * var(--k)) calc(14px * var(--k));
+  padding: calc(11px * var(--k)) calc(10px * var(--k));
   background: var(--pf-alt);
   border: 1px solid var(--pf-strong);
   border-radius: calc(18px * var(--k));
@@ -1381,7 +1510,7 @@ a.logotype { min-height: 44px; }
   box-sizing: border-box;
 }
 .dp-mrow + .dp-mrow { margin-top: calc(10px * var(--k)); }
-.dp-mrow .mtxt { flex: 1; font-size: calc(16px * var(--k)); font-weight: 500; }
+.dp-mrow .mtxt { flex: 1; font-size: calc(15px * var(--k)); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dp-mrow .chev { width: calc(20px * var(--k)); height: calc(20px * var(--k)); color: var(--pf-faint); }
 .dp-mrow + .dp-label { margin-top: calc(14px * var(--k)); }
 
@@ -1636,7 +1765,9 @@ a.logotype { min-height: 44px; }
   align-items: stretch;
   opacity: 0;
 }
-.meal-split .half { display: flex; flex-direction: column; align-items: flex-start; gap: calc(6px * var(--k)); justify-content: center; }
+.meal-split .half { display: flex; flex-direction: column; align-items: flex-start; gap: calc(6px * var(--k)); justify-content: center; min-width: 0; }
+.meal-split .vpill { white-space: nowrap; font-size: calc(12px * var(--k)); padding-inline: calc(8px * var(--k)); }
+.meal-split .mtime { font-size: calc(13px * var(--k)); }
 .meal-split .vdiv { width: 1px; background: var(--pf-border); }
 .meal-split .done { display: flex; align-items: center; gap: calc(6px * var(--k)); font-size: calc(15px * var(--k)); font-weight: 700; }
 .meal-split .done svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
@@ -1784,7 +1915,34 @@ a.logotype { min-height: 44px; }
 }
 .sides-cards { display: grid; gap: 24px; }
 .sides-phone { display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.sides .phone-caption { color: var(--dark-soft); text-align: center; max-width: 300px; }
+/* עמודת הטלפון בפתיח (הכלל הישן הלך עם המוקאפ הישן) */
+.phone-col {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.phone-col::before, .sides-phone::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 460px;
+  height: 460px;
+  margin: -250px 0 0 -230px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(18, 147, 157, 0.22) 0%, rgba(18, 147, 157, 0.08) 38%, rgba(18, 147, 157, 0) 68%);
+  z-index: -1;
+  pointer-events: none;
+}
+.sides-phone { position: relative; }
+.sides-phone::before {
+  background: radial-gradient(circle, rgba(240, 124, 26, 0.26) 0%, rgba(18, 147, 157, 0.12) 40%, rgba(0, 0, 0, 0) 70%);
+}
+.phone-caption { max-width: 300px; text-align: center; }
+.sides .phone-caption { color: var(--dark-soft); }
 @media (max-width: 920px) {
   .sides-layout { grid-template-columns: 1fr; gap: 44px; justify-items: center; }
   .sides-cards { width: 100%; }
