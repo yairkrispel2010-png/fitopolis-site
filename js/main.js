@@ -73,32 +73,13 @@
   // לופ הדמו בטלפון והטבעות המרחפות רצים בלי סוף. בלי זה הם
   // ממשיכים לצרוך ציור גם כשגוללים הרחק מהם.
   if ('IntersectionObserver' in window) {
-    var animated = document.querySelectorAll('.phone-screen, .hero, .closing');
+    var animated = document.querySelectorAll('.dp-screen, .hero, .closing');
     var pauseObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         e.target.classList.toggle('anim-paused', !e.isIntersecting);
       });
     }, { rootMargin: '120px' });
     [].forEach.call(animated, function (el) { pauseObserver.observe(el); });
-  }
-
-  // ── בר הניווט בטלפון: "הצצת גילוי" + פתיחה במגע ──────────
-  // מקבילה לאותה התנהגות באפליקציה (§2.6.8): הבר נפתח לרגע בכניסה
-  // כדי שיראו שיש שם עוד טאבים, ואז מתכווץ. בעכבר הריחוף פותח אותו.
-  var psNav = document.querySelector('.ps-nav');
-  if (psNav && !reduceMotion) {
-    var peekTimer = setTimeout(function () {
-      psNav.classList.add('is-open');
-      setTimeout(function () { psNav.classList.remove('is-open'); }, 1900);
-    }, 1600);
-
-    if (!finePointer) {
-      // בלי עכבר אין ריחוף — נגיעה פותחת וסוגרת
-      psNav.addEventListener('click', function () {
-        clearTimeout(peekTimer);
-        psNav.classList.toggle('is-open');
-      });
-    }
   }
 
   // ── חשיפה בגלילה ──
