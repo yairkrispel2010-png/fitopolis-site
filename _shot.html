@@ -4,7 +4,7 @@ const q=new URLSearchParams(location.search);
 const w=+q.get('w')||1280, h=+q.get('h')||900, t=q.get('t')||'1.2', y=q.get('y')||'0', sel=q.get('sel'), url=q.get('u')||'/';
 const f=document.createElement('iframe'); f.width=w; f.height=h; f.style.marginTop='36px'; f.src=url+(url.includes('?')?'&':'?')+'shot=1';
 f.onload=()=>{const d=f.contentDocument;const s=d.createElement('style');
- s.textContent='.reveal,.dp-screen,.dp-screen *,.breathe,.drift-a,.drift-b,.drift-c,.fu-status *{animation-play-state:paused !important;animation-delay:-'+t+'s !important}.dp.flip-out,.dp.flip-in{animation-play-state:running !important;animation-delay:0s !important}';
+ s.textContent='.reveal,.dp-screen,.dp-screen *,.breathe,.drift-a,.drift-b,.drift-c,.fu-status *{animation-play-state:paused !important;animation-delay:-'+t+'s !important}.dp.flip-out,.dp.flip-in,.dp.is-turning,.dp.is-turning .dp-sheen,.dp.is-turning .dp-back::after,.dp-wrap.is-flipping .dp-ground{animation-play-state:running !important;animation-delay:0s !important}';
  d.head.appendChild(s); d.querySelectorAll('.scroll-reveal').forEach(e=>{e.style.transition='none';e.classList.add('is-visible')});
  d.documentElement.style.scrollBehavior='auto'; if(q.get('x')){const xs=d.createElement('style'); xs.textContent=q.get('x'); d.head.appendChild(xs);} const go=()=>{ if(sel){ const el=d.querySelector(sel); if(el) f.contentWindow.scrollTo(0, el.getBoundingClientRect().top + f.contentWindow.scrollY - 24); }
    else if(y==='end') f.contentWindow.scrollTo(0, d.documentElement.scrollHeight);

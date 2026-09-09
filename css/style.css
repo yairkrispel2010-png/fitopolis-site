@@ -1381,11 +1381,22 @@ a.logotype { min-height: 44px; }
   .brand-ui .roles { grid-template-columns: 1fr; }
 }
 
-/* ── מסכים רחבים: הטלפון והכרטיסים לא נשארים קטנים באמצע ─────── */
+/* ── מסכים רחבים: המכולה גדלה עם המסך, והטלפון והכותרת גדלים איתה — הדף ממלא את המסך במקום לשבת בקופסה של 1280 ── */
+@media (min-width: 1440px) {
+  .container { max-width: 1400px; padding-inline: 40px; }
+  .hero-inner { gap: 88px; }
+  .hero .sub { max-width: 600px; }
+}
 @media (min-width: 1600px) {
   .hero .dp-wrap, .sides .dp-wrap { zoom: 1.12; }
-  .hero h1 { font-size: 62px; }
-  .hero .sub { max-width: 600px; }
+  .hero h1 { font-size: 64px; }
+  .hero .sub { max-width: 620px; font-size: 20px; }
+}
+@media (min-width: 1800px) {
+  .container { max-width: 1560px; }
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 1.24; }
+  .hero h1 { font-size: 70px; }
+  .hero-inner { gap: 104px; padding-block: 64px 104px; }
 }
 
 /* ── צמצום תנועה ──────────────────────────────────────────── */
