@@ -313,14 +313,18 @@
   }
 
   function flip(ph) {
+    if (ph.turning) return;
     var wrap = ph.root.parentNode;
     var to = ph.side === 'trainer' ? 'trainee' : 'trainer';
     var swap = function () { ph.side = to; ph.screen = to === 'trainer' ? 'home' : 'today'; ph.navOpen = false; ph.sheetOpen = false; ph.scrollTop = 0; render(ph); };
     if (reduceMotion) { swap(); return; }
+    ph.turning = true;
     wrap.classList.add('is-flipping');
-    ph.root.classList.add('flip-out');
-    setTimeout(function () { swap(); ph.root.classList.remove('flip-out'); ph.root.classList.add('flip-in'); }, 360);
-    setTimeout(function () { ph.root.classList.remove('flip-in'); wrap.classList.remove('is-flipping'); }, 760);
+    var arrow = wrap.querySelector('.flip-btn svg');
+    if (arrow) { ph.spins = (ph.spins || 0) + 360; arrow.style.transform = 'rotate(' + ph.spins + 'deg)'; }
+    ph.root.classList.add('is-turning');
+    setTimeout(swap, 475);                                            // המסך פונה מאיתנו — מחליפים
+    setTimeout(function () { ph.root.classList.remove('is-turning'); wrap.classList.remove('is-flipping'); ph.turning = false; }, 960);
   }
 
   function mount(root) {
@@ -328,7 +332,8 @@
     ph.screen = ph.side === 'trainer' ? 'home' : 'today';
     root.innerHTML = '<div class="dp-screen"><div class="dp-status"><span class="dp-clock">' + now() + '</span><span class="dp-status-icons">' + icon('signal') + icon('wifi') + icon('battery') + '</span></div>' +
       '<div class="dp-topbar"></div><div class="dp-stage"></div><div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
-      '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden><div class="sheet-card"><span class="lbl">הזנת משקל</span><span class="big"><b>81.2</b><i>ק"ג</i></span><span class="hint">היום · אפשר לערוך עד חצות</span><div class="sheet-btns"><button class="dp-obtn" data-act="sheetclose">ביטול</button><button class="dp-eat compact" data-act="weightsave">' + icon('check') + 'שמור</button></div></div></div></div>';
+      '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden><div class="sheet-card"><span class="lbl">הזנת משקל</span><span class="big"><b>81.2</b><i>ק"ג</i></span><span class="hint">היום · אפשר לערוך עד חצות</span><div class="sheet-btns"><button class="dp-obtn" data-act="sheetclose">ביטול</button><button class="dp-eat compact" data-act="weightsave">' + icon('check') + 'שמור</button></div></div></div></div>' +
+      '<div class="dp-back" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg></div>';
     ph.topbar = root.querySelector('.dp-topbar'); ph.stage = root.querySelector('.dp-stage'); ph.nav = root.querySelector('.dp-nav'); ph.sheet = root.querySelector('.dp-sheet'); ph.toast = root.querySelector('.dp-toast');
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]');
@@ -343,8 +348,15 @@
     var fb = wrap.querySelector('.flip-btn'); if (fb) fb.addEventListener('click', function () { act(ph, 'flip'); });
     var rb = wrap.querySelector('.reset-btn'); if (rb) rb.addEventListener('click', function () { act(ph, 'reset'); });
     phones.push(ph);
+    ph.nav.style.transition = 'none';                               // הבר נולד מכווץ, בלי אנימציית פתיחה בטעינה
     render(ph);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { ph.nav.style.transition = ''; }); });
   }
 
   document.querySelectorAll('.dp[data-demo]').forEach(mount);
+  // הגלולה נמדדת שוב אחרי שהגופנים נטענו ובשינוי גודל — אחרת הרוחב של התווית לא נכון בלחיצה הראשונה
+  function refit() { phones.forEach(fitNav); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+  window.addEventListener('resize', refit);
+  window.addEventListener('load', refit);
 })();
