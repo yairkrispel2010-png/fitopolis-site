@@ -275,12 +275,15 @@
   function fitNav(ph) {
     var nav = ph.nav, on = nav.querySelector('.dp-tab.is-on');
     if (!on) return;
-    var nr = nav.getBoundingClientRect(), tr = on.getBoundingClientRect(), pad = 5;
-    var right = Math.max(0, nr.right - tr.right - pad), left = Math.max(0, tr.left - nr.left - pad);
+    // מודדים ב-offset (מרחב הפריסה) ולא ב-getBoundingClientRect: כך המדידה לא מושפעת
+    // מסיבוב הטלפון, מהקטנה ב-transform (תמונת השיתוף) או מ-zoom במסכים רחבים.
+    // הבר הוא position: relative, ולכן הוא ה-offsetParent של הטאבים; offsetLeft נמדד מקצה הריפוד — מוסיפים את המסגרת
+    var navW = nav.offsetWidth, tW = on.offsetWidth, pad = 5;
+    var tL = on.offsetParent === nav ? on.offsetLeft + nav.clientLeft : on.offsetLeft - nav.offsetLeft;
+    if (!navW || !tW) return;
+    var left = Math.max(0, tL - pad), right = Math.max(0, navW - (tL + tW) - pad);
     nav.style.setProperty('--clip', 'inset(0 ' + right.toFixed(1) + 'px 0 ' + left.toFixed(1) + 'px round 24px)');
-    var m = new DOMMatrix(getComputedStyle(nav).transform);          // מנטרלים הזזה קודמת
-    var sliceCenter = (tr.left + tr.right) / 2 - m.m41, navCenter = (nr.left + nr.right) / 2 - m.m41;
-    nav.style.setProperty('--shift', 'translateX(' + (navCenter - sliceCenter).toFixed(1) + 'px)');
+    nav.style.setProperty('--shift', 'translateX(' + (navW / 2 - (tL + tW / 2)).toFixed(1) + 'px)');   // מרכז הבר פחות מרכז הטאב
   }
 
   function act(ph, a) {

@@ -1771,6 +1771,7 @@ button.dp-row:active { background: var(--pf-alt); }
 
 /* ── בר הניווט: גלולה שמכווצת סביב הטאב הפעיל ונפתחת בלחיצה ── */
 .dp-nav {
+  position: relative;             /* תמיד ה-offsetParent של הטאבים — המדידה ב-fitNav לא תלויה במצב */
   pointer-events: auto;
   display: flex;
   align-items: center;
