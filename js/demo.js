@@ -636,6 +636,7 @@
   /* ── פעולות ───────────────────────────────────────────────────────── */
   function act(ph, a) {
     var p = a.split(':');
+    if (p[0] === 'start') { start(ph); return; }
     if (p[0] === 'noop') { ph.hint = 'בדמו הזה זה עוצר כאן — באפליקציה זה ממשיך'; }
     else if (p[0] === 'noopcoach') { ph.hint = 'באפליקציה נפתח כאן דף המאמן'; }
     else if (p[0] === 'go') {
@@ -699,6 +700,7 @@
 
   function flip(ph) {
     if (ph.turning) return;
+    if (!ph.started) { ph.started = true; ph.root.classList.remove('is-idle'); }   // סיבוב = גם התחלה
     var wrap = ph.root.parentNode;
     var to = ph.side === 'trainer' ? 'trainee' : 'trainer';
     var swap = function () { quiet(ph, function () { ph.side = to; ph.screen = to === 'trainer' ? 'home' : 'today'; ph.navOpen = false; ph.sheetKind = null; ph.typing = false; ph.scrollTop = 0; ph.catOpen = false; render(ph); }); };
@@ -722,14 +724,16 @@
     spin.finished.then(function () { if (!swapped) { swapped = true; swap(); } done(); }, function () { if (!swapped) { swapped = true; swap(); } done(); });
   }
 
-  function edges() { var s = ''; for (var i = 1; i <= 8; i++) s += '<i class="dp-edge" style="--i:' + i + '" aria-hidden="true"></i>'; return s; }
+  function edges() { var s = ''; for (var i = 1; i <= 8; i++) s += '<i class="dp-edge" style="--i:' + i + '" aria-hidden="true"></i>'; return s + '<i class="dp-btn power" aria-hidden="true"></i><i class="dp-btn mute" aria-hidden="true"></i><i class="dp-btn vol-up" aria-hidden="true"></i><i class="dp-btn vol-down" aria-hidden="true"></i><i class="dp-tray" aria-hidden="true"></i>'; }
   function mount(root) {
-    var ph = { root: root, side: root.getAttribute('data-side') || 'trainer', navOpen: false, presetIdx: 0, scrollTop: 0, openMeal: -1, openWo: -1 };
+    var ph = { root: root, side: root.getAttribute('data-side') || 'trainer', navOpen: false, presetIdx: 0, scrollTop: 0, openMeal: -1, openWo: -1, started: false };
+    root.classList.add('is-idle');
     ph.screen = ph.side === 'trainer' ? 'home' : 'today';
     root.innerHTML = '<div class="dp-screen"><div class="dp-status"><span class="dp-clock">' + now() + '</span><span class="dp-status-icons">' + icon('signal') + icon('wifi') + icon('battery') + '</span></div>' +
       '<div class="dp-topbar"></div><div class="dp-stage"></div><div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
-      '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden></div><div class="dp-sheen" aria-hidden="true"></div></div>' +
-      edges() + '<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i></i><i></i><i></i><b></b><u></u></span><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg></div>';
+      '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden></div><div class="dp-sheen" aria-hidden="true"></div>' +
+      '<div class="dp-cover"><span class="wm" dir="ltr">' + wordmark() + '</span><p>הדגמה חיה של הממשק — כל כפתור לחיץ</p><button class="dp-start" data-act="start">התחל הדגמה</button></div></div>' +
+      edges() + '<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><b class="flash"></b><u class="lidar"></u><s class="mic"></s></span><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg><span class="brand">FITOPOLIS</span></div>';
     var ground = document.createElement('div'); ground.className = 'dp-ground'; ground.setAttribute('aria-hidden', 'true');
     root.parentNode.insertBefore(ground, root);
     var placeGround = function () { ground.style.top = (root.offsetTop + root.offsetHeight - 12) + 'px'; };
@@ -751,15 +755,13 @@
     var rb = wrap.querySelector('.reset-btn'); if (rb) rb.addEventListener('click', function () { act(ph, 'reset'); });
     phones.push(ph);
     quiet(ph, function () { render(ph); });
-    if (!reduceMotion && 'IntersectionObserver' in window) {
-      var peeked = false;
-      var io = new IntersectionObserver(function (es) {
-        if (peeked || !es[0].isIntersecting) return;
-        peeked = true; io.disconnect();
-        setTimeout(function () { if (!ph.navOpen) { ph.navOpen = true; render(ph); setTimeout(function () { if (ph.navOpen) { ph.navOpen = false; render(ph); } }, 1700); } }, 900);
-      }, { threshold: 0.6 });
-      io.observe(root);
-    }
+  }
+  // "התחל הדגמה": מסיר את מסך הפתיחה, ופותח את הבר לרגע כדי שיראו שהוא חי
+  function start(ph) {
+    if (ph.started) return;
+    ph.started = true; ph.root.classList.remove('is-idle');
+    if (reduceMotion) return;
+    setTimeout(function () { if (!ph.navOpen && !ph.turning) { ph.navOpen = true; render(ph); setTimeout(function () { if (ph.navOpen) { ph.navOpen = false; render(ph); } }, 1700); } }, 700);
   }
   document.querySelectorAll('.dp[data-demo]').forEach(mount);
   function refit() { phones.forEach(function (ph) { quiet(ph, function () { fitNav(ph); }); }); }

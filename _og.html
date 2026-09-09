@@ -6,7 +6,7 @@ f.onload=()=>{const d=f.contentDocument, s=d.createElement('style');
   .reveal,.dp-screen,.dp-screen *,.breathe,.drift-a,.drift-b,.drift-c{animation-play-state:paused !important;animation-delay:-0.3s !important}
   header.topbar,.features,.sides,footer,.hero-chip,.note,.phone-caption,.hero .btn,.flip-btn,.demo-hint{display:none !important}
   html{overflow:hidden} body{overflow:hidden} .hero::after{display:none !important}
-  .hero{height:630px;overflow:hidden}
+  .hero{height:630px;overflow:hidden} .dp-cover{display:none !important}
   .hero-inner{padding:0 !important;height:630px;align-items:center;gap:40px}
   .hero-copy{gap:26px;padding-inline-start:16px;margin-top:40px}
   .hero h1{font-size:64px !important;line-height:1.12}
@@ -20,6 +20,7 @@ f.onload=()=>{const d=f.contentDocument, s=d.createElement('style');
  const m=d.createElement('div'); m.className='og-mark'; m.innerHTML='<b class="fit">FIT</b><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg><b class="polis">POLIS</b>';
  d.querySelector('.hero').appendChild(m);
  d.querySelectorAll('.scroll-reveal').forEach(e=>e.classList.add('is-visible'));
+ d.querySelectorAll('.dp [data-act="start"]').forEach(b=>b.click()); d.querySelectorAll('.dp').forEach(el=>el.classList.remove('is-idle'));
 };
 document.body.appendChild(f);
 </script></body></html>

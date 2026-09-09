@@ -33,9 +33,6 @@
   text-align: start;
   transform-style: preserve-3d;
 }
-.dp::before, .dp::after { content: ""; position: absolute; width: 3px; border-radius: 2px; background: linear-gradient(180deg, #4a4f56, #17191c); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22); transform: translateZ(-9px); }
-.dp::before { right: -3.5px; top: 132px; height: 52px; }
-.dp::after  { left: -3.5px; top: 112px; height: 34px; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 46px 0 0 #2f3238; }
 .sides .dp { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2), inset 0 0 0 4px #0a0b0c, inset 0 0 0 5px rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.5), 0 22px 40px -10px rgba(0, 0, 0, 0.6), 0 70px 100px -30px rgba(0, 0, 0, 0.55); }
 .sides .dp { --rest-y: 13deg; }   /* שני הטלפונים מסתכלים זה אל זה */
 
@@ -49,29 +46,31 @@
   100% { translate: 0 0;     scale: 1;    transform: rotateX(var(--rest-x, 0deg)); }
 }
 /* עובי (12 שכבות) — צלעות מתכת: בהיר בקצוות (מה שרואים בזמן הסיבוב), כהה באמצע; שכבות עמוקות יותר כהות יותר */
-.dp-edge { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(90deg, #6a7079 0%, #2c3036 7%, #1c1f23 50%, #2c3036 93%, #6a7079 100%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 rgba(0, 0, 0, 0.6); transform: translateZ(calc(var(--i) * -2.4px)); }   /* 8 × 2.4 = אותו עובי, שליש פחות שכבות */
+.dp-edge { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(180deg, transparent 0 47px, rgba(255, 255, 255, 0.28) 47px 48.5px, rgba(0, 0, 0, 0.55) 48.5px 49.5px, transparent 49.5px), linear-gradient(180deg, transparent 0 556px, rgba(255, 255, 255, 0.28) 556px 557.5px, rgba(0, 0, 0, 0.55) 557.5px 558.5px, transparent 558.5px), linear-gradient(90deg, #6a7079 0%, #2c3036 7%, #1c1f23 50%, #2c3036 93%, #6a7079 100%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 rgba(0, 0, 0, 0.6); transform: translateZ(calc(var(--i) * -2.4px)); }
 .dp-edge:nth-child(n+6) { background: linear-gradient(90deg, #5a6068 0%, #24282d 7%, #17191d 50%, #24282d 93%, #5a6068 100%); }
 /* הגב: זכוכית מט עם אור מלמעלה-שמאל, מסגרת פנימית, כתם אור נע בזמן הסיבוב */
 .dp-back { position: absolute; inset: 0; border-radius: inherit; overflow: hidden;
-  background: radial-gradient(95% 55% at 26% 6%, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0) 62%), radial-gradient(70% 40% at 80% 100%, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0) 70%), linear-gradient(168deg, #3f454c 0%, #2b3036 30%, #1e2227 62%, #272c31 100%);
+  background: radial-gradient(120% 70% at 18% 0%, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0) 70%), linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 35%, rgba(0, 0, 0, 0.06) 100%), linear-gradient(160deg, #363b42 0%, #2a2f35 38%, #22262b 70%, #272c31 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), inset 0 0 0 5px #0b0d0f, inset 0 0 0 6px rgba(255, 255, 255, 0.06), inset 0 -44px 70px rgba(0, 0, 0, 0.36), inset 0 36px 56px rgba(255, 255, 255, 0.025);
   transform: rotateY(180deg) translateZ(20.5px); backface-visibility: hidden; pointer-events: none; }   /* מעבר לצלע העמוקה ביותר (8 × 2.4 = 19.2) — אחרת הצלע מכסה את הגב */
-.dp-back::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(112deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 26%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.03) 100%); }
-.dp-back::after { content: ""; position: absolute; inset: 0; background: linear-gradient(104deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.16) 50%, rgba(255, 255, 255, 0) 60%); transform: translateX(130%); opacity: 0; }
+.dp-back::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(60% 40% at 72% 88%, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0) 70%), repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.007) 0 1px, rgba(0, 0, 0, 0) 1px 3px); }
+.dp-back::after { content: ""; position: absolute; inset: 0; background: linear-gradient(104deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.07) 50%, rgba(255, 255, 255, 0) 60%); transform: translateX(130%); opacity: 0; }
 .dp.is-turning .dp-back::after { animation: dp-backsheen 0.95s both; }
 @keyframes dp-backsheen { 0%, 30% { transform: translateX(130%); opacity: 0; } 40% { opacity: 1; } 70%, 100% { transform: translateX(-130%); opacity: 0; } }
 /* לוגו חרוט במרכז-תחתית */
-.dp-back > svg { position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; margin: -29px 0 0 -29px; opacity: 0.42; filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.10)) drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.75)); }
+.dp-back > svg { position: absolute; left: 50%; top: 50%; width: 88px; height: 88px; margin: -50px 0 0 -44px; opacity: 0.92; filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.12)) drop-shadow(0 -1px 1px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.06)); }
+.dp-back .brand { position: absolute; left: 0; right: 0; top: calc(50% + 46px); text-align: center; font-family: var(--fd); font-weight: 600; font-size: 13px; letter-spacing: 0.32em; color: rgba(255, 255, 255, 0.42); text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.08); direction: ltr; }
 /* אי המצלמה: ריבוע מעוגל מורם, שלוש עדשות עם טבעת פלדה וזכוכית כחלחלה, פלאש, חיישן */
-.dp-cam { position: absolute; top: 16px; right: 16px; width: 96px; height: 96px; border-radius: 28px; background: linear-gradient(150deg, #383d44 0%, #1c1f24 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 22px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.5); }
-.dp-cam i { position: absolute; width: 34px; height: 34px; border-radius: 999px; background: radial-gradient(circle at 38% 32%, #7d8ea0 0%, #3a4553 18%, #151a20 38%, #04060a 60%, #10141a 100%); box-shadow: 0 0 0 2px #0b0d10, 0 0 0 3.5px #454b53, 0 0 0 4.5px #101317, inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 -4px 6px rgba(0, 0, 0, 0.7), inset 0 3px 4px rgba(255, 255, 255, 0.06); }
-.dp-cam i::before { content: ""; position: absolute; inset: 9px; border-radius: 999px; background: radial-gradient(circle at 45% 40%, #2b4a6e 0%, #0e1d33 45%, #05080d 75%); box-shadow: inset 0 0 0 1px rgba(120, 160, 220, 0.25); }
-.dp-cam i::after { content: ""; position: absolute; top: 5px; left: 8px; width: 9px; height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.5); transform: rotate(-35deg); }
-.dp-cam i:nth-child(1) { top: 10px; left: 10px; }
-.dp-cam i:nth-child(2) { bottom: 10px; left: 10px; }
-.dp-cam i:nth-child(3) { top: 31px; right: 10px; }
-.dp-cam b { position: absolute; top: 9px; right: 15px; width: 10px; height: 10px; border-radius: 999px; background: radial-gradient(circle at 40% 35%, #fff8e6 0%, #e9cf8a 55%, #b8933f 100%); box-shadow: 0 0 0 2px #14171a, 0 0 0 3px rgba(255, 255, 255, 0.06), 0 0 8px rgba(255, 230, 160, 0.3); }
-.dp-cam u { position: absolute; bottom: 11px; right: 16px; width: 8px; height: 8px; border-radius: 999px; background: #0a0c0e; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 0 0 2px #1a1d21; }
+.dp-cam { position: absolute; top: 14px; right: 14px; width: 104px; height: 104px; border-radius: 30px; background: linear-gradient(150deg, #3a3f46 0%, #262a30 45%, #1c1f24 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset -1px -1px 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 22px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.5); }
+.dp-cam .l { position: absolute; width: 40px; height: 40px; border-radius: 999px; background: conic-gradient(from 210deg, #7b8490, #3a4048 18%, #9aa3ae 32%, #2c3138 48%, #6f7883 62%, #2f343b 80%, #7b8490); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.dp-cam .l::before { content: ""; position: absolute; inset: 4px; border-radius: 999px; background: radial-gradient(circle at 50% 50%, #0b1220 0%, #0a0e16 40%, #05070b 70%, #0d1117 100%); box-shadow: inset 0 0 0 2px #14181d, inset 0 0 0 3px rgba(120, 140, 165, 0.25), inset 0 6px 8px rgba(0, 0, 0, 0.7); }
+.dp-cam .l::after { content: ""; position: absolute; inset: 11px; border-radius: 999px; background: radial-gradient(circle at 38% 32%, rgba(160, 190, 230, 0.55) 0%, rgba(90, 110, 150, 0.35) 18%, rgba(30, 40, 70, 0.9) 45%, #04060a 72%); box-shadow: inset 0 0 0 1px rgba(150, 170, 200, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.7); }
+.dp-cam .l1 { top: 10px; left: 10px; }
+.dp-cam .l2 { bottom: 10px; left: 10px; }
+.dp-cam .l3 { top: 32px; right: 10px; }
+.dp-cam .flash { position: absolute; top: 12px; right: 18px; width: 11px; height: 11px; border-radius: 999px; background: radial-gradient(circle at 40% 35%, #fff8e6 0%, #e9cf8a 50%, #b8933f 100%); box-shadow: 0 0 0 2px #15181c, 0 0 0 3px rgba(255, 255, 255, 0.06), 0 0 8px rgba(255, 230, 160, 0.3); }
+.dp-cam .lidar { position: absolute; bottom: 14px; right: 16px; width: 12px; height: 12px; border-radius: 999px; background: radial-gradient(circle at 50% 50%, #1a1f2a 0%, #0a0c10 60%, #14171a 100%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 0 0 2px #1a1d21; }
+.dp-cam .mic { position: absolute; bottom: 33px; right: 21px; width: 3px; height: 3px; border-radius: 999px; background: #05070a; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12); }
 .dp-ground { position: absolute; left: 50%; width: 268px; height: 34px; margin-left: -134px; border-radius: 50%; z-index: 0; pointer-events: none; background: radial-gradient(ellipse at center, rgba(21, 18, 15, 0.26) 0%, rgba(21, 18, 15, 0.17) 30%, rgba(21, 18, 15, 0.07) 56%, rgba(21, 18, 15, 0) 76%); }
 .dp-ground::before { content: ""; position: absolute; left: 50%; top: 50%; width: 170px; height: 13px; margin: -6.5px 0 0 -85px; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(16, 14, 12, 0.44) 0%, rgba(16, 14, 12, 0.18) 52%, rgba(16, 14, 12, 0) 78%); }
 .sides .dp-ground { background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0.12) 56%, rgba(0, 0, 0, 0) 76%); }
@@ -585,3 +584,22 @@ p.k-center { display: block; margin: 0; }
   .dp { --rest-y: 0deg; --rest-x: 0deg; }
   .dp-tab, .dp-tab b, .dp-fab { transition: none !important; }
 }
+
+/* ── לחצני צד (בעובי המכשיר, אלמנטים אמיתיים): הפעלה מימין; השתקה, עוצמה+ ועוצמה- משמאל; מגש סים ── */
+.dp-btn { position: absolute; width: 4.5px; border-radius: 2.5px; background: linear-gradient(90deg, #5c626b 0%, #3a3f46 30%, #22262b 70%, #15181c 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 -1px 0 rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.6), 1px 0 2px rgba(0, 0, 0, 0.35); transform: translateZ(-9.6px); pointer-events: none; }
+.dp-btn.power { right: -4.5px; top: 150px; height: 60px; }
+.dp-btn.mute { left: -4px; top: 92px; height: 16px; width: 4px; background: linear-gradient(90deg, #15181c 0%, #2a2e34 40%, #464c55 100%); }
+.dp-btn.mute::after { content: ""; position: absolute; left: 1px; top: 4px; width: 2px; height: 4px; border-radius: 1px; background: #f07c1a; opacity: 0.85; }
+.dp-btn.vol-up { left: -4.5px; top: 122px; height: 34px; background: linear-gradient(90deg, #15181c 0%, #22262b 30%, #3a3f46 70%, #5c626b 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 -1px 0 rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.6), -1px 0 2px rgba(0, 0, 0, 0.35); }
+.dp-btn.vol-down { left: -4.5px; top: 164px; height: 34px; background: linear-gradient(90deg, #15181c 0%, #22262b 30%, #3a3f46 70%, #5c626b 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 -1px 0 rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.6), -1px 0 2px rgba(0, 0, 0, 0.35); }
+.dp-tray { position: absolute; left: -1px; top: 400px; width: 2px; height: 44px; border-radius: 1px; background: rgba(0, 0, 0, 0.55); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.16); transform: translateZ(-9.6px); pointer-events: none; }
+/* ── מסך הפתיחה: כמו פתיחת האפליקציה, עם "התחל הדגמה" — לפני הלחיצה הבמה לא גוללת והגלילה של הדף עוברת דרך הטלפון ── */
+.dp-cover { position: absolute; inset: 0; z-index: 8; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(12px * var(--k)); padding: 0 calc(24px * var(--k)); transition: opacity 0.45s ease, visibility 0.45s; }
+.dp-cover .wm { display: inline-flex; align-items: center; gap: 0.03em; font-family: var(--fd); font-weight: 600; font-size: calc(34px * var(--k)); line-height: 1; margin-bottom: calc(6px * var(--k)); }
+.dp-cover .wm .fit { color: var(--coach); } .dp-cover .wm .polis { color: var(--trainee); } .dp-cover .wm .o { width: 0.95em; height: 0.95em; }
+.dp-cover p { margin: 0; font-size: calc(14px * var(--k)); line-height: 1.45; color: var(--muted); text-align: center; }
+.dp-cover .dp-start { margin-top: calc(12px * var(--k)); background: var(--ink); color: var(--onInk); border-radius: 999px; padding: calc(13px * var(--k)) calc(30px * var(--k)); font-family: var(--fb); font-weight: 700; font-size: calc(16px * var(--k)); box-shadow: 0 8px 24px var(--shadow); cursor: pointer; }
+.dp:not(.is-idle) .dp-cover { opacity: 0; visibility: hidden; pointer-events: none; }
+.dp.is-idle .dp-stage { overflow: hidden; }
+.dp.is-idle .dp-navwrap, .dp.is-idle .dp-topbar { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .dp-cover { transition: none; } }
