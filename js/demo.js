@@ -138,7 +138,7 @@
           '<div class="dp-sub">ספטמבר</div>' +
           S.payments.map(function (p, i) {
             var badge = p.paid ? '<span class="chip chip-positive">שולם ✓</span>' : (p.late ? '<span class="chip chip-negative">באיחור</span>' : '<span class="chip chip-attention">לא שולם</span>');
-            return '<button class="dp-ccard" data-act="' + (p.paid ? '' : 'pay:' + i) + '"' + (p.paid ? ' disabled' : '') + '>' + av(p.av, p.c, 'md') + '<span class="col"><b>' + p.name + '</b><small>' + p.period + ' · 350 ₪' + (p.paid ? '' : ' · לחץ לרישום תשלום') + '</small></span>' + badge + '</button>';
+            return '<button class="dp-ccard" data-act="' + (p.paid ? '' : 'pay:' + i) + '"' + (p.paid ? ' disabled' : '') + '>' + av(p.av, p.c, 'md') + '<span class="col"><b>' + p.name + '</b><small>' + p.period + '' + (p.paid ? '' : ' · לחץ לרישום תשלום') + '</small></span>' + badge + '</button>';
           }).join('');
       }
     }
@@ -330,13 +330,19 @@
     setTimeout(function () { ph.root.classList.remove('is-turning'); wrap.classList.remove('is-flipping'); ph.turning = false; }, 960);
   }
 
+  function edges() { var s = ''; for (var i = 1; i <= 12; i++) s += '<i class="dp-edge" style="--i:' + i + '" aria-hidden="true"></i>'; return s; }
   function mount(root) {
     var ph = { root: root, side: root.getAttribute('data-side') || 'trainer', navOpen: false, presetIdx: 0, scrollTop: 0 };
     ph.screen = ph.side === 'trainer' ? 'home' : 'today';
     root.innerHTML = '<div class="dp-screen"><div class="dp-status"><span class="dp-clock">' + now() + '</span><span class="dp-status-icons">' + icon('signal') + icon('wifi') + icon('battery') + '</span></div>' +
       '<div class="dp-topbar"></div><div class="dp-stage"></div><div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
       '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden><div class="sheet-card"><span class="lbl">הזנת משקל</span><span class="big"><b>81.2</b><i>ק"ג</i></span><span class="hint">היום · אפשר לערוך עד חצות</span><div class="sheet-btns"><button class="dp-obtn" data-act="sheetclose">ביטול</button><button class="dp-eat compact" data-act="weightsave">' + icon('check') + 'שמור</button></div></div></div></div>' +
-      '<div class="dp-back" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg></div>';
+      edges() + '<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i></i><i></i><b></b><u></u></span><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg></div>';
+    root.querySelector('.dp-screen').insertAdjacentHTML('beforeend', '<div class="dp-sheen" aria-hidden="true"></div>');
+    var ground = document.createElement('div'); ground.className = 'dp-ground'; ground.setAttribute('aria-hidden', 'true');
+    root.parentNode.insertBefore(ground, root);
+    var placeGround = function () { ground.style.top = (root.offsetTop + root.offsetHeight - 12) + 'px'; };
+    placeGround(); window.addEventListener('resize', placeGround);
     ph.topbar = root.querySelector('.dp-topbar'); ph.stage = root.querySelector('.dp-stage'); ph.nav = root.querySelector('.dp-nav'); ph.sheet = root.querySelector('.dp-sheet'); ph.toast = root.querySelector('.dp-toast');
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]');
