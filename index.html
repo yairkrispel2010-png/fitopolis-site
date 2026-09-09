@@ -24,7 +24,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/rubik-400-hebrew.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/fredoka-600-hebrew.woff2" crossorigin>
   <link rel="stylesheet" href="assets/fonts/fonts.css">
-  <link rel="stylesheet" href="css/style.css?v=11">
+  <link rel="stylesheet" href="css/style.css?v=12">
   <link rel="stylesheet" href="css/phone.css?v=2">
   <link rel="canonical" href="https://fitopolis.co.il/">
 </head>
@@ -123,15 +123,16 @@
       <div class="hero-copy">
         <span class="hero-chip reveal"><span class="dot"></span>בקרוב ב-Google Play וב-App Store</span>
         <h1 class="reveal d1">הדבר היחיד שאתה צריך <br>כדי לנהל את העסק שלך.</h1>
-        <p class="sub reveal d2">פיטופוליס היא אפליקציה אחת למאמן כושר: המתאמנים, התוכניות, התפריטים, הפגישות והתשלומים — במקום אחד, בלי לרדוף אחרי כלום. ולכל מתאמן ממשק משלו, שמחובר לשלך: מה שאתה בונה — הוא רואה. מה שהוא עושה — אתה רואה.</p>
+        <p class="sub reveal d2">פיטופוליס היא אפליקציה אחת למאמן כושר: המתאמנים, התוכניות, התפריטים, הפגישות והתשלומים — במקום אחד, בלי לרדוף אחרי כלום. ולכל מתאמן שלך ממשק משלו, שמחובר לשלך.</p>
         <a class="btn btn-primary reveal d4" href="mailto:fitopolis.contact@gmail.com">אני רוצה להיות מהראשונים</a>
-        <p class="note reveal d5">בהרצה סגורה · המקומות הראשונים מוגבלים · תשובה אישית ממני</p>
+        <p class="note reveal d5">בהרצה סגורה · תשובה אישית ממני</p>
       </div>
 
       <div class="phone-col reveal d3">
         <!-- אב-טיפוס אינטראקטיבי: js/demo.js מצייר את שני הממשקים מ-state משותף.
              ברירת המחדל כאן — הצד של המאמן; הכפתור מתחת מסובב לצד של המתאמן. -->
         <div class="dp-wrap">
+          <a class="skip-link" href="#after-demo">דלג על ההדגמה האינטראקטיבית</a>
           <div class="dp" data-demo data-side="trainer" role="group" aria-label="הדגמה אינטראקטיבית של ממשק המאמן — כל כפתור לחיץ"></div>
           <button class="flip-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-swap"/></svg><span>לממשק המתאמן</span></button>
           <p class="demo-hint">הדגמה חיה, לא סרטון: כל כפתור לחיץ. פתח כרטיס, שלח הודעה, אשר פגישה. <button class="reset-btn" type="button">איפוס</button></p>
@@ -141,8 +142,29 @@
   </section>
 
   <!-- ══ המבנה המרכזי ══ -->
-  <section class="features">
+  <section class="features" id="after-demo">
     <div class="container">
+      <!-- ══ מי צריך אותך היום: למי זה, הכאב, ומסך הבית של המאמן כתור טיפול ══ -->
+      <div class="triage scroll-reveal">
+        <div class="triage-copy">
+          <h2 class="section-title">מי צריך אותך היום — ולמה</h2>
+          <p class="lead">פיטופוליס בנויה למאמן שמלווה אנשים לאורך זמן — תוכנית, תפריט ומעקב. לא לסטודיו עם חוגים, ולא למערכת תורים.</p>
+          <p>עם עשרים מתאמנים אתה זוכר מי נעלם השבוע. עם מאתיים — מישהו צריך להגיד לך. מסך הבית שלך הוא תור טיפול: הודעות שלא נקראו, מי דורש טיפול ולמה, פגישות ובקשות. לא עוברים על כל הכרטיסים — פותחים את מי שצריך.</p>
+          <ul>
+            <li>מתאמן חדש נכנס בקישור הזמנה: מוסיפים אותו, שולחים לו קישור, וזהו.</li>
+            <li>גם מתאמן שלא יוריד כלום מנוהל מכאן — תוכנית, תפריט, פגישות ותשלומים, בלי מעקב שהוא לא יזין.</li>
+            <li>שעות הארוחות שלו מחושבות מזמני הקימה והשינה שהזנת — לא מוקלדות ארוחה-ארוחה.</li>
+          </ul>
+        </div>
+        <div class="struct-ui triage-ui" aria-hidden="true">
+          <div class="dp-tcard hcard"><div class="hcard-t"><svg class="ic v-trainee"><use href="#i-chat"/></svg><b>הודעות</b></div><span class="hcard-b">3 הודעות לא נקראו</span><span class="avs"><span class="av av-blue">דכ</span><span class="av av-amber">רג</span></span></div>
+          <div class="dp-tcard hcard"><div class="hcard-t"><svg class="ic v-attention"><use href="#i-priority"/></svg><b>דורשים טיפול</b></div><span class="hcard-b">2 לקוחות דורשים טיפול</span>
+            <div class="why"><span class="av av-blue">דכ</span><span>לא עדכן משקל השבוע</span></div>
+            <div class="why"><span class="av av-amber">רג</span><span>נדרשות מידות</span></div>
+          </div>
+          <div class="dp-tcard hcard"><div class="hcard-t"><svg class="ic"><use href="#i-inbox"/></svg><b>בקשות פגישה</b></div><span class="hcard-b">בקשה אחת ממתינה</span></div>
+        </div>
+      </div>
       <div class="section-head scroll-reveal">
         <svg class="section-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg>
         <h2 class="section-title">המבנה המרכזי של <span dir="ltr">FITOPOLIS</span></h2>
@@ -153,7 +175,7 @@
           <div class="struct-ui" aria-hidden="true">
             <div class="dp-hero"><span class="av av-blue lg">דכ</span>
               <div class="facts"><span><b>גובה</b>180 ס"מ</span><span><b>משקל</b>81.4 ק"ג</span><span><b>גיל</b>30</span><span><b>מאז</b>03/2026</span></div>
-              <div class="tags"><span class="tag-set">מזין ארוחות</span><span class="tag-set">מגבלה: גב תחתון</span><i></i><span class="badge-needs">נדרש טיפול</span></div>
+              <div class="tags"><span class="tag-set">מזין ארוחות</span><span class="tag-set">מזין אימונים</span><i></i><span class="badge-needs">נדרש טיפול</span></div>
             </div>
             <div class="dp-tabs"><span class="on">מעקב</span><span>יצירת קשר</span><span>תשלומים</span></div>
             <div class="dp-tcard">
@@ -161,7 +183,7 @@
             </div>
           </div>
           <h3>כרטיס המתאמן</h3>
-          <p>מתאמן אחד — מקום אחד: פרטים ומגבלות, התוכנית והתפריט שלו, משקל והיקפים לאורך זמן, פגישות, תשלומים והשיחה ביניכם. מכאן אתה מנהל אותו, ומכאן נולד הממשק שהוא רואה.</p>
+          <p>מתאמן אחד — מקום אחד: פרטים, הערות שרק אתה רואה, התוכנית והתפריט שלו, משקל והיקפים לאורך זמן, פגישות, תשלומים והשיחה ביניכם. כל שינוי שעשית לו נשמר, עם תאריך. מכאן אתה מנהל אותו, ומכאן נולד הממשק שהוא רואה.</p>
         </div>
 
         <div class="struct-card scroll-reveal">
@@ -171,22 +193,21 @@
             <div class="tpl"><svg class="ic"><use href="#i-card"/></svg><span class="col"><b>מנוי סטנדרטי</b><small>חודשי · 8 מתאמנים מקושרים</small></span><span class="linked"><span class="av av-green">מל</span><span class="av av-amber">אב</span><span class="more">+6</span></span></div>
           </div>
           <h3>התבניות</h3>
-          <p>תוכנית, תפריט ומבנה תשלום — בונים פעם אחת. מקצים למתאמן בלחיצה, משנים לו רק מה שצריך, ולא מתחילים מאפס. עדכון בתבנית מגיע לכל מי שמקושר אליה — ורק אליו.</p>
+          <p>תוכנית, תפריט ומבנה תשלום — בונים פעם אחת. מקצים למתאמן בלחיצה, משנים לו רק מה שצריך, ולא מתחילים מאפס. עדכון בתבנית מגיע לכל מי שמקושר אליה — ורק אליו; ולפני שהוא נכנס, האפליקציה שואלת אם לעדכן את כולם או לשמור כתבנית נוספת, ושומרת את ההתאמות האישיות של כל אחד.</p>
         </div>
 
         <div class="struct-card scroll-reveal">
           <div class="struct-ui brand-ui" aria-hidden="true">
-            <div class="logo-slot"><span class="mark">רן</span><span class="col"><b>הלוגו שלך</b><small>מופיע בראש כל דף ובפתיחת האפליקציה — אצלך ואצל המתאמנים שלך</small></span></div>
+            <div class="logo-slot"><span class="mark">רן</span><span class="col"><b>הלוגו שלך</b><small>מלוגו אחד נגזרים כל הצבעים — בלחיצה</small></span></div>
             <div class="roles">
               <span class="role"><i style="background:#12939D"></i><span>קול המאמן<small>מה שמגיע ממך</small></span></span>
               <span class="role"><i style="background:#F07C1A"></i><span>קול המתאמן<small>מה שהוא עושה</small></span></span>
               <span class="role"><i style="background:#C08A18"></i><span>דורש טיפול<small>קריאה לפעולה</small></span></span>
               <span class="role"><i style="background:#37945F"></i><span>חיובי<small>מגמה ותוצאה טובה</small></span></span>
             </div>
-            <span class="caption">חל על הממשק שלך ועל ממשק המתאמנים שלך</span>
           </div>
           <h3>המיתוג שלך</h3>
-          <p>הלוגו שלך פותח את האפליקציה ויושב בראש כל מסך — אצלך ואצל המתאמנים שלך. הצבעים שלך על כל כפתור, תג וסמן. לכל צבע תפקיד אחד: אתה בוחר את הגוון, המשמעות נשארת.</p>
+          <p>הלוגו שלך — לא שלי — פותח את האפליקציה ויושב בראש כל מסך, גם אצל המתאמנים שלך. העלית לוגו? לחיצה אחת גוזרת ממנו את הצבעים לכל כפתור, תג וסמן. לכל צבע תפקיד אחד: אתה בוחר את הגוון, המשמעות נשארת.</p>
         </div>
 
         <div class="struct-card scroll-reveal">
@@ -196,8 +217,8 @@
             <span class="flow-label">תשלום</span>
             <div class="flow"><span class="step who-trainer">מבנה תשלום<small>סכום ותדירות</small></span><svg class="arr"><use href="#i-arrow"/></svg><span class="step">תקופות<small>נגזרות מהמבנה</small></span><svg class="arr"><use href="#i-arrow"/></svg><span class="step who-trainer">רישום<small>נסגר מול תקופה</small></span></div>
           </div>
-          <h3>תיאומים ותקופות</h3>
-          <p>פגישה היא תיאום, לא הודעה: הוא מבקש, אתה מאשר או מציע זמן אחר, הוא מאשר הגעה — וכל שלב מסומן. תשלום הוא תקופה, לא סכום: מבנה התשלום קובע תקופות, כל רישום נסגר מול תקופה — ותמיד ברור מי שילם על מה.</p>
+          <h3>פגישות ותשלומים</h3>
+          <p>פגישה היא תיאום, לא הודעה: כל שלב מסומן, ואף אחד לא נשאר לנחש אם נקבע. פגישה קבועה נקבעת פעם אחת, ופגישה שאושרה נכנסת ליומן של הטלפון. תשלום הוא תקופה, לא סכום: כל רישום נסגר מול תקופה — ותמיד ברור מי שילם על מה.</p>
         </div>
       </div>
     </div>
@@ -210,14 +231,14 @@
         <svg class="section-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg>
         <h2 class="section-title">סנכרון מלא בין הממשקים</h2>
       </div>
-      <p class="sides-intro scroll-reveal">אין כאן שני מוצרים — יש מערכת אחת עם שני צדדים שקוראים מאותו מידע. מה שנעשה בצד אחד מופיע בשני באותו רגע. ושני הטלפונים בדף הזה מחוברים באמת: סמן כאן ארוחה, ותמצא אותה בכרטיס המתאמן למעלה.</p>
+      <p class="sides-intro scroll-reveal">אין כאן שני מוצרים — יש מערכת אחת עם שני צדדים שקוראים מאותו מידע: מה שנעשה בצד אחד מופיע בשני. ושני הטלפונים בדף הזה מחוברים באמת: עדכן כאן משקל, והטלפון של המאמן למעלה יוריד אותו מ"דורשים טיפול".</p>
       <div class="sides-layout">
         <div class="sides-cards">
           <div class="side-card side-trainer scroll-reveal">
             <span class="voice-dot voice-trainer"></span>
             <h3>הצד שלך</h3>
             <ul>
-              <li>אתה בונה תוכנית — היא אצלו באותו רגע</li>
+              <li>אתה בונה תוכנית — היא מופיעה אצלו</li>
               <li>אתה מאשר פגישה — הוא רואה שאושרה</li>
               <li>אתה שולח הודעה — היא מחכה לו במסך הבית, לא בשיחה שנקברת</li>
             </ul>
@@ -234,6 +255,7 @@
         </div>
         <div class="sides-phone scroll-reveal">
           <div class="dp-wrap">
+            <a class="skip-link" href="#closing">דלג על ההדגמה האינטראקטיבית</a>
             <div class="dp" data-demo data-side="trainee" role="group" aria-label="הדגמה אינטראקטיבית של ממשק המתאמן — כל כפתור לחיץ"></div>
             <button class="flip-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-swap"/></svg><span>לממשק המאמן</span></button>
             <p class="demo-hint">אותו מידע כמו בטלפון שלמעלה. <button class="reset-btn" type="button">איפוס</button></p>
@@ -245,11 +267,11 @@
 </main>
 
 <!-- ══ סגירה + פוטר ══ -->
-<footer class="closing">
+<footer class="closing" id="closing">
   <div class="container">
     <div class="closing-inner">
       <svg class="breathe" viewBox="0 0 100 100" style="width: 56px; height: 56px;" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg>
-      <h2>בחנויות — בקרוב. אצל המאמנים הראשונים — עכשיו.</h2>
+      <h2>בחנויות — בקרוב. המאמנים הראשונים נכנסים לפני כולם.</h2>
       <p class="sub">רוצים להיות מהמאמנים הראשונים? דברו איתי — יאיר.</p>
       <a class="btn btn-ghost" href="mailto:fitopolis.contact@gmail.com">צרו קשר</a>
     </div>
@@ -268,7 +290,7 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=3"></script>
-<script src="js/demo.js?v=3"></script>
+<script src="js/main.js?v=4"></script>
+<script src="js/demo.js?v=4"></script>
 </body>
 </html>

@@ -12,7 +12,6 @@
   if (!reduceMotion) {
     var layers = Array.prototype.slice.call(document.querySelectorAll('[data-depth]'));
     var depths = layers.map(function (el) { return parseFloat(el.getAttribute('data-depth')) || 0; });
-    var tilt = document.querySelector('[data-tilt]');
     var hero = document.querySelector('.hero');
     var raf = null;
     var mx = 0;
@@ -36,10 +35,6 @@
         var scrollShift = progress * d * 2.2;
         // translate3d מכריח שכבת GPU — זול משמעותית מ-translate רגיל
         el.style.transform = 'translate3d(' + mouseX.toFixed(1) + 'px,' + (mouseY + scrollShift).toFixed(1) + 'px,0)';
-      }
-
-      if (tilt && finePointer) {
-        tilt.style.transform = 'perspective(900px) rotateX(' + (my * -5).toFixed(2) + 'deg) rotateY(' + (mx * 7).toFixed(2) + 'deg)';
       }
     }
 

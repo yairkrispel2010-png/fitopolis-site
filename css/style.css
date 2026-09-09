@@ -109,6 +109,9 @@ a { color: var(--trainer-text); text-decoration: none; }
 }
 
 .skip-link:focus { transform: translateY(0); color: #FFFFFF; }
+/* קישורי הדילוג שמעל הטלפונים: מוסתרים מחוץ למסך עד פוקוס (ההזזה של -200% נשארת גלויה בתוך מקטע בלי overflow) */
+.dp-wrap .skip-link { top: -9999px; transform: none; inset-inline-start: 50%; translate: 50% 0; white-space: nowrap; }
+.dp-wrap .skip-link:focus { top: -56px; }
 
 img, svg { max-width: 100%; }
 
@@ -252,7 +255,7 @@ img, svg { max-width: 100%; }
   display: flex;
   align-items: center;
   gap: 64px;
-  padding-block: 48px 88px;
+  padding-block: 32px 72px;
 }
 
 .hero-copy {
@@ -262,7 +265,7 @@ img, svg { max-width: 100%; }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 22px;
+  gap: 18px;
 }
 
 .hero-chip {
@@ -338,29 +341,6 @@ img, svg { max-width: 100%; }
   padding-block: 88px;
 }
 
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.feat-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 13px;
-  /* עומק פנימי: המשטח עצמו נוטה מלבן לצל קל, עם קו-אור בקצה העליון */
-  background: linear-gradient(168deg, #FFFFFF 0%, #FBFAF7 62%, #F5F3EE 100%);
-  border-radius: 22px;
-  padding: 30px 22px 28px;
-  box-shadow:
-    var(--shadow-sm),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(21, 18, 15, 0.05);
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .feat-card:hover {
     transform: translateY(-5px);
@@ -371,37 +351,14 @@ img, svg { max-width: 100%; }
   }
 }
 
-.feat-icon {
-  width: 54px;
-  height: 54px;
-  border-radius: 999px;
-  /* האייקון יושב בתוך גומה — לא סתם עיגול שטוח */
-  background: linear-gradient(160deg, #EAF4F5 0%, #D6E9EA 100%);
-  box-shadow:
-    inset 0 2px 4px rgba(18, 147, 157, 0.18),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.8),
-    0 3px 8px rgba(18, 147, 157, 0.12);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.feat-card h3 { margin: 0; font-size: 17.5px; font-weight: 600; font-family: var(--font-body); }
-.feat-card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); max-width: 24ch; }
-
 /* שני הקולות יושבים על כהה — שם הטורקיז והכתום באמת קופצים */
 .sides {
   background: var(--dark);
   color: #FFFFFF;
-  padding-block: 84px;
+  padding-block: 84px 56px;
 }
 
 .sides .section-title { color: #FFFFFF; }
-.sides-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-}
 
 .side-card {
   background: var(--dark-2);
@@ -467,7 +424,7 @@ img, svg { max-width: 100%; }
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  padding-block: 78px 62px;
+  padding-block: 56px 52px;
   border-top: 1px solid var(--dark-line);
   text-align: center;
 }
@@ -479,7 +436,7 @@ img, svg { max-width: 100%; }
   font-size: clamp(25px, 3vw, 30px);
 }
 
-.closing .sub { font-size: 16px; color: var(--dark-soft); }
+.closing .sub { font-size: 16px; color: var(--dark-soft); text-wrap: balance; }
 /* הפוטר — גם כאן הלוגו במרכז, כמו בכל שאר הדפים */
 .footer-bar {
   border-top: 1px solid var(--dark-line);
@@ -904,7 +861,6 @@ a.logotype { min-height: 44px; }
 /* כל סקשן מצויר בנפרד — שינוי באחד לא מכריח ציור מחדש של האחרים */
 .hero, .features, .sides, .closing { contain: paint; }
 
-
 /* אנימציות נעצרות כשהאלמנט לא על המסך */
 .anim-paused,
 .anim-paused *,
@@ -944,113 +900,19 @@ a.logotype { min-height: 44px; }
   .closing-inner { padding-block: 52px 44px; }
 }
 
-
 /* מקומות שממתינים למילוי — מסומנים בבירור כדי שהדף לא יישלח כך */
-.todo {
-  display: block;
-  background: #F6EFDD;
-  border-inline-start: 4px solid var(--attention);
-  border-radius: 12px;
-  padding: 14px 16px;
-  font-size: 16px;
-  color: var(--attention-text);
-  font-weight: 500;
-}
 
 /* ── דף "מי עומד מאחורי זה" ────────────────────────────────
    דף אישי, גוף ראשון. הכותרות ממורכזות עם הסימן מעליהן —
    כלל הבעלים (28/08): אין תוכן בצד שמתמשק איתן.
    הסיפור הוא הבלוק היחיד בגופן גדול; כל השאר נשען עליו. */
-.about {
-  max-width: 660px;
-  gap: 0;
-  align-items: center;
-  padding-bottom: 88px;
-}
+
 /* בעטיפת flex ממורכזת כל מיכל צריך רוחב מפורש, אחרת הוא
    מתכווץ לרוחב התוכן שלו (אותו באג של .container ו-.page-main) */
-.about > * { width: 100%; }
-.about-mark {
-  width: 58px;
-  height: 58px;
-  display: block;
-  margin: 0 auto 16px;
-}
-
-.about h1 { margin-bottom: 14px; }
-.about .lead { max-width: 52ch; margin: 0 auto 34px; }
 
 /* הסיפור — כרטיס בעומק של כרטיסי היכולות, טקסט גדול ממה שסביבו */
-.about-story {
-  background: linear-gradient(168deg, #FFFFFF 0%, #FBFAF7 62%, #F5F3EE 100%);
-  border-radius: 24px;
-  padding: 34px 32px;
-  box-shadow:
-    var(--shadow-sm),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(21, 18, 15, 0.05);
-}
 
-.about-story p {
-  margin: 0;
-  font-size: 19px;
-  line-height: 1.75;
-  color: var(--ink-mid);
-  text-align: center;
-}
-
-.about-block {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding-top: 42px;
-  margin-top: 42px;
-  border-top: 1px solid var(--line);
-}
-
-.about-block h2 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 25px;
-  line-height: 1.3;
-  text-align: center;
-}
-
-.about-block p {
-  margin: 0;
-  font-size: 17px;
-  line-height: 1.8;
-  color: var(--ink-mid);
-}
-
-.about-list {
-  margin: 0;
-  padding-inline-start: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  font-size: 17px;
-  line-height: 1.75;
-  color: var(--ink-mid);
-}
-
-.about-list li { display: flex; gap: 13px; align-items: baseline; }
 /* נקודה בצבע קול המאמן — הדף הזה מדבר אל מאמן */
-.about-list li::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: var(--trainer);
-  flex: none;
-  transform: translateY(-3px);
-}
-
-.about-list strong { color: var(--ink); font-weight: 600; }
-.about-close { gap: 14px; }
-.about-close .mini-note { font-size: 17px; padding-inline: 0; }
 
 @media (max-width: 560px) {
   .about { padding-bottom: 64px; }
@@ -1061,17 +923,6 @@ a.logotype { min-height: 44px; }
 }
 
 /* קישור עדין לדף האישי, מתחת לכפתור בסיום דף הבית */
-.closing-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  margin-top: -8px;
-  font-size: 15px;
-  color: var(--dark-soft);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: rgba(169, 163, 153, 0.5);
-}
 
 @media (hover: hover) and (pointer: fine) {
   .closing-link:hover {
@@ -1156,7 +1007,6 @@ a.logotype { min-height: 44px; }
   padding-top: 30px;
 }
 
-
 /* ═══ אב-הטיפוס האינטראקטיבי — שני הממשקים בתוך הטלפונים (09/09/2026) ═══
    אין לולאות אנימציה. המסכים מצוירים ב-js/demo.js מ-state משותף לכל
    הטלפונים בדף; תנועה רק כתגובה ללחיצה (פתיחת הבר, סיבוב הממשק).
@@ -1217,7 +1067,7 @@ a.logotype { min-height: 44px; }
 .flip-btn:active { transform: scale(0.97); }
 /* החץ בכפתור מסתובב עם הטלפון (הזווית מצטברת ב-JS, כדי שלא יסתובב חזרה) */
 .sides .flip-btn { background: var(--dark-2); border-color: var(--dark-line); color: #FFFFFF; }
-.demo-hint { font-size: 13.5px; color: var(--ink-soft); text-align: center; max-width: 300px; position: relative; z-index: 1; }
+.demo-hint { font-size: 15px; font-weight: 500; color: var(--ink-soft); text-align: center; max-width: 320px; position: relative; z-index: 1; }
 .demo-hint .reset-btn { background: none; border: 0; padding: 0 4px; min-height: 44px; font: inherit; font-size: 13.5px; color: var(--trainer-text); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
 .sides .demo-hint { color: var(--dark-soft); }
 .sides .demo-hint .reset-btn { color: #FFFFFF; }
@@ -1360,7 +1210,7 @@ a.logotype { min-height: 44px; }
 .flow { display: flex; align-items: center; gap: 6px; }
 .flow .step { flex: 1; min-width: 0; background: var(--pf-card); border: 1px solid var(--pf-border); border-radius: 12px; padding: 9px 8px; text-align: center; font-size: 12px; font-weight: 700; line-height: 1.3; }
 .flow .step small { display: block; font-weight: 400; font-size: 10.5px; color: var(--pf-muted); margin-top: 2px; }
-.flow .arr { width: 14px; height: 14px; color: var(--pf-faint); flex: none; transform: scaleX(-1); }
+.flow .arr { width: 14px; height: 14px; color: var(--pf-faint); flex: none; }
 .flow .step.who-trainee { border-color: var(--trainee); }
 .flow .step.who-trainer { border-color: var(--coach); }
 .flow-label { font-size: 11.5px; font-weight: 700; color: var(--pf-muted); margin: 0 2px -4px; }
@@ -1388,16 +1238,41 @@ a.logotype { min-height: 44px; }
   .hero .sub { max-width: 600px; }
 }
 @media (min-width: 1600px) {
+  .hero-inner { justify-content: center; }
+  .hero-copy { flex: 0 1 720px; }
   .hero .dp-wrap, .sides .dp-wrap { zoom: 1.12; }
-  .hero h1 { font-size: 64px; }
+  .hero h1 { font-size: 62px; }
   .hero .sub { max-width: 620px; font-size: 20px; }
 }
 @media (min-width: 1800px) {
   .container { max-width: 1560px; }
+  .hero-copy { flex: 0 1 800px; }
   .hero .dp-wrap, .sides .dp-wrap { zoom: 1.24; }
-  .hero h1 { font-size: 70px; }
+  .hero h1 { font-size: 68px; }
   .hero-inner { gap: 104px; padding-block: 64px 104px; }
 }
+
+/* ── "מי צריך אותך היום": למי זה, הכאב, ומסך הבית של המאמן כתור טיפול (סבב 4, 09/09/2026) ── */
+.triage { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr); gap: 56px; align-items: center; padding-bottom: 64px; margin-bottom: 64px; border-bottom: 1px solid rgba(20, 33, 42, 0.1); }
+.triage-copy { display: flex; flex-direction: column; gap: 14px; }
+.triage-copy .section-title { text-align: start; margin: 0; }
+.triage-copy .lead { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.5; }
+.triage-copy p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--ink-soft); }
+.triage-copy ul { margin: 6px 0 0; padding-inline-start: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
+.triage-copy li::marker { color: #F07C1A; }
+.triage-ui.struct-ui { min-height: 0; display: flex; flex-direction: column; gap: 12px; border-radius: 24px; background: var(--pf-bg); }
+.triage-ui .hcard { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 14px; text-align: center; margin: 0 !important; }
+.triage-ui .hcard-t { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 600; font-size: 17px; color: var(--pf-ink); }
+.triage-ui .ic { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; color: var(--pf-muted); flex: none; }
+.triage-ui .ic.v-trainee { color: #F07C1A; }
+.triage-ui .ic.v-attention { color: #C08A18; }
+.triage-ui .hcard-b { font-size: 13px; color: var(--pf-muted); }
+.triage-ui .avs { display: flex; gap: 8px; }
+.triage-ui .why { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; background: var(--pf-alt); border-radius: 12px; font-size: 13px; font-weight: 500; text-align: start; color: var(--pf-ink); }
+.triage-ui .why span:last-child { flex: 1; }
+@media (max-width: 920px) { .triage { grid-template-columns: 1fr; gap: 28px; padding-bottom: 48px; margin-bottom: 48px; } .triage-ui.struct-ui { max-width: 360px; margin-inline: auto; width: 100%; } }
+/* לפטופ נמוך (1366×768 ודומיו): הכפתור הראשי נשאר מעל קו הקיפול */
+@media (min-width: 921px) and (max-height: 820px) { .hero h1 { font-size: clamp(34px, 4vw, 48px); } .hero-inner { padding-block: 24px 56px; } }
 
 /* ── צמצום תנועה ──────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

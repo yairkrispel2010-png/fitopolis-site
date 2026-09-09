@@ -84,7 +84,7 @@
   function cav(cl, size, ring) { return av(cl.c, cl.ini, size, ring); }
   function nextMeal() { for (var i = 0; i < S.meals.length; i++) if (!S.meals[i].eaten) return S.meals[i]; return null; }
   function lastEaten() { for (var i = S.meals.length - 1; i >= 0; i--) if (S.meals[i].eaten) return S.meals[i]; return null; }
-  function danielReasons() { var r = []; if (!S.weightLogged) r.push('לא עדכן משקל השבוע'); if (!S.workoutDone) r.push('לא סימן אף אימון השבוע'); return r; }
+  function danielReasons() { return S.weightLogged ? [] : ['לא עדכן משקל השבוע']; }   // סיבה אחת, כדי שעדכון משקל בטלפון של המתאמן יוריד אותו מהרשימה אצל המאמן
   function needsCount() { return (danielReasons().length ? 1 : 0) + 1; }
   function clientReasons(id) { return id === 'daniel' ? danielReasons() : id === 'ron' ? ['נדרשות מידות'] : []; }
   function unreadTotal() { return S.unreadByTrainer + S.ronUnread; }
@@ -488,7 +488,7 @@
     return app.tabs.map(function (t) {
       var on = ph.screen === t[0] || (ph.side === 'trainer' && ph.screen === 'thread' && t[0] === 'chat') || (ph.side === 'trainer' && ph.screen === 'profile' && t[0] === 'clients');
       var badge = (ph.side === 'trainee' && t[0] === 'chat' && S.unreadByTrainee) ? '<i class="k-tabbadge">' + S.unreadByTrainee + '</i>' : '';
-      return '<button class="dp-tab' + (on ? ' is-on' : '') + '" role="tab" aria-selected="' + on + '" data-act="tab:' + t[0] + '"><span class="ico">' + icon(t[1]) + badge + '</span><b>' + t[2] + '</b></button>';
+      return '<button class="dp-tab' + (on ? ' is-on' : '') + '" role="tab" aria-selected="' + on + '"' + (on || ph.navOpen ? '' : ' tabindex="-1" aria-hidden="true"') + ' data-act="tab:' + t[0] + '"><span class="ico">' + icon(t[1]) + badge + '</span><b>' + t[2] + '</b></button>';
     }).join('');
   }
 
