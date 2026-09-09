@@ -355,7 +355,10 @@
 
   document.querySelectorAll('.dp[data-demo]').forEach(mount);
   // הגלולה נמדדת שוב אחרי שהגופנים נטענו ובשינוי גודל — אחרת הרוחב של התווית לא נכון בלחיצה הראשונה
-  function refit() { phones.forEach(fitNav); }
+  function refit() {                                                // מדידה שקטה — בלי שהגלולה תזוז באנימציה
+    phones.forEach(function (ph) { ph.nav.style.transition = 'none'; fitNav(ph); });
+    requestAnimationFrame(function () { requestAnimationFrame(function () { phones.forEach(function (ph) { ph.nav.style.transition = ''; }); }); });
+  }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
   window.addEventListener('resize', refit);
   window.addEventListener('load', refit);
