@@ -700,7 +700,7 @@
 
   function flip(ph) {
     if (ph.turning) return;
-    if (!ph.started) { ph.started = true; ph.root.classList.remove('is-idle'); }   // סיבוב = גם התחלה
+    if (!ph.started) { ph.started = true; ph.root.classList.remove('is-idle'); ph.root.parentNode.classList.remove('is-idle'); }   // סיבוב = גם התחלה
     var wrap = ph.root.parentNode;
     var to = ph.side === 'trainer' ? 'trainee' : 'trainer';
     var swap = function () { quiet(ph, function () { ph.side = to; ph.screen = to === 'trainer' ? 'home' : 'today'; ph.navOpen = false; ph.sheetKind = null; ph.typing = false; ph.scrollTop = 0; ph.catOpen = false; render(ph); }); };
@@ -727,7 +727,7 @@
   function edges() { var s = ''; for (var i = 1; i <= 8; i++) s += '<i class="dp-edge" style="--i:' + i + '" aria-hidden="true"></i>'; return s + '<i class="dp-btn power" aria-hidden="true"></i><i class="dp-btn mute" aria-hidden="true"></i><i class="dp-btn vol-up" aria-hidden="true"></i><i class="dp-btn vol-down" aria-hidden="true"></i><i class="dp-tray" aria-hidden="true"></i>'; }
   function mount(root) {
     var ph = { root: root, side: root.getAttribute('data-side') || 'trainer', navOpen: false, presetIdx: 0, scrollTop: 0, openMeal: -1, openWo: -1, started: false };
-    root.classList.add('is-idle');
+    root.classList.add('is-idle'); root.parentNode.classList.add('is-idle');   // גם על העטיפה — כדי לא לסמוך על :has
     ph.screen = ph.side === 'trainer' ? 'home' : 'today';
     root.innerHTML = '<div class="dp-screen"><div class="dp-status"><span class="dp-clock">' + now() + '</span><span class="dp-status-icons">' + icon('signal') + icon('wifi') + icon('battery') + '</span></div>' +
       '<div class="dp-topbar"></div><div class="dp-stage"></div><div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
@@ -759,7 +759,7 @@
   // "התחל הדגמה": מסיר את מסך הפתיחה, ופותח את הבר לרגע כדי שיראו שהוא חי
   function start(ph) {
     if (ph.started) return;
-    ph.started = true; ph.root.classList.remove('is-idle');
+    ph.started = true; ph.root.classList.remove('is-idle'); ph.root.parentNode.classList.remove('is-idle');
     if (reduceMotion) return;
     setTimeout(function () { if (!ph.navOpen && !ph.turning) { ph.navOpen = true; render(ph); setTimeout(function () { if (ph.navOpen) { ph.navOpen = false; render(ph); } }, 1700); } }, 700);
   }

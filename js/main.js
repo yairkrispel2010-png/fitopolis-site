@@ -132,8 +132,10 @@
           var g = geo[i]; if (!g || !st[i].live) continue;
           var dx = (e.clientX - (g.cx - window.scrollX)) / (g.w * 2.2);
           var dy = ((g.cy - window.scrollY) - e.clientY) / (g.h * 1.4);
-          st[i].gy = Math.max(-1, Math.min(1, dx)) * 6.5;
-          st[i].gx = Math.max(-1, Math.min(1, dy)) * 3.5;
+          // כשהסמן על הטלפון עצמו — הטלפון עומד בשקט (אחרת הבר זז מתחת לעכבר ונראה כמרצד); ההטיה היא רק לסמן שמסביב
+          var inside = Math.abs(e.clientX - (g.cx - window.scrollX)) < g.w / 2 + 12 && Math.abs(e.clientY - (g.cy - window.scrollY)) < g.h / 2 + 12;
+          st[i].gy = inside ? 0 : Math.max(-1, Math.min(1, dx)) * 6.5;
+          st[i].gx = inside ? 0 : Math.max(-1, Math.min(1, dy)) * 3.5;
         }
         if (!tRaf) tRaf = requestAnimationFrame(tPaint);
       }, { passive: true });

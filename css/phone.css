@@ -603,3 +603,8 @@ p.k-center { display: block; margin: 0; }
 .dp.is-idle .dp-stage { overflow: hidden; }
 .dp.is-idle .dp-navwrap, .dp.is-idle .dp-topbar { visibility: hidden; }
 @media (prefers-reduced-motion: reduce) { .dp-cover { transition: none; } }
+/* ── לפני "התחל הדגמה": כפתור המעבר והרמז מוסתרים; הבר וה-FAB בשכבה משלהם כדי שלא יצוירו מחדש בכל תזוזה ── */
+.flip-btn, .demo-hint { transition: opacity 0.35s ease, visibility 0.35s; }
+.dp-wrap.is-idle .flip-btn, .dp-wrap.is-idle .demo-hint { opacity: 0; visibility: hidden; pointer-events: none; }
+.dp-nav { will-change: clip-path, transform; }
+.dp-fab { will-change: transform; }
