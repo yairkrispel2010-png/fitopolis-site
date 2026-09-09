@@ -95,4 +95,48 @@
       io.observe(el);
     });
   }
+
+  // ── הטיה עדינה אחרי הסמן (עכבר בלבד) ──────────────────────────────
+  // נכתב על --tilt-y/--tilt-x (@property inherits:false), ולכן כל תזוזה פוסלת רק את .dp ולא את תת-העץ שלו.
+  // שום קריאת פריסה בתוך ה-listener — הגאומטריה נמדדת פעם אחת ומתעדכנת ב-resize.
+  if (!reduceMotion && finePointer) {
+    var dps = Array.prototype.slice.call(document.querySelectorAll('.dp[data-demo]'));
+    if (dps.length) {
+      var geo = [], st = dps.map(function () { return { y: 0, x: 0, gy: 0, gx: 0, live: true }; }), tRaf = null;
+      var measure = function () {
+        geo = dps.map(function (el) { var r = el.getBoundingClientRect(); return { cx: r.left + r.width / 2 + window.scrollX, cy: r.top + r.height / 2 + window.scrollY, w: r.width || 1, h: r.height || 1 }; });
+      };
+      measure();
+      window.addEventListener('resize', measure, { passive: true });
+      window.addEventListener('load', measure);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+      if ('IntersectionObserver' in window) {
+        dps.forEach(function (el, i) { st[i].live = false; new IntersectionObserver(function (es) { st[i].live = es[0].isIntersecting; }, { rootMargin: '120px' }).observe(el); });
+      }
+      var tPaint = function () {
+        tRaf = null;
+        var moving = false;
+        for (var i = 0; i < dps.length; i++) {
+          var s = st[i];
+          if (!s.live || dps[i].classList.contains('is-turning')) continue;
+          s.y += (s.gy - s.y) * 0.14; s.x += (s.gx - s.x) * 0.14;
+          if (Math.abs(s.gy - s.y) > 0.03 || Math.abs(s.gx - s.x) > 0.03) moving = true;
+          dps[i].style.setProperty('--tilt-y', s.y.toFixed(2) + 'deg');
+          dps[i].style.setProperty('--tilt-x', s.x.toFixed(2) + 'deg');
+        }
+        if (moving) tRaf = requestAnimationFrame(tPaint);
+      };
+      document.addEventListener('pointermove', function (e) {
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        for (var i = 0; i < dps.length; i++) {
+          var g = geo[i]; if (!g || !st[i].live) continue;
+          var dx = (e.clientX - (g.cx - window.scrollX)) / (g.w * 2.2);
+          var dy = ((g.cy - window.scrollY) - e.clientY) / (g.h * 1.4);
+          st[i].gy = Math.max(-1, Math.min(1, dx)) * 6.5;
+          st[i].gx = Math.max(-1, Math.min(1, dy)) * 3.5;
+        }
+        if (!tRaf) tRaf = requestAnimationFrame(tPaint);
+      }, { passive: true });
+    }
+  }
 })();

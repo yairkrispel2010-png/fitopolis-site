@@ -866,6 +866,8 @@ a.logotype { min-height: 44px; }
 .anim-paused *,
 .anim-paused *::before,
 .anim-paused *::after { animation-play-state: paused !important; }
+/* סיבוב שכבר רץ לא נעצר באוויר בגלל גלילה שמוציאה את ההירו מהמסך */
+.anim-paused .dp.is-turning, .anim-paused .dp.is-turning *, .anim-paused .dp-wrap.is-flipping .dp-ground { animation-play-state: running !important; }
 
 /* ── דף התמיכה בטלפון ────────────────────────────────────── */
 @media (max-width: 560px) {
@@ -1063,7 +1065,7 @@ a.logotype { min-height: 44px; }
   position: relative;
   z-index: 1;
 }
-.flip-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--system); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.95s cubic-bezier(0.45, 0, 0.3, 1); }
+.flip-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--system); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.95s cubic-bezier(0.62, 0, 0.38, 1); }
 .flip-btn:active { transform: scale(0.97); }
 /* החץ בכפתור מסתובב עם הטלפון (הזווית מצטברת ב-JS, כדי שלא יסתובב חזרה) */
 .sides .flip-btn { background: var(--dark-2); border-color: var(--dark-line); color: #FFFFFF; }
@@ -1196,16 +1198,6 @@ a.logotype { min-height: 44px; }
 .tpl .linked .av:first-child { margin-inline-start: 0; }
 .tpl .linked .more { width: 22px; height: 22px; border-radius: 7px; background: var(--pf-alt); color: var(--pf-muted); font-size: 9px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; margin-inline-start: -6px; }
 /* המיתוג: הלוגו + צבעי התפקידים */
-.brand-ui .logo-slot { display: flex; align-items: center; gap: 10px; background: var(--pf-card); border: 1.5px dashed var(--pf-strong); border-radius: 14px; padding: 10px 12px; }
-.brand-ui .logo-slot .mark { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #1F6F8B, #29A19C); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: 0.02em; }
-.brand-ui .logo-slot .col { flex: 1; display: flex; flex-direction: column; gap: 2px; }
-.brand-ui .logo-slot b { font-size: 13.5px; }
-.brand-ui .logo-slot small { font-size: 11.5px; color: var(--pf-muted); }
-.brand-ui .roles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-.brand-ui .role { display: flex; align-items: center; gap: 8px; background: var(--pf-card); border: 1px solid var(--pf-border); border-radius: 12px; padding: 8px 10px; font-size: 12.5px; font-weight: 700; }
-.brand-ui .role i { width: 18px; height: 18px; border-radius: 999px; flex: none; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08); }
-.brand-ui .role small { display: block; font-weight: 400; font-size: 11px; color: var(--pf-muted); }
-.brand-ui .caption { font-size: 11.5px; color: var(--pf-muted); text-align: center; }
 /* תיאומים ותקופות: זרימה של שלושה צעדים */
 .flow { display: flex; align-items: center; gap: 6px; }
 .flow .step { flex: 1; min-width: 0; background: var(--pf-card); border: 1px solid var(--pf-border); border-radius: 12px; padding: 9px 8px; text-align: center; font-size: 12px; font-weight: 700; line-height: 1.3; }
@@ -1281,3 +1273,35 @@ a.logotype { min-height: 44px; }
 @media (prefers-reduced-motion: reduce) {
   .flip-btn svg { transition: none; }
 }
+
+
+/* ── כרטיס "הלוגו וצבעי המערכת": המבנה האמיתי של שני מקטעי ההגדרות (logo_section.dart, palette_editor.dart), מצומצם ── */
+.brand-ui { display: flex; flex-direction: column; gap: 14px; }
+.brand-ui .bs { display: flex; flex-direction: column; gap: 8px; }
+.brand-ui .bt { font-family: var(--font-display); font-weight: 600; font-size: 16px; color: var(--pf-ink); }
+.brand-ui .prev2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.brand-ui .pv { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+.brand-ui .pv .box { width: 100%; height: 44px; border-radius: 12px; background: var(--pf-alt); display: flex; align-items: center; gap: 6px; padding: 0 10px; box-sizing: border-box; overflow: hidden; }
+.brand-ui .pv .box.center { justify-content: center; }
+.brand-ui .pv small { font-size: 11px; color: var(--pf-muted); }
+.brand-ui .mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #1F6F8B, #29A19C); color: #FFFFFF; font-weight: 800; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.brand-ui .box em { font-style: normal; font-weight: 800; font-size: 13px; color: #1F6F8B; white-space: nowrap; }
+.brand-ui .found { display: flex; justify-content: center; gap: 8px; }
+.brand-ui .found i { width: 22px; height: 22px; border-radius: 999px; border: 1px solid var(--pf-border); }
+.brand-ui .btn-primary { display: block; text-align: center; background: var(--coach); color: #FFFFFF; border-radius: 999px; padding: 9px 12px; font-weight: 700; font-size: 13px; }
+.brand-ui .bubbles { display: flex; flex-direction: column; gap: 6px; background: var(--pf-alt); border-radius: 14px; padding: 10px; }
+.brand-ui .bub { max-width: 84%; padding: 7px 10px; border-radius: 13px; font-size: 12px; line-height: 1.35; }
+.brand-ui .bub.coach { background: #12939D; color: #FFFFFF; align-self: flex-start; }
+.brand-ui .bub.trainee { background: #F07C1A; color: #331B04; align-self: flex-end; }
+.brand-ui .rolecard { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; align-items: center; background: var(--pf-card); border: 1px solid var(--pf-strong); border-radius: 14px; padding: 10px 12px; }
+.brand-ui .rolecard .dot { width: 34px; height: 34px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; grid-row: span 2; }
+.brand-ui .rolecard .dot .ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.brand-ui .rolecard .col { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.brand-ui .rolecard .col b { font-size: 13.5px; }
+.brand-ui .rolecard .col small { font-size: 11px; color: var(--pf-muted); line-height: 1.3; }
+.brand-ui .rolecard .strip { grid-column: 2; display: flex; gap: 6px; align-items: center; }
+.brand-ui .pill { padding: 3px 10px; border-radius: 999px; color: #FFFFFF; font-size: 11px; font-weight: 700; }
+.brand-ui .tag { padding: 2px 9px; border-radius: 999px; border: 2px solid; font-size: 11px; font-weight: 700; color: var(--pf-ink); }
+.brand-ui .caption { font-size: 11px; color: var(--pf-faint); text-align: center; }
+/* כרטיס הפגישות חולק שורה עם הכרטיס הגבוה — הדיאגרמה שלו ממורכזת בתא */
+.struct-grid > .struct-card:nth-child(4) .struct-ui { display: flex; flex-direction: column; justify-content: center; }
