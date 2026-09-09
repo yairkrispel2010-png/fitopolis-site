@@ -205,7 +205,7 @@
         var preset = traineePresets[ph.presetIdx % traineePresets.length];
         return '<div class="dp-chead">' + av('רל', 'blue', 'sm ring-coach') + '<span class="cname">המאמן שלך · רן</span></div>' +
           '<div class="dp-bubbles">' + S.chat.map(function (m) { return '<div class="bub ' + (m.from === 'trainee' ? 'mine' : 'theirs') + '">' + esc(m.text) + '<time>' + m.time + '</time></div>'; }).join('') + '</div>' +
-          '<div class="dp-input"><span class="field">' + esc(preset) + '</span><button class="send" data-act="send:trainee" aria-label="שלח הודעה">' + icon('send') + '</button></div>';
+          (ph.typing ? '<div class="dp-input"><button class="navback" data-act="typingoff" aria-label="הצג ניווט" title="הצג ניווט">' + icon('nav-down') + '</button><span class="field">' + esc(preset) + '</span><button class="send" data-act="send:trainee" aria-label="שלח הודעה">' + icon('send') + '</button></div>' : '');
       }
     }
   };
@@ -254,9 +254,15 @@
     ph.nav.innerHTML = navHtml(app, ph);
     ph.nav.classList.toggle('is-open', !!ph.navOpen);
     ph.nav.setAttribute('data-side', ph.side);
+    // FAB ליד הבר — לפי הצד והמסך (TraineeBottomNav / BottomNavWithFab)
+    var old = ph.navwrap.querySelector('.dp-fab'); if (old) old.remove();
+    var fab = fabSpec(ph);
+    if (fab) ph.navwrap.insertAdjacentHTML('beforeend', '<button class="dp-fab ' + fab.cls + '" data-act="' + fab.act + '" aria-label="' + fab.label + '" title="' + fab.label + '">' + icon(fab.icon) + '</button>');
+    ph.navwrap.classList.toggle('is-open', !!ph.navOpen);
+    ph.navwrap.classList.toggle('is-hidden', ph.side === 'trainee' && ph.screen === 'chat' && !!ph.typing);   // במצב הקלדה הבר יורד
     fitNav(ph);
     ph.stage.scrollTop = ph.scrollTop || 0;
-    if (ph.sheet) ph.sheet.hidden = !ph.sheetOpen;
+    if (ph.sheet) { ph.sheet.hidden = !ph.sheetKind; ph.sheet.innerHTML = ph.sheetKind ? sheetHtml(ph.sheetKind) : ''; }
     if (ph.hint) { toast(ph, ph.hint); ph.hint = null; }
     var lab = ph.root.parentNode.querySelector('.flip-btn');
     if (lab) lab.querySelector('span').textContent = ph.side === 'trainer' ? 'לממשק המתאמן' : 'לממשק המאמן';
@@ -264,6 +270,37 @@
     ph.root.setAttribute('aria-label', 'הדגמה אינטראקטיבית של ' + (ph.side === 'trainer' ? 'ממשק המאמן' : 'ממשק המתאמן') + ' — כל כפתור לחיץ');
   }
   function renderAll() { phones.forEach(render); }
+  // מה יושב ליד הבר: אצל המאמן פלוס (חוץ מהבית), אצל המתאמן פעולת ההקשר של הטאב (חוץ מהצ'אט — שם מעבר למצב הקלדה)
+  function fabSpec(ph) {
+    var t = ph.screen;
+    if (ph.side === 'trainer') {
+      if (t === 'home') return null;
+      if (t === 'meetings') return { icon: 'plus', cls: 'v-coach', act: 'sheet:newMeeting', label: 'פגישה חדשה' };
+      if (t === 'chat' || t === 'thread') return { icon: 'plus', cls: 'v-coach', act: 'sheet:newChat', label: 'שיחה חדשה' };
+      return { icon: 'plus', cls: 'v-coach', act: 'sheet:addClient', label: 'הוסף לקוח' };
+    }
+    if (t === 'chat') return ph.typing ? null : { icon: 'keyboard', cls: 'small', act: 'typing', label: 'מצב הקלדה' };
+    if (t === 'today') {
+      if (!S.weightLogged) return { icon: 'weight', cls: 'v-trainee', act: 'weight', label: 'הזנת משקל' };
+      if (nextMeal()) return { icon: 'check', cls: 'v-trainee', act: 'eatnext', label: 'סמן את הארוחה הבאה' };
+      return null;
+    }
+    if (t === 'nutrition') return nextMeal() ? { icon: 'check', cls: 'v-trainee', act: 'eatnext', label: 'סמן את הארוחה הבאה' } : { icon: 'minus', cls: 'v-trainee', act: 'uneatlast', label: 'בטל סימון' };
+    if (t === 'workouts') return S.workoutDone ? null : { icon: 'play', cls: 'v-trainee', act: 'go:workout', label: 'התחל אימון' };
+    if (t === 'meetings') return S.requestSentByTrainee ? null : { icon: 'event-note', cls: 'v-trainee', act: 'sheet:request', label: 'בקשת פגישה' };
+    return null;
+  }
+  function shField(lbl, val) { return '<div class="sh-field"><span>' + lbl + '</span><i' + (val ? '' : ' class="ph"') + '>' + (val || 'לא הוזן') + '</i></div>'; }
+  function shRow(a, c, name, sub, act) { return '<button class="sh-row" data-act="' + act + '">' + av(a, c, 'sm') + '<span class="col"><b>' + name + '</b><small>' + sub + '</small></span>' + icon('chevron', 'chev') + '</button>'; }
+  function shBtns(cancel, okLabel, okAct, okCls) { return '<div class="sheet-btns"><button class="dp-obtn" data-act="sheetclose">' + cancel + '</button><button class="dp-eat compact' + (okCls || '') + '" data-act="' + okAct + '">' + icon('check') + okLabel + '</button></div>'; }
+  function sheetHtml(kind) {
+    if (kind === 'weight') return '<div class="sheet-card"><span class="lbl">הזנת משקל</span><span class="big"><b>81.2</b><i>ק"ג</i></span><span class="hint">היום · אפשר לערוך עד חצות</span>' + shBtns('ביטול', 'שמור', 'weightsave') + '</div>';
+    if (kind === 'addClient') return '<div class="sheet-card"><span class="lbl">הוסף לקוח</span>' + shField('שם מלא', 'נועה ברק') + shField('טלפון', '') + shField('מטרה', 'חיטוב') + shBtns('ביטול', 'שמירה', 'sheetdone:נועה נוספה לרשימת הלקוחות', ' coach') + '</div>';
+    if (kind === 'newMeeting') return '<div class="sheet-card"><span class="lbl">פגישה חדשה</span>' + shField('בחר לקוח:', 'רון גולדברג') + shField('יום ושעה', 'יום חמישי · 18:00') + shField('נושא', 'מדידת היקפים') + shBtns('ביטול', 'קבע פגישה', 'sheetdone:הפגישה נקבעה — רון יראה אותה אצלו', ' coach') + '</div>';
+    if (kind === 'newChat') return '<div class="sheet-card"><span class="lbl">שיחה חדשה</span><span class="hint">בחר לקוח:</span>' + shRow('אב', 'yellow', 'אור בן דוד', 'עדיין אין שיחה', 'sheetdone:נפתחה שיחה עם אור') + shRow('רג', 'green', 'רון גולדברג', 'עדיין אין שיחה', 'sheetdone:נפתחה שיחה עם רון') + '<div class="sheet-btns"><button class="dp-obtn" data-act="sheetclose">ביטול</button></div></div>';
+    if (kind === 'request') return '<div class="sheet-card"><span class="lbl">בקשת פגישה</span>' + shField('נושא (חובה)', 'מדידת היקפים') + shField('יום ושעה', 'יום שני · 18:00') + shBtns('ביטול', 'שלח בקשה', 'requestsend', ' v-trainee') + '</div>';
+    return '';
+  }
   function toast(ph, t) {
     ph.toast.textContent = t; ph.toast.classList.add('show');
     clearTimeout(ph.toastT); ph.toastT = setTimeout(function () { ph.toast.classList.remove('show'); }, 1800);
@@ -284,6 +321,8 @@
     var left = Math.max(0, tL - pad), right = Math.max(0, navW - (tL + tW) - pad);
     nav.style.setProperty('--clip', 'inset(0 ' + right.toFixed(1) + 'px 0 ' + left.toFixed(1) + 'px round 24px)');
     nav.style.setProperty('--shift', 'translateX(' + (navW / 2 - (tL + tW / 2)).toFixed(1) + 'px)');   // מרכז הבר פחות מרכז הטאב
+    // ה-FAB יושב משמאל לקופסת הבר; כשהבר מכווץ הוא נצמד לגלולה הנראית
+    if (ph.navwrap) ph.navwrap.style.setProperty('--fabx', ((navW - (tW + 2 * pad)) / 2).toFixed(1) + 'px');
   }
 
   function act(ph, a) {
@@ -307,11 +346,17 @@
     else if (p[0] === 'set') { var e = S.exercises[+p[1]], s = +p[2]; e.done = (s < e.done) ? s : s + 1; }
     else if (p[0] === 'finish') { if (S.exercises.every(function (e) { return e.done >= e.sets; })) { S.workoutDone = true; ph.screen = 'workouts'; } else { ph.hint = 'סמן את כל הסטים קודם'; } }
     else if (p[0] === 'confirm') { S.meetingConfirmed = true; }
-    else if (p[0] === 'request') { S.requestSentByTrainee = true; }
-    else if (p[0] === 'weight') { ph.sheetOpen = true; }
-    else if (p[0] === 'weightsave') { S.weightLogged = true; ph.sheetOpen = false; }
-    else if (p[0] === 'sheetclose') { ph.sheetOpen = false; }
-    else if (p[0] === 'reset') { S = initial(); phones.forEach(function (x) { x.screen = x.side === 'trainer' ? 'home' : 'today'; x.navOpen = false; x.sheetOpen = false; x.presetIdx = 0; x.scrollTop = 0; }); }
+    else if (p[0] === 'request') { ph.sheetKind = 'request'; }
+    else if (p[0] === 'requestsend') { S.requestSentByTrainee = true; ph.sheetKind = null; ph.hint = 'הבקשה נשלחה למאמן'; }
+    else if (p[0] === 'weight') { ph.sheetKind = 'weight'; }
+    else if (p[0] === 'weightsave') { S.weightLogged = true; ph.sheetKind = null; }
+    else if (p[0] === 'sheet') { ph.sheetKind = p[1]; ph.navOpen = false; }
+    else if (p[0] === 'sheetdone') { ph.sheetKind = null; ph.hint = p.slice(1).join(':'); }
+    else if (p[0] === 'sheetclose') { ph.sheetKind = null; }
+    else if (p[0] === 'uneatlast') { var le = lastEaten(); if (le) le.eaten = false; }
+    else if (p[0] === 'typing') { ph.typing = true; ph.navOpen = false; ph.scrollTop = 9999; }
+    else if (p[0] === 'typingoff') { ph.typing = false; }
+    else if (p[0] === 'reset') { S = initial(); phones.forEach(function (x) { x.screen = x.side === 'trainer' ? 'home' : 'today'; x.navOpen = false; x.sheetKind = null; x.typing = false; x.presetIdx = 0; x.scrollTop = 0; }); }
     renderAll();
   }
 
@@ -319,7 +364,7 @@
     if (ph.turning) return;
     var wrap = ph.root.parentNode;
     var to = ph.side === 'trainer' ? 'trainee' : 'trainer';
-    var swap = function () { ph.side = to; ph.screen = to === 'trainer' ? 'home' : 'today'; ph.navOpen = false; ph.sheetOpen = false; ph.scrollTop = 0; render(ph); };
+    var swap = function () { ph.side = to; ph.screen = to === 'trainer' ? 'home' : 'today'; ph.navOpen = false; ph.sheetKind = null; ph.typing = false; ph.scrollTop = 0; render(ph); };
     if (reduceMotion) { swap(); return; }
     ph.turning = true;
     wrap.classList.add('is-flipping');
@@ -336,14 +381,14 @@
     ph.screen = ph.side === 'trainer' ? 'home' : 'today';
     root.innerHTML = '<div class="dp-screen"><div class="dp-status"><span class="dp-clock">' + now() + '</span><span class="dp-status-icons">' + icon('signal') + icon('wifi') + icon('battery') + '</span></div>' +
       '<div class="dp-topbar"></div><div class="dp-stage"></div><div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
-      '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden><div class="sheet-card"><span class="lbl">הזנת משקל</span><span class="big"><b>81.2</b><i>ק"ג</i></span><span class="hint">היום · אפשר לערוך עד חצות</span><div class="sheet-btns"><button class="dp-obtn" data-act="sheetclose">ביטול</button><button class="dp-eat compact" data-act="weightsave">' + icon('check') + 'שמור</button></div></div></div></div>' +
+      '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden></div></div>' +
       edges() + '<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i></i><i></i><b></b><u></u></span><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg></div>';
     root.querySelector('.dp-screen').insertAdjacentHTML('beforeend', '<div class="dp-sheen" aria-hidden="true"></div>');
     var ground = document.createElement('div'); ground.className = 'dp-ground'; ground.setAttribute('aria-hidden', 'true');
     root.parentNode.insertBefore(ground, root);
     var placeGround = function () { ground.style.top = (root.offsetTop + root.offsetHeight - 12) + 'px'; };
     placeGround(); window.addEventListener('resize', placeGround);
-    ph.topbar = root.querySelector('.dp-topbar'); ph.stage = root.querySelector('.dp-stage'); ph.nav = root.querySelector('.dp-nav'); ph.sheet = root.querySelector('.dp-sheet'); ph.toast = root.querySelector('.dp-toast');
+    ph.topbar = root.querySelector('.dp-topbar'); ph.stage = root.querySelector('.dp-stage'); ph.nav = root.querySelector('.dp-nav'); ph.sheet = root.querySelector('.dp-sheet'); ph.navwrap = root.querySelector('.dp-navwrap'); ph.toast = root.querySelector('.dp-toast');
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]');
       // לחיצה מחוץ לבר סוגרת אותו (כמו באפליקציה)

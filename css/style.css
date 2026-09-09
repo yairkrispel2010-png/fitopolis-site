@@ -1841,6 +1841,7 @@ button.dp-row:active { background: var(--pf-alt); }
 }
 .setdot.on { background: var(--trainee); border-color: var(--trainee); color: var(--on-trainee); }
 .setdot:active { transform: scale(0.9); }
+.dp-eat.coach { background: var(--coach); color: #FFFFFF; }   /* כפתור ראשי בקול המאמן (גיליונות בצד שלו) */
 .dp-ex + .dp-ex { margin-top: calc(10px * var(--k)); }
 .dp-ex + .dp-eat { margin-top: calc(14px * var(--k)); }
 
@@ -1915,6 +1916,55 @@ button.dp-row:active { background: var(--pf-alt); }
 .dp-nav:not(.is-open) .dp-tab:not(.is-on) { opacity: 0; pointer-events: none; }
 .dp-nav.is-open .dp-tab:not(.is-on) { transition-delay: 0.08s; }   /* הטאבים מופיעים אחרי שהגלולה נפתחה */
 .dp-nav:not(.is-open) { clip-path: var(--clip, inset(0 round 24px)); transform: var(--shift, none); }
+
+/* ── FAB ליד הבר: 56dp, צבע הקול של הצד; במצב מכווץ הוא נצמד לגלולה (הזזה מחושבת ב-fitNav) ── */
+.dp-fab {
+  pointer-events: auto;
+  flex: none;
+  width: calc(56px * var(--k));
+  height: calc(56px * var(--k));
+  margin-inline-start: 8px;
+  border-radius: 999px;
+  background: var(--coach);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(20, 33, 42, 0.24), 0 1px 3px rgba(0, 0, 0, 0.18);
+  transition: transform 0.32s cubic-bezier(0.22, 0.8, 0.35, 1);
+  align-self: center;
+}
+.dp-fab svg { width: 22px; height: 22px; }
+.dp-fab.v-trainee { background: var(--trainee); color: var(--on-trainee); }
+.dp-fab.small {                    /* FloatingActionButton.small — מעבר למצב הקלדה בצ'אט */
+  width: calc(40px * var(--k));
+  height: calc(40px * var(--k));
+  border-radius: 11px;
+  background: var(--pf-card);
+  color: var(--pf-ink);
+  border: 1.5px solid var(--pf-strong);
+  box-shadow: 0 4px 12px rgba(20, 33, 42, 0.16);
+}
+.dp-fab.small svg { width: 18px; height: 18px; }
+.dp-navwrap:not(.is-open) .dp-fab { transform: translateX(var(--fabx, 0px)); }
+.dp-navwrap { align-items: center; }
+.dp-navwrap.is-hidden { display: none; }
+.dp-fab:active { transform: translateX(var(--fabx, 0px)) scale(0.94); }
+
+/* מצב הקלדה בצ'אט: שורת הקלט מחליפה את הבר; כפתור קטן מחזיר את הניווט */
+.dp-input .navback { width: calc(36px * var(--k)); height: calc(36px * var(--k)); border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: var(--pf-muted); border: 1.5px solid var(--pf-border); background: var(--pf-card); flex: none; }
+.dp-input .navback svg { width: 16px; height: 16px; }
+
+/* גיליונות: שדות סטטיים ורשימות */
+.sheet-card .sh-field { display: flex; flex-direction: column; gap: 4px; padding: calc(8px * var(--k)) 0; border-bottom: 1px solid var(--pf-border); }
+.sheet-card .sh-field span { font-size: calc(12px * var(--k)); color: var(--pf-muted); }
+.sheet-card .sh-field i { font-style: normal; font-size: calc(15px * var(--k)); color: var(--pf-ink); min-height: 1.3em; }
+.sheet-card .sh-field i.ph { color: var(--pf-faint); }
+.sheet-card .sh-row { display: flex; align-items: center; gap: 10px; padding: calc(9px * var(--k)) 0; border-bottom: 1px solid var(--pf-border); width: 100%; }
+.sheet-card .sh-row b { font-size: calc(15px * var(--k)); }
+.sheet-card .sh-row small { font-size: calc(12px * var(--k)); color: var(--pf-muted); display: block; }
+.sheet-card .sh-row .col { flex: 1; display: flex; flex-direction: column; }
+.sheet-card .sh-row .chev { width: 16px; height: 16px; color: var(--pf-faint); }
 
 /* ── כרטיסי המבנה (סקשן 2) ───────────────────────────────── */
 .struct-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; gap: 24px; }
