@@ -378,7 +378,7 @@
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
         '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-trainee') + '</button>' +
         (/nutrition|workouts|meetings/.test(ph.screen) ? '<button class="k-tbtn" aria-label="הגדרות">' + icon('settings', 'bi v-system') + '</button>' : '') +
-        '<span class="k-me ring-trainee" aria-hidden="true"><i class="av-blue">דכ</i></span>';
+        '<span class="k-me ring-trainee" aria-hidden="true"><i>דכ</i></span>';
     },
     screens: {
       today: function (ph) {

@@ -106,7 +106,7 @@
 .k-me { width: calc(48px * var(--k)); height: calc(48px * var(--k)); margin-inline-start: calc(4px * var(--k)); padding: calc(2.5px * var(--k)); box-sizing: border-box; border-radius: calc(48px * var(--k) * 0.3056); background: var(--card); border: calc(2.5px * var(--k)) solid var(--coach); display: inline-flex; flex: none; }
 .k-me.ring-trainee { border-color: var(--trainee); }
 .k-me i { flex: 1; border-radius: calc(38px * var(--k) * 0.3056); background: var(--cardAlt); color: var(--coach); font-style: normal; font-weight: 800; font-size: calc(14.4px * var(--k)); display: inline-flex; align-items: center; justify-content: center; }
-.k-me i.av-blue { background: #DBEAFE; color: #1A3A6B; }
+
 
 /* הבמה */
 .dp-stage { position: relative; flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
