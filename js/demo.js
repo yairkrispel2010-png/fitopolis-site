@@ -568,7 +568,8 @@
     var sHtml = ph.sheetKind ? sheetHtml(ph.sheetKind, ph) : '';
     ph.sheet.hidden = !ph.sheetKind;
     if (ph._sheet !== sHtml) { ph.sheet.innerHTML = sHtml; ph._sheet = sHtml; }   // גיליון פתוח לא נכנס מחדש בכל נגיעה
-    ph.sheet.className = 'dp-sheet' + (ph.sheetKind ? ' kind-' + ph.sheetKind : '');
+    var scls = 'dp-sheet' + (ph.sheetKind ? ' kind-' + ph.sheetKind : '');
+    if (ph.sheet.className !== scls) ph.sheet.className = scls;
     if (ph.hint) { toast(ph, ph.hint); ph.hint = null; }
     if (ph.pulse) { clearTimeout(ph.pulseT); ph.pulseT = setTimeout(function () { ph.pulse = false; ph._page = null; var b = ph.stage.querySelector('.k-card.block'); if (b) b.classList.remove('pulse'); }, 1100); }
     var lab = ph.root.parentNode.querySelector('.flip-btn');
@@ -583,9 +584,11 @@
     var rebuild = ph.nav.getAttribute('data-side') !== ph.side || ph.nav.children.length !== app.tabs.length;
     if (rebuild) { ph.nav.innerHTML = navHtml(app, ph); ph.nav.setAttribute('data-side', ph.side); }
     else app.tabs.forEach(function (t, i) {
-      var el = ph.nav.children[i], on = tabOn(ph, t[0]);
-      el.classList.toggle('is-on', on); el.setAttribute('aria-selected', on);
-      if (on || ph.navOpen) { el.removeAttribute('tabindex'); el.removeAttribute('aria-hidden'); } else { el.setAttribute('tabindex', '-1'); el.setAttribute('aria-hidden', 'true'); }
+      var el = ph.nav.children[i], on = tabOn(ph, t[0]), reach = on || ph.navOpen;
+      el.classList.toggle('is-on', on);
+      if (el.getAttribute('aria-selected') !== String(on)) el.setAttribute('aria-selected', on);   // כתיבה של אותו ערך היא עדיין שינוי DOM
+      if (reach) { if (el.hasAttribute('tabindex')) { el.removeAttribute('tabindex'); el.removeAttribute('aria-hidden'); } }
+      else if (!el.hasAttribute('tabindex')) { el.setAttribute('tabindex', '-1'); el.setAttribute('aria-hidden', 'true'); }
       var n = (ph.side === 'trainee' && t[0] === 'chat') ? S.unreadByTrainee : 0, b = el.querySelector('.k-tabbadge');
       if (n && !b) el.querySelector('.ico').insertAdjacentHTML('beforeend', '<i class="k-tabbadge">' + n + '</i>');
       else if (n && b) b.textContent = n;
@@ -617,8 +620,13 @@
     ph.toast.textContent = t; ph.toast.classList.add('show');
     clearTimeout(ph.toastT); ph.toastT = setTimeout(function () { ph.toast.classList.remove('show'); }, 2000);
   }
-  // רוחב הטאב הפעיל נמצא באמצע מעבר ברגע המדידה, אז מודדים שיבוט סמוי של הבר שכבר יושב במצב היעד
-  function fitNav(ph) {
+  // רוחב הטאב הפעיל נמצא באמצע מעבר ברגע המדידה, אז מודדים שיבוט סמוי של הבר שכבר יושב במצב היעד.
+  // הגאומטריה תלויה רק בצד ובטאב הפעיל — פתיחת הבר לא משנה אותה — ולכן מדידה זהה לא נעשית פעמיים.
+  function fitNav(ph, force) {
+    var on0 = ph.nav.querySelector('.dp-tab.is-on');
+    var key = ph.side + '|' + (on0 ? on0.getAttribute('data-act') : '-') + '|' + ph.nav.offsetWidth;
+    if (!force && ph._navKey === key) return;
+    ph._navKey = key;
     var nav = ph.nav, c = nav.cloneNode(true);
     c.classList.add('measure'); c.removeAttribute('role');
     ph.navwrap.appendChild(c);
@@ -766,7 +774,7 @@
     setTimeout(function () { if (!ph.navOpen && !ph.turning) { ph.navOpen = true; render(ph); setTimeout(function () { if (ph.navOpen) { ph.navOpen = false; render(ph); } }, 1700); } }, 700);
   }
   document.querySelectorAll('.dp[data-demo]').forEach(mount);
-  function refit() { phones.forEach(function (ph) { quiet(ph, function () { fitNav(ph); }); }); }
+  function refit() { phones.forEach(function (ph) { quiet(ph, function () { fitNav(ph, true); }); }); }   // שינוי גופן/גודל חלון — מודדים מחדש בכל מקרה
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
   window.addEventListener('resize', refit);
   window.addEventListener('load', refit);
