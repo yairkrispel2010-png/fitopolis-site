@@ -7,12 +7,12 @@
 
   /* ── נתוני הדמו (mock_data.dart / trainee_mock.dart / menu_mock.dart) ── */
   var CLIENTS = [
-    { id: 'or',     name: 'אור בן דוד',  ini: 'אב', c: 'green',  goal: 'מסה',      since: '15/01/2025' },
-    { id: 'daniel', name: 'דניאל כהן',   ini: 'דכ', c: 'blue',   goal: 'חיטוב',    since: '15/10/2025' },
-    { id: 'yossi',  name: 'יוסי מזרחי',  ini: 'ימ', c: 'purple', goal: 'מסה',      since: '10/02/2025' },
-    { id: 'michal', name: 'מיכל לוי',    ini: 'מל', c: 'amber',  goal: 'לא הוגדר', since: '20/04/2025' },
-    { id: 'ron',    name: 'רון גולדברג', ini: 'רג', c: 'amber',  goal: 'חיטוב',    since: '15/05/2025' },
-    { id: 'shira',  name: 'שירה כהן',    ini: 'שכ', c: 'green',  goal: 'סטטי',     since: '05/09/2026' }
+    { id: 'or',     name: 'אור בן דוד',  ini: 'אב', c: 'green',  goal: 'מסה',      since: '15/01/2025', pic: 'or' },
+    { id: 'daniel', name: 'דניאל כהן',   ini: 'דכ', c: 'blue',   goal: 'חיטוב',    since: '15/10/2025', pic: 'daniel' },
+    { id: 'yossi',  name: 'יוסי מזרחי',  ini: 'ימ', c: 'purple', goal: 'מסה',      since: '10/02/2025', pic: 'yossi' },
+    { id: 'michal', name: 'מיכל לוי',    ini: 'מל', c: 'amber',  goal: 'לא הוגדר', since: '20/04/2025', pic: 'michal' },
+    { id: 'ron',    name: 'רון גולדברג', ini: 'רג', c: 'amber',  goal: 'חיטוב',    since: '15/05/2025', pic: 'ron' },
+    { id: 'shira',  name: 'שירה כהן',    ini: 'שכ', c: 'green',  goal: 'סטטי',     since: '05/09/2026', pic: 'shira' }
   ];
   function client(id) { for (var i = 0; i < CLIENTS.length; i++) if (CLIENTS[i].id === id) return CLIENTS[i]; return CLIENTS[1]; }
   var MEETINGS = {                                                  // פגישות המאמן (mock_data) — לגיליון "לפרטי הפגישה"
@@ -78,10 +78,12 @@
   function icon(id, cls) { return '<svg class="' + (cls || 'ic') + '" aria-hidden="true"><use href="#i-' + id + '"/></svg>'; }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function now() { var d = new Date(); return (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(); }
-  function av(c, ini, size, ring, extra) {
-    return '<span class="k-av' + (ring ? ' ring-' + ring : ' noring') + (extra ? ' ' + extra : '') + '" style="--s:' + size + 'px"><i class="av-' + c + '">' + ini + '</i></span>';
+  // דיוקן כשיש (כמו תמונת אווטאר באפליקציה), ראשי תיבות כשאין — בדיוק ההתנהגות של ClientAvatar
+  function av(c, ini, size, ring, extra, pic) {
+    var inner = pic ? '<svg class="k-face" viewBox="0 0 100 100" aria-hidden="true"><use href="#a-' + pic + '"/></svg>' : ini;
+    return '<span class="k-av' + (ring ? ' ring-' + ring : ' noring') + (pic ? ' pic' : '') + (extra ? ' ' + extra : '') + '" style="--s:' + size + 'px"><i class="av-' + c + '">' + inner + '</i></span>';
   }
-  function cav(cl, size, ring) { return av(cl.c, cl.ini, size, ring); }
+  function cav(cl, size, ring) { return av(cl.c, cl.ini, size, ring, null, cl.pic); }
   function nextMeal() { for (var i = 0; i < S.meals.length; i++) if (!S.meals[i].eaten) return S.meals[i]; return null; }
   function lastEaten() { for (var i = S.meals.length - 1; i >= 0; i--) if (S.meals[i].eaten) return S.meals[i]; return null; }
   function danielReasons() { return S.weightLogged ? [] : ['לא עדכן משקל השבוע']; }   // סיבה אחת, כדי שעדכון משקל בטלפון של המתאמן יוריד אותו מהרשימה אצל המאמן
@@ -223,7 +225,7 @@
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
         '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-coach') + (unreadTotal() || requestsCount() ? '<i class="k-dot"></i>' : '') + '</button>' +
         (ph.screen === 'meetings' ? '<button class="k-tbtn" aria-label="הגדרות">' + icon('settings', 'bi v-system') + '</button>' : '') +
-        '<span class="k-me ring-coach" aria-hidden="true"><i>יו</i></span>';
+        '<span class="k-me ring-coach pic" aria-hidden="true"><i><svg class="k-face" viewBox="0 0 100 100"><use href="#a-yoav"/></svg></i></span>';
     },
     screens: {
       home: function () {
@@ -258,7 +260,7 @@
       profile: function (ph) {
         var cl = client('daniel'), reasons = danielReasons(), tab = ph.profileTab || 'progress';
         var head = '<div class="k-phead"><button class="k-iconbtn" data-act="go:clients" aria-label="חזרה">' + icon('back', 'bi') + '</button><b>' + cl.name + '</b><button class="k-compact secondary" data-act="noop">' + icon('edit', 'bi') + 'עריכה</button></div>';
-        var hero = '<div class="k-hero"><div class="who">' + av(cl.c, cl.ini, 64, null, 'big') +
+        var hero = '<div class="k-hero"><div class="who">' + av(cl.c, cl.ini, 64, null, 'big', cl.pic) +
           '<div class="facts"><span><i>גיל: </i><b>28 שנה</b></span><span><i>גובה: </i><b>180 ס"מ</b></span><span><i>משקל: </i><b>' + (S.weightLogged ? '76.5' : '76.8') + ' ק"ג</b></span><span><i>מאז: </i><b>' + cl.since + '</b></span></div></div>' +
           '<div class="tagsbox"><div class="gt">מוגדר</div>' + badge('מזין ארוחות', 'noInfo', 'check') + badge('מזין אימונים', 'noInfo', 'check') + '<i class="k-div"></i><div class="gt">סטטוס</div>' +
           (reasons.length ? badge('נדרש טיפול', 'needs') + reasons.map(function (r) { return '<small class="reason">• ' + r + '</small>'; }).join('') : badge('הכל תקין ✓', 'ok')) +
@@ -378,7 +380,7 @@
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
         '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-trainee') + '</button>' +
         (/nutrition|workouts|meetings/.test(ph.screen) ? '<button class="k-tbtn" aria-label="הגדרות">' + icon('settings', 'bi v-system') + '</button>' : '') +
-        '<span class="k-me ring-trainee" aria-hidden="true"><i>דכ</i></span>';
+        '<span class="k-me ring-trainee pic" aria-hidden="true"><i><svg class="k-face" viewBox="0 0 100 100"><use href="#a-daniel"/></svg></i></span>';
     },
     screens: {
       today: function (ph) {
@@ -460,7 +462,7 @@
       },
       chat: function (ph) {
         var preset = traineePresets[ph.presetIdx % traineePresets.length];
-        return '<button class="k-thead trainee" data-act="noopcoach"><span class="k-av ring-coach" style="--s:44px"><i class="av-green">יו</i></span><span class="col"><b>יואב</b><small>שיחה ישירה עם המאמן</small></span></button>' +
+        return '<button class="k-thead trainee" data-act="noopcoach"><span class="k-av ring-coach pic" style="--s:44px"><i class="av-green"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-yoav"/></svg></i></span><span class="col"><b>יואב</b><small>שיחה ישירה עם המאמן</small></span></button>' +
           '<div class="k-bubbles' + (ph.typing ? '' : ' navpad') + '">' + S.chat.map(function (m) { return bubble(m, 'trainee'); }).join('') + '</div>' +
           (ph.typing ? '<div class="k-input trainee"><span class="field">' + esc(preset) + '</span><span class="btns">' + icon('photo', 'bi v-muted') + '<button class="send v-trainee" data-act="send:trainee" aria-label="שלח">' + icon('send', 'bi') + '</button><button class="apps" data-act="typingoff" aria-label="הצג ניווט">' + icon('apps', 'bi') + '</button></span></div>' : '');
       }
@@ -634,7 +636,7 @@
   /* ── פעולות ───────────────────────────────────────────────────────── */
   function act(ph, a) {
     var p = a.split(':');
-    if (p[0] === 'start') { start(ph); return; }
+    if (p[0] === 'start') { startAll(ph); return; }
     if (p[0] === 'noop') { ph.hint = 'בדמו הזה זה עוצר כאן — באפליקציה זה ממשיך'; }
     else if (p[0] === 'noopcoach') { ph.hint = 'באפליקציה נפתח כאן דף המאמן'; }
     else if (p[0] === 'go') {
@@ -698,7 +700,7 @@
 
   function flip(ph) {
     if (ph.turning) return;
-    if (!ph.started) { ph.started = true; ph.root.classList.remove('is-idle'); ph.root.parentNode.classList.remove('is-idle'); }   // סיבוב = גם התחלה
+    if (!ph.started) startAll(ph);   // סיבוב = גם התחלה, בשני הטלפונים
     var wrap = ph.root.parentNode;
     var to = ph.side === 'trainer' ? 'trainee' : 'trainer';
     var swap = function () { quiet(ph, function () { ph.side = to; ph.screen = to === 'trainer' ? 'home' : 'today'; ph.navOpen = false; ph.sheetKind = null; ph.typing = false; ph.scrollTop = 0; ph.catOpen = false; render(ph); }); };
@@ -755,10 +757,12 @@
     quiet(ph, function () { render(ph); });
   }
   // "התחל הדגמה": מסיר את מסך הפתיחה, ופותח את הבר לרגע כדי שיראו שהוא חי
-  function start(ph) {
+  // ההדגמה מתחילה בשני הטלפונים יחד — הם צד אחד ושני של אותה מערכת, ומצב אחד משותף
+  function startAll(ph) { phones.forEach(function (x) { if (x !== ph) start(x, true); }); start(ph); }
+  function start(ph, quietly) {
     if (ph.started) return;
     ph.started = true; ph.root.classList.remove('is-idle'); ph.root.parentNode.classList.remove('is-idle');
-    if (reduceMotion) return;
+    if (reduceMotion || quietly) return;
     setTimeout(function () { if (!ph.navOpen && !ph.turning) { ph.navOpen = true; render(ph); setTimeout(function () { if (ph.navOpen) { ph.navOpen = false; render(ph); } }, 1700); } }, 700);
   }
   document.querySelectorAll('.dp[data-demo]').forEach(mount);

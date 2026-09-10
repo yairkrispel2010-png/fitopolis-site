@@ -1330,3 +1330,6 @@ a.logotype { min-height: 44px; }
 .brand-ui .caption { font-size: 11px; color: var(--pf-faint); text-align: center; line-height: 1.35; }
 /* כרטיס הפגישות חולק שורה עם הכרטיס הגבוה — הדיאגרמה שלו ממורכזת בתא */
 .struct-grid > .struct-card:nth-child(4) .struct-ui { display: flex; flex-direction: column; justify-content: center; }
+/* הדיוקן במוקאפ הסטטי של כרטיס הלקוח */
+.av.pic { overflow: hidden; padding: 0; }
+.av.pic svg { width: 100%; height: 100%; display: block; }

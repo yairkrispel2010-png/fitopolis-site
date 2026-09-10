@@ -610,3 +610,7 @@ p.k-center { display: block; margin: 0; }
 @keyframes dp-appear { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .dp-nav { will-change: clip-path, transform; }
 .dp-fab { will-change: transform; }
+
+/* ── דיוקנאות: התמונה ממלאת את הריבוע הפנימי ונחתכת לצורתו (כמו ClientAvatar עם תמונה) ── */
+.k-av.pic i, .k-me.pic i { overflow: hidden; padding: 0; }
+.k-face { width: 100%; height: 100%; display: block; }
