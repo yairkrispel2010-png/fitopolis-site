@@ -99,7 +99,11 @@
   // ── הטיה עדינה אחרי הסמן (עכבר בלבד) ──────────────────────────────
   // נכתב על --tilt-y/--tilt-x (@property inherits:false), ולכן כל תזוזה פוסלת רק את .dp ולא את תת-העץ שלו.
   // שום קריאת פריסה בתוך ה-listener — הגאומטריה נמדדת פעם אחת ומתעדכנת ב-resize.
-  if (!reduceMotion && finePointer) {
+  // ⚠️ מדידה, 10/09: כל כתיבה ל---tilt מסובבת את .dp — ו-preserve-3d מאלץ ציור מחדש של כל תת-העץ
+  // (8 שכבות עובי, הגב, אי המצלמה, הלחצנים). זה הדבר היקר ביותר בדף, והוא רץ בכל תזוזת עכבר.
+  // לכן: רק במכונה עם יותר מארבעה מעבדים. זווית המנוחה (--rest-y) נשארת תמיד — היא לא עולה כלום.
+  var strongCpu = (navigator.hardwareConcurrency || 0) > 4;
+  if (!reduceMotion && finePointer && strongCpu) {
     var dps = Array.prototype.slice.call(document.querySelectorAll('.dp[data-demo]'));
     if (dps.length) {
       var geo = [], st = dps.map(function () { return { y: 0, x: 0, gy: 0, gx: 0, live: true }; }), tRaf = null;
@@ -132,6 +136,8 @@
           var g = geo[i]; if (!g || !st[i].live) continue;
           var dx = (e.clientX - (g.cx - window.scrollX)) / (g.w * 2.2);
           var dy = ((g.cy - window.scrollY) - e.clientY) / (g.h * 1.4);
+          // מעבר לרוחב טלפון וחצי מהמרכז אין מה להטות — הסמן פשוט לא שם
+          if (Math.abs(dx) > 1.5 || Math.abs(dy) > 1.5) { st[i].gy = 0; st[i].gx = 0; continue; }
           // כשהסמן על הטלפון עצמו — הטלפון עומד בשקט (אחרת הבר זז מתחת לעכבר ונראה כמרצד); ההטיה היא רק לסמן שמסביב
           var inside = Math.abs(e.clientX - (g.cx - window.scrollX)) < g.w / 2 + 12 && Math.abs(e.clientY - (g.cy - window.scrollY)) < g.h / 2 + 12;
           st[i].gy = inside ? 0 : Math.max(-1, Math.min(1, dx)) * 6.5;
