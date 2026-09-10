@@ -378,7 +378,7 @@
     topbar: function (ph) {
       if (ph.screen === 'chat' || ph.screen === 'workout') return '';
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
-        '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-trainee') + '</button>' +
+        '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-trainee') + (S.unreadByTrainee || !S.proposalApproved ? '<i class="k-dot"></i>' : '') + '</button>' +
         (/nutrition|workouts|meetings/.test(ph.screen) ? '<button class="k-tbtn" aria-label="הגדרות">' + icon('settings', 'bi v-system') + '</button>' : '') +
         '<span class="k-me ring-trainee pic" aria-hidden="true"><i><svg class="k-face" viewBox="0 0 100 100"><use href="#a-daniel"/></svg></i></span>';
     },
