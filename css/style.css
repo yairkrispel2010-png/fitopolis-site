@@ -1268,6 +1268,24 @@ a.logotype { min-height: 44px; }
   .hero h1 { font-size: 84px; }
   .hero .sub { max-width: 760px; font-size: 22px; }
 }
+/* מסך אולטרה-רחב: מעל 3000 המכולה של 2000 השאירה 58% ניצול. כאן היא גדלה יחד עם הטיפוגרפיה,
+   כי הרחבה בלי הגדלה רק מותחת שורות טקסט ארוכות מדי. */
+@media (min-width: 3000px) {
+  .container { max-width: 2400px; padding-inline: 64px; }
+  .hero-copy { flex: 0 1 1100px; }
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 1.8; }
+  .hero h1 { font-size: 96px; }
+  .hero .sub { max-width: 840px; font-size: 24px; }
+  .hero-inner { gap: 140px; padding-block: 96px 140px; }
+  .section-title { font-size: 50px; }
+  .section-intro { font-size: 21px; max-width: 720px; }
+  .struct-card h3 { font-size: 32px; }
+  .struct-card p { font-size: 20px; }
+  .triage-copy .lead { font-size: 25px; }
+  .triage-copy p, .triage-copy ul { font-size: 21px; }
+  .side-card h3 { font-size: 30px; }
+  .side-card li { font-size: 21px; }
+}
 
 /* ── "מי צריך אותך היום": למי זה, הכאב, ומסך הבית של המאמן כתור טיפול (סבב 4, 09/09/2026) ── */
 .triage { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr); gap: 56px; align-items: center; padding-bottom: 64px; margin-bottom: 64px; border-bottom: 1px solid rgba(20, 33, 42, 0.1); }
