@@ -1237,11 +1237,36 @@ a.logotype { min-height: 44px; }
   .hero .sub { max-width: 620px; font-size: 20px; }
 }
 @media (min-width: 1800px) {
-  .container { max-width: 1560px; }
+  .container { max-width: 1680px; }   /* 1560 השאיר 188px ריקים לכל צד ב-1920 — הרזולוציה הנפוצה ביותר */
   .hero-copy { flex: 0 1 800px; }
   .hero .dp-wrap, .sides .dp-wrap { zoom: 1.24; }
   .hero h1 { font-size: 68px; }
   .hero-inner { gap: 104px; padding-block: 64px 104px; }
+}
+/* מעל 2000 הדף התחיל לצוף באמצע: המכולה נעצרה ב-1560, כלומר 61% מהרוחב במסך 2560.
+   כאן גדלים יחד המכולה, הטיפוגרפיה והטלפון — אחרת המכולה מתרחבת והתוכן נשאר קטן בתוכה. */
+@media (min-width: 2100px) {
+  .container { max-width: 1780px; padding-inline: 56px; }
+  .hero-copy { flex: 0 1 880px; }
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 1.42; }
+  .hero h1 { font-size: 76px; }
+  .hero .sub { max-width: 700px; font-size: 21px; }
+  .hero-inner { gap: 120px; padding-block: 80px 120px; }
+  .section-title { font-size: 42px; }
+  .section-intro { font-size: 19px; max-width: 640px; }
+  .struct-card h3 { font-size: 28px; }
+  .struct-card p { font-size: 18px; }
+  .triage-copy .lead { font-size: 22px; }
+  .triage-copy p, .triage-copy ul { font-size: 19px; }
+  .side-card h3 { font-size: 26px; }
+  .side-card li { font-size: 19px; }
+}
+@media (min-width: 2500px) {
+  .container { max-width: 2000px; }
+  .hero-copy { flex: 0 1 980px; }
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 1.58; }
+  .hero h1 { font-size: 84px; }
+  .hero .sub { max-width: 760px; font-size: 22px; }
 }
 
 /* ── "מי צריך אותך היום": למי זה, הכאב, ומסך הבית של המאמן כתור טיפול (סבב 4, 09/09/2026) ── */
