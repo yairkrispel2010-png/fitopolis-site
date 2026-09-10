@@ -89,7 +89,7 @@
   function clientReasons(id) { return id === 'daniel' ? danielReasons() : id === 'ron' ? ['נדרשות מידות'] : []; }
   function unreadTotal() { return S.unreadByTrainer + S.ronUnread; }
   function requestsCount() { return 1 + (S.ronPending ? 1 : 0) + (S.traineeRequestSent ? 1 : 0); }   // 1 = ההצעה החלופית של שירה, שממתינה תמיד
-  function lastTrainerText() { for (var i = S.chat.length - 1; i >= 0; i--) if (S.chat[i].from === 'trainer') return S.chat[i].card ? '[הצעת פגישה]' : S.chat[i].text; return ''; }
+  function lastTrainerText() { for (var i = S.chat.length - 1; i >= 0; i--) if (S.chat[i].from === 'trainer') return S.chat[i].card ? 'תיאום פגישה · בדיקת התקדמות' : S.chat[i].text; return ''; }
   function lastDanielPreview() { var m = S.chat[S.chat.length - 1]; return m.card ? 'תיאום פגישה · ' + (S.proposalApproved ? 'אושרה ✓' : 'ממתין לאישור המתאמן') : m.text; }
   // מאקרו של ארוחה: קבוצה שנענתה — ערך הנבחרת; אחרת אמצע הטווח בין האפשרויות (trainee.dart)
   function mealMacros(m) {
