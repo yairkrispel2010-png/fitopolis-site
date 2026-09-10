@@ -17,7 +17,7 @@ f.onload=()=>{const d=f.contentDocument, s=d.createElement('style');
   .og-mark .fit{color:#12939D}.og-mark .polis{color:#F07C1A}.og-mark svg{width:.98em;height:.98em}
  `;
  d.head.appendChild(s);
- const m=d.createElement('div'); m.className='og-mark'; m.innerHTML='<b class="fit">FIT</b><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg><b class="polis">POLIS</b>';
+ const m=d.createElement('div'); m.className='og-mark'; m.innerHTML='<b class="fit">FIT</b><svg viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><b class="polis">POLIS</b>';
  d.querySelector('.hero').appendChild(m);
  d.querySelectorAll('.scroll-reveal').forEach(e=>e.classList.add('is-visible'));
  d.querySelectorAll('.dp [data-act="start"]').forEach(b=>b.click()); d.querySelectorAll('.dp').forEach(el=>el.classList.remove('is-idle'));

@@ -222,7 +222,6 @@
       if (ph.screen === 'profile' || ph.screen === 'thread') return '';        // שכבת-על מסך מלא — בלי סרגל עליון (home_screen showMain=false)
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
         '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-coach') + (unreadTotal() || requestsCount() ? '<i class="k-dot"></i>' : '') + '</button>' +
-        '<button class="k-tbtn" aria-label="עבור לתצוגת מתאמן" data-act="flip">' + icon('swap', 'bi v-system') + '</button>' +
         (ph.screen === 'meetings' ? '<button class="k-tbtn" aria-label="הגדרות">' + icon('settings', 'bi v-system') + '</button>' : '') +
         '<span class="k-me ring-coach" aria-hidden="true"><i>יו</i></span>';
     },
@@ -378,7 +377,6 @@
       if (ph.screen === 'chat' || ph.screen === 'workout') return '';
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
         '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-trainee') + '</button>' +
-        '<button class="k-tbtn" aria-label="עבור לתצוגת מאמן" data-act="flip">' + icon('swap', 'bi v-system') + '</button>' +
         (/nutrition|workouts|meetings/.test(ph.screen) ? '<button class="k-tbtn" aria-label="הגדרות">' + icon('settings', 'bi v-system') + '</button>' : '') +
         '<span class="k-me ring-trainee" aria-hidden="true"><i class="av-blue">דכ</i></span>';
     },
@@ -482,7 +480,7 @@
     return '<div class="k-bub ' + (mine ? 'mine' : 'theirs') + ' from-' + m.from + '"><span>' + esc(m.text) + '</span><time>' + m.time + '</time></div>';
   }
   function wordmark() {
-    return '<b class="fit">FIT</b><svg class="o" viewBox="0 0 100 100" aria-hidden="true"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg><b class="polis">POLIS</b>';
+    return '<b class="fit">FIT</b><svg class="o" viewBox="0 0 100 100" aria-hidden="true"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><b class="polis">POLIS</b>';
   }
   function navHtml(app, ph) {
     return app.tabs.map(function (t) {
@@ -733,7 +731,7 @@
       '<div class="dp-topbar"></div><div class="dp-stage"></div><div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
       '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden></div><div class="dp-sheen" aria-hidden="true"></div>' +
       '<div class="dp-cover"><span class="wm" dir="ltr">' + wordmark() + '</span><p>הדגמה חיה של הממשק — כל כפתור לחיץ</p><button class="dp-start" data-act="start">התחל הדגמה</button></div></div>' +
-      edges() + '<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><b class="flash"></b><u class="lidar"></u><s class="mic"></s></span><svg viewBox="0 0 100 100"><path d="M 41.8 17 A 34 34 0 0 0 41.8 83" fill="none" stroke="#F07C1A" stroke-width="14" stroke-linecap="round"/><path d="M 58.2 17 A 34 34 0 0 1 58.2 83" fill="none" stroke="#12939D" stroke-width="14" stroke-linecap="round"/></svg><span class="brand">FITOPOLIS</span></div>';
+      edges() + '<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><b class="flash"></b><u class="lidar"></u><s class="mic"></s></span><svg viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><span class="brand">FITOPOLIS</span></div>';
     var ground = document.createElement('div'); ground.className = 'dp-ground'; ground.setAttribute('aria-hidden', 'true');
     root.parentNode.insertBefore(ground, root);
     var placeGround = function () { ground.style.top = (root.offsetTop + root.offsetHeight - 12) + 'px'; };
