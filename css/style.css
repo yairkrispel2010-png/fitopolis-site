@@ -745,7 +745,7 @@ a.logotype { min-height: 44px; }
   .hero h1 br { display: none; }
 }
 @media (max-width: 920px) {
-  .hero-inner { flex-direction: column; align-items: flex-start; gap: 44px; padding-block: 28px 56px; }
+  .hero-inner { flex-direction: column; align-items: flex-start; gap: 44px; padding-block: 28px 32px; }
   .phone-col { align-self: center; }
   .sides .phone-caption { max-width: none; }
   .hero-copy .btn { align-self: stretch; }
@@ -1262,7 +1262,10 @@ a.logotype { min-height: 44px; }
 .triage-ui .avs { display: flex; gap: 8px; }
 .triage-ui .why { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; background: var(--pf-alt); border-radius: 12px; font-size: 13px; font-weight: 500; text-align: start; color: var(--pf-ink); }
 .triage-ui .why span:last-child { flex: 1; }
-@media (max-width: 920px) { .triage { grid-template-columns: 1fr; gap: 28px; padding-bottom: 48px; margin-bottom: 48px; } .triage-ui.struct-ui { max-width: 360px; margin-inline: auto; width: 100%; } }
+@media (max-width: 920px) { .triage { grid-template-columns: 1fr; gap: 28px; padding-bottom: 48px; margin-bottom: 48px; }
+  /* בעמודה אחת הכותרת ממורכזת כמו בכל שאר המקטעים; הפסקאות נשארות מיושרות לתחילת השורה לקריאוּת */
+  .triage-copy .section-title { text-align: center; align-self: center; }
+  .triage-copy .lead { text-align: center; } .triage-ui.struct-ui { max-width: 360px; margin-inline: auto; width: 100%; } }
 /* לפטופ נמוך (1366×768 ודומיו): הכפתור הראשי נשאר מעל קו הקיפול */
 @media (min-width: 921px) and (max-height: 820px) { .hero h1 { font-size: clamp(34px, 4vw, 48px); } .hero-inner { padding-block: 24px 56px; } }
 
