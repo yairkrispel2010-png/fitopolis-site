@@ -1,4 +1,4 @@
-/* הטיה אחרי העכבר: מאפיינים רשומים עם inherits:false — כתיבה אליהם פוסלת רק את .dp ולא את כל תת-העץ */
+/* הטיה אחרי העכבר: כרגע אף אחד לא כותב אליהם (הוסרה 11/09 — הטלפון עומד ישר), והם נשארים כווסת מוכן */
 @property --tilt-y { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @property --tilt-x { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 
@@ -22,9 +22,10 @@
     linear-gradient(96deg, #14161a 0%, #2f343b 6%, #464c55 11%, #22262c 19%, #16181c 50%, #22262c 81%, #464c55 89%, #2f343b 94%, #14161a 100%),
     linear-gradient(155deg, #34383d 0%, #16181b 38%, #0f1113 70%, #1d2024 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.30), inset 0 0 0 4px #0a0b0c, inset 0 0 0 5px rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.35), 0 3px 6px rgba(21, 18, 15, 0.28), 0 18px 36px -10px rgba(21, 18, 15, 0.45), 0 60px 90px -28px rgba(21, 18, 15, 0.40);
-  /* זווית מנוחה: רואים את הצלע והלחצנים; rotate/translate/scale נפרדים מ-transform כדי שהסיבוב והקשת יקבלו עקומות שונות */
-  --rest-y: -13deg;
-  --rest-x: 2deg;
+  /* ישר אל המצלמה — התוכן לא באלכסון. העומק נשאר בצלעות ובלחצנים שבולטים מהצללית, ונחשף במלואו בסיבוב.
+     rotate/translate/scale נפרדים מ-transform כדי שהסיבוב והקשת יקבלו עקומות שונות */
+  --rest-y: 0deg;
+  --rest-x: 0deg;
   rotate: y calc(var(--rest-y) + var(--tilt-y));
   transform: rotateX(calc(var(--rest-x) + var(--tilt-x)));
   interpolate-size: allow-keywords;
@@ -34,7 +35,6 @@
   transform-style: preserve-3d;
 }
 .sides .dp { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2), inset 0 0 0 4px #0a0b0c, inset 0 0 0 5px rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.5), 0 22px 40px -10px rgba(0, 0, 0, 0.6), 0 70px 100px -30px rgba(0, 0, 0, 0.55); }
-.sides .dp { --rest-y: 13deg; }   /* שני הטלפונים מסתכלים זה אל זה */
 
 /* סיבוב 360° עם קפיצה; התוכן מתחלף כשהמסך פונה מאיתנו */
 .dp.is-turning { animation: dp-spin 0.95s cubic-bezier(0.62, 0, 0.38, 1) both, dp-arc 0.95s cubic-bezier(0.34, 0, 0.28, 1) both; }
@@ -120,7 +120,7 @@
 .dp-navwrap { position: absolute; inset: auto 0 0 0; height: 84px; background: none; display: flex; justify-content: center; align-items: center; padding-bottom: calc(18px * var(--k)); box-sizing: border-box; pointer-events: none; z-index: 3; }
 .dp-navwrap.is-hidden { display: none; }
 .dp-nav { position: relative; pointer-events: auto; display: flex; align-items: center; gap: 3px; padding: calc(6px * var(--k)); border-radius: calc(30px * var(--k)); background: var(--card); border: 1px solid var(--border); box-shadow: 0 8px 24px var(--shadow); clip-path: inset(0 round 24px); transform: none; transition: clip-path 0.32s cubic-bezier(0.2, 0, 0, 1), transform 0.32s cubic-bezier(0.2, 0, 0, 1); }
-.dp-tab { width: calc(46px * var(--k)); min-height: calc(38px * var(--k)); padding: calc(9px * var(--k)) 0; border-radius: calc(22px * var(--k)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; color: var(--faint); flex: none; box-sizing: border-box; transition: background-color 0.24s ease, color 0.24s ease, opacity 0.2s ease; }   /* בלי מעברי פריסה: width/padding/gap על חמישה טאבים = חמישה חישובי-פריסה בכל פריים, וזה מה שריצד */
+.dp-tab { width: calc(46px * var(--k)); min-height: calc(38px * var(--k)); padding: calc(9px * var(--k)) 0; border-radius: calc(22px * var(--k)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; color: var(--faint); flex: none; box-sizing: border-box; transition: background-color 0.24s ease, color 0.24s ease, opacity 0.2s ease; }   /* בלי מעברי פריסה: width/padding/gap על חמישה טאבים = חמישה חישובי-פריסה בכל פריים, וזה מה שריצד. התנועה עצמה נשמרת ב-FLIP (demo.js) */
 .dp-tab .ico { position: relative; display: inline-flex; }
 .dp-tab svg { width: calc(20px * var(--k)); height: calc(20px * var(--k)); }
 .dp-tab b { display: block; height: 0; overflow: hidden; opacity: 0; font-size: calc(10px * var(--k)); font-weight: 700; line-height: 1; transition: opacity 0.16s ease; }
@@ -581,7 +581,6 @@ p.k-center { display: block; margin: 0; }
 .dp-nav.measure { position: absolute !important; visibility: hidden !important; pointer-events: none !important; clip-path: none !important; transform: none !important; }
 .dp-nav.measure, .dp-nav.measure * { transition: none !important; animation: none !important; }
 @media (prefers-reduced-motion: reduce) {
-  .dp { --rest-y: 0deg; --rest-x: 0deg; }
   .dp-tab, .dp-tab b, .dp-fab { transition: none !important; }
 }
 
@@ -610,6 +609,14 @@ p.k-center { display: block; margin: 0; }
 @keyframes dp-appear { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .dp-nav { will-change: clip-path, transform; }
 .dp-fab { will-change: transform; }
+
+/* ── מסך מגע: הטלפון לא גונב את הגלילה ──────────────────────────────
+   שני גלילים מקוננים על מסך מגע = האצבע לא יודעת מי יזוז. הגליל הפנימי נסגר
+   לאצבע — overflow:hidden עדיין מאפשר גלילה מהקוד — והדף מזין אותו (main.js).
+   הגיליונות נשארים גלילים: הם נפתחים בנגיעה מכוונת, ושם ברור מי המסך הפעיל. */
+@media (hover: none) and (pointer: coarse) {
+  .dp-stage { overflow: hidden; }
+}
 
 /* ── דיוקנאות: התמונה ממלאת את הריבוע הפנימי ונחתכת לצורתו (כמו ClientAvatar עם תמונה) ── */
 .k-av.pic i, .k-me.pic i { overflow: hidden; padding: 0; }

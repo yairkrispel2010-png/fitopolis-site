@@ -1223,6 +1223,14 @@ a.logotype { min-height: 44px; }
   .brand-ui .roles { grid-template-columns: 1fr; }
 }
 
+/* מסך מגע נמוך: המכשיר נכנס בשלמותו למסך במקום להיחתך — רק לפי גובה, לא לפי רוחב */
+@media (hover: none) and (pointer: coarse) and (max-height: 700px) {
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 0.88; }
+}
+@media (hover: none) and (pointer: coarse) and (max-height: 580px) {
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 0.76; }
+}
+
 /* ── מסכים רחבים: המכולה גדלה עם המסך, והטלפון והכותרת גדלים איתה — הדף ממלא את המסך במקום לשבת בקופסה של 1280 ── */
 @media (min-width: 1440px) {
   .container { max-width: 1400px; padding-inline: 40px; }

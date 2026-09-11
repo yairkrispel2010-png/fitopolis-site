@@ -557,6 +557,9 @@
   var phones = [];
   function render(ph) {
     var app = ph.side === 'trainer' ? trainer : trainee;
+    var f0 = fabSpec(ph), sig = ph.side + '|' + ph.screen + '|' + (ph.navOpen ? 1 : 0) + '|' + (f0 ? f0.cls : '-') + '|' + (ph.typing ? 1 : 0);
+    var before = sig === ph._navSig ? null : flipStart(ph);   // נמדד כאן, כשהפריסה הישנה עדיין תקפה — אחרי כתיבת העמוד זו מדידה יקרה
+    ph._navSig = sig;
     var screenFn = app.screens[ph.screen] || app.screens[app.tabs[0][0]];
     var top = app.topbar(ph);
     if (ph._top !== top) { ph.topbar.innerHTML = top; ph._top = top; }
@@ -564,7 +567,7 @@
     var full = ph.screen === 'chat' && ph.side === 'trainee' || ph.screen === 'thread' || ph.screen === 'workout' || ph.screen === 'profile';
     var page = '<div class="k-page' + (full ? ' full' : '') + (ph.side === 'trainer' ? ' trainer' : '') + '">' + screenFn(ph) + '</div>';
     if (ph._page !== page) { ph.stage.innerHTML = page; ph._page = page; ph.stage.scrollTop = ph.scrollTop || 0; }   // כתיבה ל-DOM רק כשמשהו השתנה — הלחיצה הראשונה על טאב רק פותחת את הבר
-    syncNav(ph, app);
+    syncNav(ph, app, before);
     var sHtml = ph.sheetKind ? sheetHtml(ph.sheetKind, ph) : '';
     ph.sheet.hidden = !ph.sheetKind;
     if (ph._sheet !== sHtml) { ph.sheet.innerHTML = sHtml; ph._sheet = sHtml; }   // גיליון פתוח לא נכנס מחדש בכל נגיעה
@@ -580,8 +583,29 @@
   function renderAll() { phones.forEach(render); }
   // הבר וה-FAB הם צמתים קבועים: מעדכנים מחלקות במקום לבנות מחדש, כדי שמעברי ה-CSS (גלולה, שקיפות הטאבים, הכפתור) ירוצו
   function tabOn(ph, id) { return ph.screen === id || (ph.side === 'trainer' && ph.screen === 'thread' && id === 'chat') || (ph.side === 'trainer' && ph.screen === 'profile' && id === 'clients'); }
-  function syncNav(ph, app) {
+  // הגלולה משנה רוחב וגובה כשהיא עוברת טאב, וזה מזיז את כל האייקונים שאחריה. מעבר CSS על
+  // width/padding היה מחשב פריסה מחדש בכל פריים — וזה מה שריצד. במקום זה: מודדים לפני, נותנים
+  // לפריסה לנחות מיד, מודדים אחרי, ומנפישים את ההפרש ב-translate — תנועה שלא נוגעת בפריסה בכלל.
+  function flipStart(ph) {
+    if (reduceMotion || ph.root.classList.contains('no-anim') || !ph.nav.animate) return null;
+    var els = [ph.nav].concat([].slice.call(ph.nav.children));          // גם הבר עצמו: החלפת ה-FAB מזיזה אותו בתוך העטיפה
+    var fab = ph.navwrap.querySelector('.dp-fab:not(.is-gone)');
+    if (fab) els.push(fab);
+    return els.map(function (el) { return [el, el.offsetLeft, el.offsetTop]; });
+  }
+  function flipEnd(before) {
+    if (!before) return;
+    for (var i = 0; i < before.length; i++) {
+      var el = before[i][0], dx = before[i][1] - el.offsetLeft, dy = before[i][2] - el.offsetTop;
+      if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) continue;
+      if (!el.isConnected) continue;                                    // ה-FAB הישן כבר הוסר
+      el.animate([{ translate: dx.toFixed(1) + 'px ' + dy.toFixed(1) + 'px' }, { translate: '0px 0px' }],
+        { duration: 320, easing: 'cubic-bezier(0.2, 0, 0, 1)' });
+    }
+  }
+  function syncNav(ph, app, before) {
     var rebuild = ph.nav.getAttribute('data-side') !== ph.side || ph.nav.children.length !== app.tabs.length;
+    if (rebuild) before = null;
     if (rebuild) { ph.nav.innerHTML = navHtml(app, ph); ph.nav.setAttribute('data-side', ph.side); }
     else app.tabs.forEach(function (t, i) {
       var el = ph.nav.children[i], on = tabOn(ph, t[0]), reach = on || ph.navOpen;
@@ -608,6 +632,7 @@
     ph.navwrap.classList.toggle('is-open', !!ph.navOpen);
     ph.navwrap.classList.toggle('is-hidden', (ph.side === 'trainee' && ph.screen === 'chat' && !!ph.typing) || ph.screen === 'workout' || ph.screen === 'thread' || ph.screen === 'profile');
     fitNav(ph);
+    flipEnd(before);                                                    // בסוף — אחרי שהפריסה הסופית כבר ידועה
   }
   // רינדור בלי מעברים (לידה, והחלפת הצד באמצע הסיבוב) — המצב החדש מופיע כבר במקומו, בלי שהגלולה תזחל בזמן שהטלפון מסתובב
   function quiet(ph, fn) {
