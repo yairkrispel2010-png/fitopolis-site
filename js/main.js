@@ -96,41 +96,11 @@
     });
   }
 
-  // ── מסך מגע: המסך שבתוך הטלפון נגלל עם הדף ─────────────────────
-  // הבעיה: הגליל שבתוך הטלפון בלע כל החלקה, והדף זז רק אחרי שהוא נגמר —
-  // ולכן קשה היה להבין מי אמור לזוז. הפתרון: גליל אחד בלבד. הפנימי סגור
-  // לאצבע (CSS), והדף מזין אותו — 0.7px על כל פיקסל של גלילת הדף. כל התוכן
-  // עדיין נגיש, בלי להקטין את המכשיר ובלי לתפוס את הדף.
-  if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
-    // הבמה עצמה נבנית ב-demo.js אחרי הקובץ הזה — מחזיקים את שורש הטלפון ומחפשים אותה בזמן אמת
-    var dps = Array.prototype.slice.call(document.querySelectorAll('.dp[data-demo]'));
-    if (dps.length) {
-      var lastY = window.scrollY || 0, sRaf = null, near = dps.map(function () { return true; });
-      if ('IntersectionObserver' in window) {
-        dps.forEach(function (el, i) {
-          near[i] = false;
-          new IntersectionObserver(function (es) { near[i] = es[0].isIntersecting; }, { threshold: 0.35 }).observe(el);
-        });
-      }
-      var linkScroll = function () {
-        sRaf = null;
-        var y = window.scrollY || 0, d = y - lastY;
-        lastY = y;
-        if (!d) { return; }
-        for (var i = 0; i < dps.length; i++) {
-          if (!near[i] || dps[i].classList.contains('is-idle')) { continue; }
-          var el = dps[i].querySelector('.dp-stage');
-          if (!el) { continue; }
-          var max = el.scrollHeight - el.clientHeight;
-          if (max <= 0) { continue; }
-          el.scrollTop = Math.max(0, Math.min(max, el.scrollTop + d * 0.7));
-        }
-      };
-      window.addEventListener('scroll', function () {
-        if (!sRaf) { sRaf = requestAnimationFrame(linkScroll); }
-      }, { passive: true });
-    }
-  }
+  // ── מסך מגע: הקישור בין הדף למסך הוסר (11/09, סבב שני) ─────────
+  // גרסה ראשונה הזינה את המסך שבטלפון מגלילת הדף. זה פתר את התפיסה, אבל
+  // עדיין היו שני דברים שזזים — והבעלים אמר שזה לא חלק. עכשיו: הדף זז לבד
+  // (הגליל הפנימי סגור ב-CSS), המכשיר נכנס בשלמותו למסך, והמסך שבפנים
+  // מתקדם בנגיעה על כפתור ייעודי (dp-more ב-demo.js).
 
   // ── הטיה אחרי הסמן: הוסרה (11/09) ─────────────────────────────
   // הטלפון עומד ישר. ההטיה החזירה את התוכן לאלכסון בכל תזוזת עכבר, והיא גם

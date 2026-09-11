@@ -612,11 +612,21 @@ p.k-center { display: block; margin: 0; }
 
 /* ── מסך מגע: הטלפון לא גונב את הגלילה ──────────────────────────────
    שני גלילים מקוננים על מסך מגע = האצבע לא יודעת מי יזוז. הגליל הפנימי נסגר
-   לאצבע — overflow:hidden עדיין מאפשר גלילה מהקוד — והדף מזין אותו (main.js).
-   הגיליונות נשארים גלילים: הם נפתחים בנגיעה מכוונת, ושם ברור מי המסך הפעיל. */
+   לאצבע (overflow:hidden עדיין מאפשר גלילה מהקוד), והדף תמיד עונה לאצבע.
+   למה שמתחת לקיפול מגיעים בנגיעה על dp-more — כמו כל שאר הדמו. */
+.dp-more { display: none; }
 @media (hover: none) and (pointer: coarse) {
-  .dp-stage { overflow: hidden; }
+  .dp-stage { overflow: hidden; scroll-behavior: smooth; }
+  .dp-more { position: absolute; z-index: 7; inset-inline-start: calc(11px * var(--k)); bottom: calc(100px * var(--k));
+    width: calc(38px * var(--k)); height: calc(38px * var(--k)); border-radius: 999px; padding: 0;
+    background: var(--card); border: 1px solid var(--borderStrong); box-shadow: 0 4px 14px var(--shadow);
+    display: inline-flex; align-items: center; justify-content: center; color: var(--coach); cursor: pointer; }
+  .dp-more[hidden] { display: none; }
+  .dp-more .bi { width: calc(21px * var(--k)); height: calc(21px * var(--k)); transition: rotate 0.22s ease; }
+  .dp-more.up .bi { rotate: 180deg; }
+  .dp.is-idle .dp-more { display: none; }
 }
+@media (prefers-reduced-motion: reduce) { .dp-stage { scroll-behavior: auto; } }
 
 /* ── דיוקנאות: התמונה ממלאת את הריבוע הפנימי ונחתכת לצורתו (כמו ClientAvatar עם תמונה) ── */
 .k-av.pic i, .k-me.pic i { overflow: hidden; padding: 0; }

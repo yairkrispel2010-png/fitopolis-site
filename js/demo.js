@@ -4,6 +4,7 @@
 (function () {
   'use strict';
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var coarse = window.matchMedia('(hover: none) and (pointer: coarse)').matches;   // במסך מגע הגליל הפנימי סגור לאצבע
 
   /* ── נתוני הדמו (mock_data.dart / trainee_mock.dart / menu_mock.dart) ── */
   var CLIENTS = [
@@ -579,6 +580,15 @@
     if (lab) lab.querySelector('span').textContent = ph.side === 'trainer' ? 'לממשק המתאמן' : 'לממשק המאמן';
     ph.root.setAttribute('data-side', ph.side);
     ph.root.setAttribute('aria-label', 'הדגמה אינטראקטיבית של ' + (ph.side === 'trainer' ? 'ממשק המאמן' : 'ממשק המתאמן') + ' — כל כפתור לחיץ');
+    syncMore(ph);
+  }
+  // הכפתור מופיע רק כשבאמת יש עוד מה לראות, ומתהפך לחזרה למעלה בסוף המסך
+  function syncMore(ph) {
+    if (!ph.more || !coarse) return;
+    var el = ph.stage, max = el.scrollHeight - el.clientHeight;
+    var show = max > 24 && !ph.root.classList.contains('is-idle');
+    if (ph.more.hidden === show) ph.more.hidden = !show;
+    if (show) ph.more.classList.toggle('up', el.scrollTop > max - 24);
   }
   function renderAll() { phones.forEach(render); }
   // הבר וה-FAB הם צמתים קבועים: מעדכנים מחלקות במקום לבנות מחדש, כדי שמעברי ה-CSS (גלולה, שקיפות הטאבים, הכפתור) ירוצו
@@ -763,7 +773,9 @@
     root.classList.add('is-idle'); root.parentNode.classList.add('is-idle');   // גם על העטיפה — כדי לא לסמוך על :has
     ph.screen = ph.side === 'trainer' ? 'home' : 'today';
     root.innerHTML = '<div class="dp-screen"><div class="dp-status"><span class="dp-clock">' + now() + '</span><span class="dp-status-icons">' + icon('signal') + icon('wifi') + icon('battery') + '</span></div>' +
-      '<div class="dp-topbar"></div><div class="dp-stage"></div><div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
+      '<div class="dp-topbar"></div><div class="dp-stage"></div>' +
+      '<button class="dp-more" type="button" hidden aria-label="להמשך המסך">' + icon('nav-down', 'bi') + '</button>' +
+      '<div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
       '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden></div><div class="dp-sheen" aria-hidden="true"></div>' +
       '<div class="dp-cover"><span class="wm" dir="ltr">' + wordmark() + '</span><p>הדגמה חיה של הממשק — כל כפתור לחיץ</p><button class="dp-start" data-act="start">התחל הדגמה</button></div></div>' +
       edges() + '<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><b class="flash"></b><u class="lidar"></u><s class="mic"></s></span><svg viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><span class="brand">FITOPOLIS</span></div>';
@@ -771,7 +783,7 @@
     root.parentNode.insertBefore(ground, root);
     var placeGround = function () { ground.style.top = (root.offsetTop + root.offsetHeight - 12) + 'px'; };
     placeGround(); window.addEventListener('resize', placeGround);
-    ph.topbar = root.querySelector('.dp-topbar'); ph.stage = root.querySelector('.dp-stage'); ph.nav = root.querySelector('.dp-nav'); ph.sheet = root.querySelector('.dp-sheet'); ph.navwrap = root.querySelector('.dp-navwrap'); ph.toast = root.querySelector('.dp-toast');
+    ph.topbar = root.querySelector('.dp-topbar'); ph.stage = root.querySelector('.dp-stage'); ph.more = root.querySelector('.dp-more'); ph.nav = root.querySelector('.dp-nav'); ph.sheet = root.querySelector('.dp-sheet'); ph.navwrap = root.querySelector('.dp-navwrap'); ph.toast = root.querySelector('.dp-toast');
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]');
       if (ph.sheetKind && e.target.closest('.dp-sheet') && !e.target.closest('.k-form, .k-detsheet')) { ph.sheetKind = null; render(ph); return; }
@@ -782,7 +794,12 @@
     root.addEventListener('keydown', function (e) {                    // כרטיסים לחיצים (role=button) גם מהמקלדת
       if ((e.key === 'Enter' || e.key === ' ') && e.target.getAttribute && e.target.getAttribute('role') === 'button' && e.target.hasAttribute('data-act')) { e.preventDefault(); act(ph, e.target.getAttribute('data-act')); }
     });
-    ph.stage.addEventListener('scroll', function () { ph.scrollTop = ph.stage.scrollTop; }, { passive: true });
+    ph.stage.addEventListener('scroll', function () { ph.scrollTop = ph.stage.scrollTop; syncMore(ph); }, { passive: true });
+    if (ph.more) ph.more.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var el = ph.stage, max = el.scrollHeight - el.clientHeight;
+      el.scrollTo({ top: el.scrollTop > max - 24 ? 0 : Math.min(max, el.scrollTop + el.clientHeight * 0.72), behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
     var wrap = root.parentNode;
     var fb = wrap.querySelector('.flip-btn'); if (fb) fb.addEventListener('click', function () { act(ph, 'flip'); });
     var rb = wrap.querySelector('.reset-btn'); if (rb) rb.addEventListener('click', function () { act(ph, 'reset'); });

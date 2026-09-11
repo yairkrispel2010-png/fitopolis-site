@@ -1223,12 +1223,19 @@ a.logotype { min-height: 44px; }
   .brand-ui .roles { grid-template-columns: 1fr; }
 }
 
-/* מסך מגע נמוך: המכשיר נכנס בשלמותו למסך במקום להיחתך — רק לפי גובה, לא לפי רוחב */
-@media (hover: none) and (pointer: coarse) and (max-height: 700px) {
+/* מסך מגע: המכשיר צריך להיכנס בשלמותו לחלון, אחרת הגלילה מרגישה כמו מאבק.
+   הסולם לפי גובה החלון בלבד — הרוחב לא קובע כאן כלום. */
+@media (hover: none) and (pointer: coarse) {
   .hero .dp-wrap, .sides .dp-wrap { zoom: 0.88; }
 }
-@media (hover: none) and (pointer: coarse) and (max-height: 580px) {
-  .hero .dp-wrap, .sides .dp-wrap { zoom: 0.76; }
+@media (hover: none) and (pointer: coarse) and (min-height: 940px) {
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 1; }
+}
+@media (hover: none) and (pointer: coarse) and (max-height: 740px) {
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 0.8; }
+}
+@media (hover: none) and (pointer: coarse) and (max-height: 640px) {
+  .hero .dp-wrap, .sides .dp-wrap { zoom: 0.7; }
 }
 
 /* ── מסכים רחבים: המכולה גדלה עם המסך, והטלפון והכותרת גדלים איתה — הדף ממלא את המסך במקום לשבת בקופסה של 1280 ── */
