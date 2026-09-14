@@ -60,6 +60,9 @@
 /* לוגו חרוט במרכז-תחתית */
 .dp-back > svg { position: absolute; left: 50%; top: 50%; width: 88px; height: 88px; margin: -50px 0 0 -44px; opacity: 0.92; filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.12)) drop-shadow(0 -1px 1px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.06)); }
 .dp-back .brand { position: absolute; left: 0; right: 0; top: calc(50% + 46px); text-align: center; font-family: var(--fd); font-weight: 600; font-size: 13px; letter-spacing: 0.32em; color: rgba(255, 255, 255, 0.42); text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.08); direction: ltr; }
+/* The owner's rule (02/08/2026): the O is broken at every size and in every colour version — so the lettering on the back is FIT · broken ring · POLIS, in the text's own single colour, not a plain O. */
+.dp-back .brand-o { display: inline-block; width: 0.98em; height: 0.98em; vertical-align: -0.14em; margin-right: 0.32em; fill: currentColor; }
+.dp-back .brand { white-space: nowrap; }
 /* אי המצלמה: ריבוע מעוגל מורם, שלוש עדשות עם טבעת פלדה וזכוכית כחלחלה, פלאש, חיישן */
 .dp-cam { position: absolute; top: 14px; right: 14px; width: 104px; height: 104px; border-radius: 30px; background: linear-gradient(150deg, #3a3f46 0%, #262a30 45%, #1c1f24 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset -1px -1px 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 22px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.5); }
 .dp-cam .l { position: absolute; width: 40px; height: 40px; border-radius: 999px; background: conic-gradient(from 210deg, #7b8490, #3a4048 18%, #9aa3ae 32%, #2c3138 48%, #6f7883 62%, #2f343b 80%, #7b8490); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
