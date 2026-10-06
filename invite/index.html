@@ -85,13 +85,15 @@
 </footer>
 
 <script>
-// קוד ההזמנה מגיע מהכתובת: /invite/?c=CODE  (או #CODE).
+// קוד ההזמנה מגיע מהכתובת: /invite/?c=CODE  (או #c=CODE, או #CODE).
 // אירוח סטטי לא יודע לקרוא /invite/CODE, ולכן זו הצורה שהאפליקציה צריכה לייצר.
 // הקוד הוא קוד ההזמנה של TaskLite (למשל K7PM-4XQ2) ומוצג בדיוק כמו שהגיע — בלי לשנות אותיות,
 // כי המתאמן מקליד אותו באפליקציה. הדף רק קורא את הכתובת: שום דבר לא נשמר ושום דבר לא נשלח.
 (function () {
   'use strict';
-  var raw = new URLSearchParams(location.search).get('c') || location.hash.replace('#', '');
+  var hash = location.hash.slice(1);
+  var hashParams = new URLSearchParams(hash);
+  var raw = new URLSearchParams(location.search).get('c') || (hashParams.has('c') ? hashParams.get('c') : hash);
   var code = (raw || '').trim().replace(/[^A-Za-z0-9-]/g, '').slice(0, 24);
   if (!code) { return; }
 
