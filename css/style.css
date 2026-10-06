@@ -594,6 +594,8 @@ img, svg { max-width: 100%; }
   gap: 12px;
   align-self: stretch;
 }
+/* בלי קוד בכתובת הכרטיס מוסתר — ה-display:flex שלמעלה דרס את hidden, ונשאר כרטיס ריק עם כפתור העתקה */
+.invite-code-card[hidden] { display: none; }
 
 .invite-code-label {
   font-size: 15.5px;
@@ -604,12 +606,17 @@ img, svg { max-width: 100%; }
    ולא על רקעים. הכתום נשאר כסמן מתחת. 15.8:1 — הכי קריא בדף. */
 .invite-code {
   font-family: var(--font-digits);
-  font-size: clamp(36px, 8.5vw, 50px);
+  /* קוד TaskLite (K7PM-4XQ2) הוא 9 תווים: ב-36px הוא מילא כרטיס של 320px עד הפיקסל ונשבר.
+     כ-31px ב-320 (נשאר מרווח), 36 ב-375, ועולה עם הרוחב עד 50 */
+  font-size: clamp(30px, 9.6vw, 50px);
   line-height: 1.1;
   letter-spacing: 0.14em;
   color: var(--ink);
   position: relative;
   padding-bottom: 12px;
+  /* קוד ארוך מהצפוי נשבר לשורה ולא גולש מהכרטיס */
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
 .invite-code::after {
@@ -639,9 +646,10 @@ img, svg { max-width: 100%; }
 }
 
 @media (hover: hover) and (pointer: fine) {
+  /* הכתום על המסגרת בלבד — כתום כטקסט על לבן הוא 2.8:1, וצבע תפקיד הולך על סמנים, לא על טקסט */
   .invite-copy:hover {
     border-color: var(--trainee);
-    color: var(--trainee);
+    color: var(--ink);
     transform: translateY(-1px);
   }
 }

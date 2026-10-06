@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>הוזמנתם לפיטופוליס</title>
-  <meta name="description" content="המאמן שלכם הזמין אתכם לפיטופוליס. הורידו את האפליקציה וקוד ההזמנה יחכה לכם.">
+  <meta name="description" content="המאמן שלכם הזמין אתכם לפיטופוליס. בדף הזה מחכה לכם קוד ההזמנה.">
   <meta name="robots" content="noindex">
+  <!-- הקוד יושב בכתובת; שהוא לא ייצא ממנה גם כשעוברים מכאן לדף אחר -->
+  <meta name="referrer" content="no-referrer">
   <meta property="og:type" content="website">
   <meta property="og:title" content="הוזמנתם לפיטופוליס">
-  <meta property="og:description" content="המאמן שלכם הזמין אתכם. הורידו את האפליקציה כדי להתחיל.">
+  <meta property="og:description" content="המאמן שלכם הזמין אתכם. פתחו את הקישור כדי לראות את קוד ההזמנה שלכם.">
   <meta property="og:image" content="https://fitopolis.co.il/assets/icon-512.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="512">
@@ -22,7 +24,7 @@
   <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/rubik-400-hebrew.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/fredoka-600-hebrew.woff2" crossorigin>
   <link rel="stylesheet" href="../assets/fonts/fonts.css">
-  <link rel="stylesheet" href="../css/style.css?v=22">
+  <link rel="stylesheet" href="../css/style.css?v=23">
   <link rel="canonical" href="https://fitopolis.co.il/invite/">
 </head>
 <body class="page-wrap">
@@ -45,7 +47,10 @@
   </span>
 
   <h1>הוזמנתם לפיטופוליס</h1>
-  <p class="lead">המאמן שלכם מנהל את האימונים והתזונה שלכם בפיטופוליס. הורידו את האפליקציה — וקוד ההזמנה כבר יחכה לכם בפנים.</p>
+  <p class="lead">המאמן שלכם מנהל את האימונים והתזונה שלכם בפיטופוליס.
+    <span data-with-code hidden>כדי להצטרף, פתחו את האפליקציה והקלידו בה את הקוד הזה.</span>
+    <span data-no-code>קוד ההזמנה שלכם נמצא בקישור שהמאמן שלח לכם — פתחו אותו שוב מתוך ההודעה.</span>
+  </p>
 
   <div class="invite-code-card" data-invite-card hidden>
     <span class="invite-code-label">קוד ההזמנה שלכם</span>
@@ -53,18 +58,8 @@
     <button class="invite-copy" type="button" data-invite-copy>העתקת הקוד</button>
   </div>
 
-  <div class="store-row">
-    <span class="store-btn is-soon">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v17a1 1 0 0 0 1.5.87l14-8.5a1 1 0 0 0 0-1.74l-14-8.5A1 1 0 0 0 4 3.5z"/></svg>
-      <span class="col"><span class="s1">בקרוב ב-</span><span class="s2">Google Play</span></span>
-    </span>
-    <span class="store-btn is-soon">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7c1-2.2 2.8-3 4.4-2.8.2 1.7-.6 3.3-1.7 4.2M7.5 21c-1.8 0-3.5-3.2-3.5-6.4C4 11 6 9.2 8 9.2c1.2 0 2.1.7 3 .7.9 0 1.6-.8 3.1-.8 1.6 0 3.1.9 3.9 2.4-2.5 1.5-2.3 5 .3 6.1-.8 2-2.2 4.4-3.9 4.4-1.2 0-2-.7-3.2-.7-1.2 0-2.1.7-3.7.7z"/></svg>
-      <span class="col"><span class="s1">בקרוב ב-</span><span class="s2">App Store</span></span>
-    </span>
-  </div>
-
-  <p class="mini-note">האפליקציה עדיין בהרצה עם מאמנים ראשונים. ברגע שהיא תעלה לחנויות, הכפתורים כאן יפעלו — שמרו את הקישור.</p>
+  <!-- כפתורי החנויות חוזרים כשהאפליקציה עולה לחנויות (שלב החנויות) -->
+  <p class="mini-note">עוד אין לכם את האפליקציה? שאלו את המאמן שלכם איך מתקינים אותה.</p>
 
   <div class="invite-help">
     <span>לא יודעים מה זה? <a href="/">כאן מסבירים מה זה פיטופוליס</a></span>
@@ -92,16 +87,20 @@
 <script>
 // קוד ההזמנה מגיע מהכתובת: /invite/?c=CODE  (או #CODE).
 // אירוח סטטי לא יודע לקרוא /invite/CODE, ולכן זו הצורה שהאפליקציה צריכה לייצר.
+// הקוד הוא קוד ההזמנה של TaskLite (למשל K7PM-4XQ2) ומוצג בדיוק כמו שהגיע — בלי לשנות אותיות,
+// כי המתאמן מקליד אותו באפליקציה. הדף רק קורא את הכתובת: שום דבר לא נשמר ושום דבר לא נשלח.
 (function () {
   'use strict';
   var raw = new URLSearchParams(location.search).get('c') || location.hash.replace('#', '');
-  var code = (raw || '').trim().toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 24);
+  var code = (raw || '').trim().replace(/[^A-Za-z0-9-]/g, '').slice(0, 24);
   if (!code) { return; }
 
   var card = document.querySelector('[data-invite-card]');
   var slot = document.querySelector('[data-invite-code]');
   slot.textContent = code;
   card.hidden = false;
+  document.querySelector('[data-with-code]').hidden = false;
+  document.querySelector('[data-no-code]').hidden = true;
 
   var btn = document.querySelector('[data-invite-copy]');
   btn.addEventListener('click', function () {
@@ -109,15 +108,19 @@
       btn.textContent = 'הקוד הועתק ✓';
       setTimeout(function () { btn.textContent = 'העתקת הקוד'; }, 2200);
     };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(code).then(done, function () {});
-    } else {
+    // כשהדפדפן חוסם את ההעתקה — מסמנים את הקוד: אם גם ההעתקה הישנה נכשלת, הוא לפחות מסומן להעתקה ביד
+    var fallback = function () {
       var r = document.createRange();
       r.selectNodeContents(slot);
       var sel = window.getSelection();
       sel.removeAllRanges();
       sel.addRange(r);
-      try { document.execCommand('copy'); done(); } catch (e) {}
+      try { if (document.execCommand('copy')) { done(); } } catch (e) {}
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(done, fallback);
+    } else {
+      fallback();
     }
   });
 })();

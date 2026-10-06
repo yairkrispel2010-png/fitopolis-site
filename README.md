@@ -33,7 +33,7 @@ GitHub Pages מגיש את `style.css` עם מטמון של 10 דקות, ואי 
 שבחמשת הדפים (`index`, `support`, `accessibility`, `404`,
 `invite/index`). הכתובת משתנה, והדפדפן נאלץ להוריד מחדש.
 אותו כלל ל-`js/main.js` ול-`js/demo.js` (מקושרים רק מדף הבית): `main.js?v=N`, `demo.js?v=N`.
-המצב כרגע: `style.css?v=14` (בכל הדפים, כולל `invite/`), `phone.css?v=4`, `main.js?v=5`, `demo.js?v=6` (10/09/2026, סבב 6).
+המצב כרגע: `style.css?v=23` (בכל הדפים, כולל `invite/`), `phone.css?v=15`, `main.js?v=11`, `demo.js?v=22` (06/10/2026, דף ההזמנה לקוד של TaskLite).
 
 ## הדמו האינטראקטיבי בטלפונים — `js/demo.js` + `css/phone.css` (09/09/2026)
 
