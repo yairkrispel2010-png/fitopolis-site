@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /invite/
+
+# /invite/ is not blocked here on purpose: the page carries <meta name="robots" content="noindex">,
+# and Google can only see that tag on a page it is allowed to fetch (08/10/2026).
 
 Sitemap: https://fitopolis.co.il/sitemap.xml
