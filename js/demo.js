@@ -927,6 +927,9 @@
   document.querySelectorAll('.dp[data-demo]').forEach(mount);
   function refit() { phones.forEach(function (ph) { quiet(ph, function () { fitNav(ph, true); }); }); }   // שינוי גופן/גודל חלון — מודדים מחדש בכל מקרה
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
-  window.addEventListener('resize', refit);
+  // רק כשהרוחב משתנה: בטלפון שורת הכתובת שנעלמת ונחזרת משנה רק את הגובה, והמדידה מחדש (עם עצירת המעברים)
+  // באמצע פתיחת הבר הקפיצה אותו
+  var lastVW = window.innerWidth;
+  window.addEventListener('resize', function () { if (window.innerWidth !== lastVW) { lastVW = window.innerWidth; refit(); } });
   window.addEventListener('load', refit);
 })();

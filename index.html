@@ -26,15 +26,21 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/fredoka-600-hebrew.woff2" crossorigin>
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="css/style.css?v=23">
-  <link rel="stylesheet" href="css/phone.css?v=23">
+  <link rel="stylesheet" href="css/phone.css?v=24">
   <link rel="stylesheet" href="css/intro.css?v=7">
   <link rel="stylesheet" href="css/sections.css?v=6">
-  <!-- הפתיח: נקבע לפני הציור הראשון, כדי שהאתר לא יהבהב לפני הלוגו. עם הפחתת תנועה, קישור לעוגן או חזרה לאמצע הדף — בלי פתיח. -->
+  <!-- הפתיח: נקבע לפני הציור הראשון, כדי שהאתר לא יהבהב לפני הלוגו. עם הפחתת תנועה, קישור לעוגן או חזרה לאמצע הדף — בלי פתיח.
+       ומי שכבר ראה אותו בביקור הזה וחוזר לדף הבית מדף אחר (קישור או "אחורה") — בלי פתיח (הבעלים, 27/10); ריענון של הדף מראה אותו שוב. -->
   <script>
     (function () {
       try {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
         if (location.hash && location.hash !== '#') { return; }
+        var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+        var seen = false;
+        try { seen = sessionStorage.getItem('fp-intro-seen') === '1'; } catch (e) {}
+        if (seen && !(nav && nav.type === 'reload')) { return; }
+        try { sessionStorage.setItem('fp-intro-seen', '1'); } catch (e) {}
         if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
         document.documentElement.classList.add('intro-on', 'intro-hold');
       } catch (e) {}
@@ -195,7 +201,7 @@
           <a class="skip-link" href="#after-demo">דלג על ההדגמה האינטראקטיבית</a>
           <div class="dp" data-demo data-side="trainer" role="group" aria-label="הדגמה אינטראקטיבית של ממשק המאמן — כל כפתור לחיץ"></div>
           <button class="flip-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-swap"/></svg><span>לממשק המתאמן</span></button>
-          <p class="demo-hint">הדגמה חיה, לא סרטון: כל כפתור לחיץ והמסך נגלל. פתח כרטיס, שלח הודעה, אשר פגישה. <button class="reset-btn" type="button">איפוס</button></p>
+          <p class="demo-hint">הדגמה חיה של חלק מהממשק — מוזמן להתנסות<br>נשמח לחוות דעת <button class="reset-btn" type="button">איפוס</button></p>
         </div>
       </div>
     </div>
