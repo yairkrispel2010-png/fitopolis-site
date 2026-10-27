@@ -22,8 +22,16 @@
 
   var R_IN = 23.5;    // הרדיוס הפנימי של הסמל (viewBox 100)
   var W = 0, H = 0, top0 = 0, run = 1, stay = 0, dx0 = 0, dy0 = 0, k0 = 1, spread = 0;
-  var hFixed = 0;     // גובה המסך בציור האחרון כשהמסגרת נעוצה — זה הגובה שהיא עולה איתו בסוף
   var mode = '';      // 'fixed' נעוצה למסך · 'scroll' עולה עם הבלוק הכהה · 'done' כבר מעל המסך
+
+  // הגובה של הפתיח: המסך הגדול (100lvh) — בטלפון זה המסך בלי שורת הכתובת. כשהשורה נעלמת בגלילה המסך
+  // גדל, ופתיח בגובה "המסך הנוכחי" היה נגמר לפני התחתית (נמדד בטלפון של הבעלים: 60px בלי כיסוי).
+  // הגובה הזה לא משתנה כשהשורה נעלמת ונחזרת, ולכן גם המסלול והציור לא קופצים
+  var probe = document.createElement('div');
+  probe.setAttribute('aria-hidden', 'true');
+  probe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:100vh;height:100lvh;visibility:hidden;pointer-events:none';
+  document.body.appendChild(probe);
+  function boxH() { return Math.round(probe.getBoundingClientRect().height) || window.innerHeight; }
   var raf = null;
   var released = false;
   var lastA = -1, lastCue = '', lastT = '', lastD = '', lastTop = '';
@@ -41,7 +49,7 @@
     if (fit) { fit.style.transform = ''; }
     if (polis) { polis.style.transform = ''; }
     W = root.clientWidth;
-    H = window.innerHeight;
+    H = boxH();
     top0 = pin.getBoundingClientRect().top + (window.scrollY || 0);
     run = Math.round(H * 1.2);     // ה-O גדל
     stay = Math.round(H * 0.6);    // האתר עומד במקום, וקצוות ה-O בפינות
@@ -55,7 +63,6 @@
       k0 = r.width / 100;
     }
     spread = W * 0.6;
-    if (!hFixed) { hFixed = H; }
     lastW = W; lastH = H;
     lastA = -1; lastCue = lastT = lastD = lastTop = '';
     if (hidden) { intro.classList.add('is-done'); }
@@ -70,8 +77,7 @@
   }
 
   function veilPath(cx, cy, r, h) {
-    // המלבן גדול מהמסך: בטלפון שורת הכתובת מתכווצת והמסך גדל לפני הציור הבא
-    var d = 'M-2 -2H' + (W + 2) + 'V' + (h + 200) + 'H-2Z';
+    var d = 'M-2 -2H' + (W + 2) + 'V' + (h + 2) + 'H-2Z';
     if (r <= 0.05) { return d; }
     return d + 'M' + (cx - r).toFixed(2) + ' ' + cy.toFixed(2) + 'a' + r.toFixed(2) + ' ' + r.toFixed(2) + ' 0 1 0 ' + (2 * r).toFixed(2) + ' 0a' + r.toFixed(2) + ' ' + r.toFixed(2) + ' 0 1 0 ' + (-2 * r).toFixed(2) + ' 0Z';
   }
@@ -123,23 +129,22 @@
     // המקום בדף שבו הבלוק הכהה נוגע בתחתית המסך: עד שם המסגרת נעוצה (קוראים לפני שכותבים משהו).
     // בלי בלוק כהה — המסגרת עולה עם הראש של האתר, מיד אחרי העצירה
     var stopAt = top0 + run + stay;
-    if (dark) { stopAt = Math.max(stopAt, dark.getBoundingClientRect().top + sy - hFixed); }
+    if (dark) { stopAt = Math.max(stopAt, dark.getBoundingClientRect().top + sy - H); }
     var hold = false;
 
     if (sy < stopAt) {
       setMode('fixed');
-      hFixed = window.innerHeight;
       // התוכן שמאחורי הלוח הלבן לא נגיש למקלדת עד שהחור כבר גדול
-      hold = draw(clamp((sy - top0) / run), hFixed) < 0.3;
+      hold = draw(clamp((sy - top0) / run), H) < 0.3;
     } else {
       // המסגרת עוברת לעמוד עצמו, בדיוק במקום שבו עמדה — מכאן הדפדפן מזיז אותה יחד עם הבלוק הכהה
-      draw(1, hFixed);
-      setMode(sy < stopAt + hFixed ? 'scroll' : 'done');
-      var tp = stopAt + '|' + hFixed;
+      draw(1, H);
+      setMode(sy < stopAt + H ? 'scroll' : 'done');
+      var tp = stopAt + '|' + H;
       if (mode === 'scroll' && tp !== lastTop) {
         lastTop = tp;
         intro.style.top = stopAt + 'px';
-        intro.style.height = hFixed + 'px';
+        intro.style.height = H + 'px';
       }
     }
 
@@ -151,11 +156,10 @@
 
   function relayout() { measure(); paint(); }
 
-  // בטלפון שורת הכתובת מתכווצת ומתרחבת תוך כדי גלילה ומשנה את גובה החלון — זה לא שינוי פריסה,
-  // ומדידה מחדש הייתה מזיזה את אורך המסלול באמצע הגלילה. מודדים מחדש רק כשהרוחב משתנה או הגובה בהרבה;
-  // את הציור עצמו (מרכז המסך והפינות) מעדכנים לפי הגובה החי.
+  // מודדים מחדש רק כשהרוחב או המסך הגדול משתנים (סיבוב, שינוי חלון). שורת הכתובת שנעלמת ונחזרת
+  // משנה את גובה החלון אבל לא את המסך הגדול — אז המסלול והציור נשארים במקום
   function onResize() {
-    if (root.clientWidth !== lastW || Math.abs(window.innerHeight - lastH) > 120) { relayout(); }
+    if (root.clientWidth !== lastW || boxH() !== lastH) { relayout(); }
     else { schedule(); }
   }
 

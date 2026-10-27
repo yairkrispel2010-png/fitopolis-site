@@ -7,7 +7,13 @@
 .intro-on .intro {
   display: block;
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* המסך הגדול, לא inset:0: בטלפון שורת הכתובת נעלמת בגלילה והמסך גדל, ופתיח בגובה המסך
+     הנוכחי היה נגמר לפני התחתית (המסך הלבן והפינות נחתכו). intro.js מצייר לפי אותו גובה */
+  height: 100vh;
+  height: 100lvh;
   z-index: 200;
   pointer-events: none;
   /* FIT ו-POLIS יוצאים מעבר לקצוות; כשהפתיח עולה עם הדף זה היה מרחיב את הדף לצדדים */
@@ -15,7 +21,7 @@
 }
 /* המסגרת (קצוות ה-O בפינות) נעוצה למסך עד שהבלוק הכהה מגיע לתחתית המסך; משם היא עוברת לעמוד עצמו,
    במקום שבו עמדה, ועולה יחד איתו (top ו-height נקבעים ב-intro.js) */
-.intro-on .intro.is-scroll { position: absolute; bottom: auto; }
+.intro-on .intro.is-scroll { position: absolute; }
 .intro-on .intro.is-done { display: none; }
 
 /* המסלול: הפתיח והראש של הדף נעוצים במקום בזמן שה-O גדל, ועוד קצת אחרי שנעצר */
@@ -27,10 +33,12 @@
 
 .intro-veil { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
+/* הלוגו והחץ — לפי המסך הקטן (עם שורת הכתובת), שזה מה שרואים כשהדף עולה; במחשב זה אותו גובה */
 .intro-logo {
   position: absolute;
   left: 50%;
   top: 50%;
+  top: 50svh;
   transform: translate(-50%, -50%);
   font-size: clamp(54px, 12vw, 168px);
   white-space: nowrap;
@@ -51,7 +59,8 @@
 .intro-cue {
   position: absolute;
   left: 50%;
-  bottom: 34px;
+  top: calc(100% - 64px);
+  top: calc(100svh - 64px);
   width: 30px;
   height: 30px;
   margin-left: -15px;
