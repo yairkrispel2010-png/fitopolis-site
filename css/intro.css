@@ -13,7 +13,8 @@
   /* FIT ו-POLIS יוצאים מעבר לקצוות; כשהפתיח עולה עם הדף זה היה מרחיב את הדף לצדדים */
   overflow: hidden;
 }
-/* אחרי העצירה הפתיח עולה עם הדף: הוא עובר לעמוד עצמו, במקום שבו עמד (top ו-height נקבעים ב-intro.js) */
+/* המסגרת (קצוות ה-O בפינות) נעוצה למסך עד שהבלוק הכהה מגיע לתחתית המסך; משם היא עוברת לעמוד עצמו,
+   במקום שבו עמדה, ועולה יחד איתו (top ו-height נקבעים ב-intro.js) */
 .intro-on .intro.is-scroll { position: absolute; bottom: auto; }
 .intro-on .intro.is-done { display: none; }
 

@@ -1,6 +1,7 @@
 // פיטופוליס — הפתיח: הלוגו במרכז; בגלילה FIT ו-POLIS זזים הצידה, וה-O גדל עד שהחור
 // שבתוכו חושף את האתר — ונעצר כשקצוות הטבעת יושבים בפינות המסך. משם עוד קצת גלילה
-// האתר עומד במקום, ואז הוא עולה כרגיל, והפינות עולות איתו.
+// הראש של האתר עומד במקום; אחר כך האתר נגלל בתוך המסגרת הזאת עד הבלוק הכהה שלמטה,
+// ושם המסגרת עולה יחד עם הקצה העליון שלו.
 // אין ספרייה: SVG אחד בגודל המסך — מלבן לבן עם חור עגול (evenodd, בלי מסכה), וחישוב לפי scrollY.
 (function () {
   'use strict';
@@ -10,22 +11,22 @@
 
   var intro = document.querySelector('.intro');
   var pin = document.querySelector('.intro-pin');
-  var pinned = document.querySelector('.intro-pinned');
+  var dark = document.querySelector('[data-intro-end]');   // הבלוק הכהה: עד אליו האתר נגלל בתוך המסגרת
   var slot = intro && intro.querySelector('.intro-o-slot');
   var ring = document.getElementById('intro-ring');
   var veil = document.getElementById('intro-veil-p');
   var fit = intro && intro.querySelector('.fit');
   var polis = intro && intro.querySelector('.polis');
   var cue = intro && intro.querySelector('.intro-cue');
-  if (!intro || !pin || !pinned || !slot || !ring || !veil) { root.classList.remove('intro-on'); return; }
+  if (!intro || !pin || !slot || !ring || !veil) { root.classList.remove('intro-on'); return; }
 
   var R_IN = 23.5;    // הרדיוס הפנימי של הסמל (viewBox 100)
-  var W = 0, H = 0, top0 = 0, run = 1, stay = 0, dx0 = 0, dy0 = 0, k0 = 1, spread = 0, headH = 0;
-  var hFixed = 0;     // גובה המסך בציור האחרון כשהפתיח נעוץ — זה הגובה שהפינות עולות איתו
-  var mode = '';      // 'fixed' נעוץ למסך · 'scroll' עולה עם הדף · 'done' כבר מעל המסך
+  var W = 0, H = 0, top0 = 0, run = 1, stay = 0, dx0 = 0, dy0 = 0, k0 = 1, spread = 0;
+  var hFixed = 0;     // גובה המסך בציור האחרון כשהמסגרת נעוצה — זה הגובה שהיא עולה איתו בסוף
+  var mode = '';      // 'fixed' נעוצה למסך · 'scroll' עולה עם הבלוק הכהה · 'done' כבר מעל המסך
   var raf = null;
   var released = false;
-  var lastA = -1, lastCue = '', lastT = '', lastD = '', lastTop = '', lastFade = '';
+  var lastA = -1, lastCue = '', lastT = '', lastD = '', lastTop = '';
   var lastW = -1, lastH = -1;
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
@@ -42,7 +43,6 @@
     W = root.clientWidth;
     H = window.innerHeight;
     top0 = pin.getBoundingClientRect().top + (window.scrollY || 0);
-    headH = pinned.getBoundingClientRect().height;
     run = Math.round(H * 1.2);     // ה-O גדל
     stay = Math.round(H * 0.6);    // האתר עומד במקום, וקצוות ה-O בפינות
     root.style.setProperty('--intro-run', (run + stay) + 'px');
@@ -57,7 +57,7 @@
     spread = W * 0.6;
     if (!hFixed) { hFixed = H; }
     lastW = W; lastH = H;
-    lastA = -1; lastCue = lastT = lastD = lastTop = lastFade = '';
+    lastA = -1; lastCue = lastT = lastD = lastTop = '';
     if (hidden) { intro.classList.add('is-done'); }
   }
 
@@ -114,34 +114,33 @@
     mode = m;
     intro.classList.toggle('is-scroll', m !== 'fixed');
     intro.classList.toggle('is-done', m === 'done');
-    if (m === 'fixed') { intro.style.top = intro.style.height = intro.style.opacity = ''; lastTop = lastFade = ''; }
+    if (m === 'fixed') { intro.style.top = intro.style.height = ''; lastTop = ''; }
   }
 
   function paint() {
     raf = null;
-    var y = (window.scrollY || 0) - top0;
-    var end = run + stay;              // מכאן האתר עולה, והפינות איתו
+    var sy = window.scrollY || 0;
+    // המקום בדף שבו הבלוק הכהה נוגע בתחתית המסך: עד שם המסגרת נעוצה (קוראים לפני שכותבים משהו).
+    // בלי בלוק כהה — המסגרת עולה עם הראש של האתר, מיד אחרי העצירה
+    var stopAt = top0 + run + stay;
+    if (dark) { stopAt = Math.max(stopAt, dark.getBoundingClientRect().top + sy - hFixed); }
     var hold = false;
 
-    if (y < end) {
+    if (sy < stopAt) {
       setMode('fixed');
       hFixed = window.innerHeight;
       // התוכן שמאחורי הלוח הלבן לא נגיש למקלדת עד שהחור כבר גדול
-      hold = draw(clamp(y / run), hFixed) < 0.3;
+      hold = draw(clamp((sy - top0) / run), hFixed) < 0.3;
     } else {
-      // הפתיח עובר לעמוד עצמו, בדיוק במקום שבו עמד — מכאן הדפדפן מזיז אותו יחד עם האתר
+      // המסגרת עוברת לעמוד עצמו, בדיוק במקום שבו עמדה — מכאן הדפדפן מזיז אותה יחד עם הבלוק הכהה
       draw(1, hFixed);
-      setMode(y < end + hFixed ? 'scroll' : 'done');
-      var tp = (top0 + end) + 'px|' + hFixed + 'px';
+      setMode(sy < stopAt + hFixed ? 'scroll' : 'done');
+      var tp = stopAt + '|' + hFixed;
       if (mode === 'scroll' && tp !== lastTop) {
         lastTop = tp;
-        intro.style.top = (top0 + end) + 'px';
+        intro.style.top = stopAt + 'px';
         intro.style.height = hFixed + 'px';
       }
-      // בטלפון הראש של הדף ארוך מהמסך, והפינות התחתונות היו עולות באמצע התוכן — הן נמוגות עם תחילת הגלילה.
-      // במחשב הראש של הדף הוא מסך אחד בדיוק, והפינות עולות איתו עד הסוף
-      var f = headH > hFixed + 40 ? clamp(1 - (y - end) / (hFixed * 0.25)).toFixed(3) : '';
-      if (mode === 'scroll' && f !== lastFade) { lastFade = f; intro.style.opacity = f; }
     }
 
     if (pin.inert !== hold) { pin.inert = hold; }
