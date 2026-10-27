@@ -657,9 +657,49 @@ p.k-center { display: block; margin: 0; }
 }
 .dp-btn, .dp-tray, .dp-cam { display: none; }
 .dp-back {
-  inset: -5px -7px; border-radius: 0; overflow: visible; box-shadow: none;
+  inset: 0; border-radius: 0; overflow: visible; box-shadow: none;
   background: url("../assets/phone-back.webp") 0 0 / 100% 100% no-repeat;
+  transform: translateZ(32.85px);                            /* בתוך .dp-rear: הגב בעובי האמיתי, 8.75 מ"מ */
 }
+
+/* ═══ הגוף בתלת-ממד (27/10/2026 לילה) ═══════════════════════════════════════════════════
+   הבעלים: "שתרנדר אותו הלוך ושוב עד שהוא יהיה כמה שיותר דומה לאייפון מכל הזוויות - גם כשהוא מסתובב".
+   הדפנות — רצועות שעומדות על קו המתאר (demo.js, body), כל אחת עם הרינדור של הדופן שלה מאותו מודל;
+   אי המצלמה מורם 6.9px עם קיר, העדשות בולטות עוד 5.2px, הלחצנים בולטים 2.8px מהדפנות. */
+@property --ry { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+.dp-rim, .dp-platwall, .dp-keycap, .dp-lenswall {
+  position: absolute; pointer-events: none; backface-visibility: hidden;
+  background: 0 0 / 100% 100% no-repeat;
+  transform: translateZ(var(--zc)) rotateZ(var(--th)) rotateX(90deg);
+}
+.dp-core { position: absolute; inset: 3px; border-radius: 42px; background: #19191b; transform: translateZ(-15.5px); pointer-events: none; }
+.dp-rim-t { background-image: url("../assets/side-t.webp"); }
+.dp-rim-r { background-image: url("../assets/side-r.webp"); }
+.dp-rim-b { background-image: url("../assets/side-b.webp"); }
+.dp-rim-l { background-image: url("../assets/side-l.webp"); }
+.dp-key { border-radius: 5px; background-repeat: no-repeat; }
+/* האור על הדפנות: מנורה מלמעלה-שמאל-קדימה. כל רצועה מוארת לפי הכיוון שהיא פונה אליו אחרי הסיבוב (--ry מסתובב
+   יחד עם הטלפון), והבוהק עובר על הפינות. בלי פונקציות טריגו בדפדפן — הרינדור כמו שהוא */
+.dp-rim {
+  --c: cos(var(--th) - 90deg); --s: sin(var(--th) - 90deg);
+  filter: brightness(calc(0.38 + 0.55 * max(0, -0.45 * var(--c) * cos(var(--ry)) - 0.55 * var(--s) - 0.7 * var(--c) * sin(var(--ry)))
+    + 0.45 * pow(max(0, -0.244 * var(--c) * cos(var(--ry)) - 0.2985 * var(--s) - 0.9227 * var(--c) * sin(var(--ry))), 24)));
+}
+/* האור הזז רק על הדפנות החיצוניות — שם רואים אותו. על קירות האי והעדשות הוא עלה בפריימים בטלפון חלש (נמדד) */
+.dp.is-turning { animation: dp-spin 0.95s cubic-bezier(0.62, 0, 0.38, 1) both, dp-arc 0.95s cubic-bezier(0.34, 0, 0.28, 1) both, dp-light 0.95s cubic-bezier(0.62, 0, 0.38, 1) both; }
+@keyframes dp-light { from { --ry: 0deg; } to { --ry: 360deg; } }
+/* קיר האי: שיפוע רך ורחב (באייפון הוא מעוגל), כהה בבסיס ובהיר לכל רוחב העיגול */
+.dp-platwall { background-image: linear-gradient(to top, #202023 0%, #3a3b40 22%, #5f6066 52%, #7c7d83 72%, #5a5b61 88%, #2e2e33 100%); }
+/* קיר העדשה: טבעת מתכת שחורה מט, עם פאה בהירה בקצה העליון */
+.dp-lenswall { background-image: linear-gradient(to bottom, #0d0d0f 0%, #1d1d21 35%, #2c2d31 70%, #8b8c92 86%, #3b3c41 100%); }
+.dp-keycap { background: linear-gradient(90deg, #3b3c41, #55565c 50%, #3b3c41); }
+.dp-keywall { position: absolute; width: 2.8px; border-radius: 1.4px; pointer-events: none; backface-visibility: hidden; transform: translateZ(var(--z)); background: linear-gradient(180deg, #6a6b71, #4a4b51 50%, #2e2f34); }
+.dp-keywall.is-back { transform: translateZ(var(--z)) rotateY(180deg); }
+/* מבט מאחור: מיכל מסובב 180° בגודל תמונת הגב (עם השוליים), ובתוכו הגב, ראש האי והעדשות */
+.dp-rear { position: absolute; inset: -5px -7px; transform: rotateY(180deg); transform-style: preserve-3d; pointer-events: none; }
+.dp-plat { position: absolute; inset: 0; background: url("../assets/phone-back.webp") 0 0 / 100% 100% no-repeat; transform: translateZ(39.77px); backface-visibility: hidden; }
+.dp-lens { position: absolute; width: 62px; height: 62px; border-radius: 50%; transform: translateZ(var(--z)); backface-visibility: hidden;
+  background: url("../assets/phone-back.webp") no-repeat; background-size: 314px 638px; }
 .dp-back::before { content: none; }
 .dp-back::after {                                            /* הברק של הסיבוב — רק על הגב, לא על הפינות השקופות */
   -webkit-mask: url("../assets/phone-back.webp") 0 0 / 100% 100% no-repeat;
