@@ -87,9 +87,9 @@
   function cav(cl, size, ring) { return av(cl.c, cl.ini, size, ring, null, cl.pic); }
   function nextMeal() { for (var i = 0; i < S.meals.length; i++) if (!S.meals[i].eaten) return S.meals[i]; return null; }
   function lastEaten() { for (var i = S.meals.length - 1; i >= 0; i--) if (S.meals[i].eaten) return S.meals[i]; return null; }
-  function danielReasons() { return S.weightLogged ? [] : ['לא עדכן משקל השבוע']; }   // סיבה אחת, כדי שעדכון משקל בטלפון של המתאמן יוריד אותו מהרשימה אצל המאמן
+  function danielReasons() { return S.weightLogged ? [] : ['אין עדכון משקל השבוע']; }   // סיבה אחת, כדי שעדכון משקל בטלפון של המתאמן יוריד אותו מהרשימה אצל המאמן
   function needsCount() { return (danielReasons().length ? 1 : 0) + 1; }
-  function clientReasons(id) { return id === 'daniel' ? danielReasons() : id === 'ron' ? ['נדרשות מידות'] : []; }
+  function clientReasons(id) { return id === 'daniel' ? danielReasons() : id === 'ron' ? ['נדרשים היקפים'] : []; }
   function unreadTotal() { return S.unreadByTrainer + S.ronUnread; }
   function requestsCount() { return 1 + (S.ronPending ? 1 : 0) + (S.traineeRequestSent ? 1 : 0); }   // 1 = ההצעה החלופית של שירה, שממתינה תמיד
   function lastTrainerText() { for (var i = S.chat.length - 1; i >= 0; i--) if (S.chat[i].from === 'trainer') return S.chat[i].card ? 'תיאום פגישה · בדיקת התקדמות' : S.chat[i].text; return ''; }
@@ -219,202 +219,295 @@
   function timeline(rows) { return '<div class="k-gap20"></div>' + sectionTitle('היסטוריית פעולות') + '<div class="k-tline">' + rows.map(function (r) { return '<div class="row v-' + r[0] + '">' + icon(r[1], 'bi') + '<span class="col"><b>' + r[2] + '</b><small>' + r[3] + '</small></span></div>'; }).join('') + '</div>'; }
 
   /* ── ממשק המאמן ────────────────────────────────────────────────────── */
+  /* ── תאריכים יחסיים להיום, כמו באפליקציה — ההדגמה לא מזדקנת ── */
+  var DAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+  var DAYL = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
+  var MONS = ['ינו׳', 'פבר׳', 'מרץ', 'אפר׳', 'מאי', 'יוני', 'יולי', 'אוג׳', 'ספט׳', 'אוק׳', 'נוב׳', 'דצמ׳'];
+  var MONTHS = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function dayAt(off) { var d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() + off); return d; }
+  function dm(off) { var d = dayAt(off); return two(d.getDate()) + '/' + two(d.getMonth() + 1); }
+  function dmy(off) { return dm(off) + '/' + dayAt(off).getFullYear(); }
+  function wd(off) { return DAYS[dayAt(off).getDay()]; }
+  function monOf(off) { return MONS[dayAt(off).getMonth()]; }
+  function dnum(off) { return String(dayAt(off).getDate()); }
+  function monthYear() { var d = new Date(); return MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
+  function greet() { var h = new Date().getHours(); return h >= 5 && h < 12 ? 'בוקר טוב' : h >= 12 && h < 17 ? 'צהריים טובים' : h >= 17 && h < 23 ? 'ערב טוב' : 'שלום'; }
+  function waitLine() { var h = new Date().getHours(); return h < 12 ? 'מה מחכה לך היום' : h < 17 ? 'מה עוד מחכה לך היום' : 'מה נשאר להיום'; }
+  // הפגישות של הדמו — יום יחסי להיום
+  (function () { var off = { michal: 2, yossi: 3, daniel: 4, danielrec: 1, orh: -32, danielh: -17 };
+    Object.keys(off).forEach(function (k) { var m = MEETINGS[k]; if (!m) return; m.off = off[k]; m.dd = dnum(off[k]); m.mon = monOf(off[k]); m.date = dmy(off[k]); m.wd = wd(off[k]); }); })();
+
+  /* ── הרכיבים העדכניים (n-*) ── */
+  function face(cl, badgeIcon, badgeVoice) {
+    return '<span class="n-face">' + av(cl.c, cl.ini, 34, 'trainee', 'tight', cl.pic) + (badgeIcon ? '<span class="n-badge ' + (badgeVoice || 'v-coach') + '">' + icon(badgeIcon, 'bi') + '</span>' : '') + '</span>';
+  }
+  function personRow(cl, o) {
+    return '<button class="n-row" data-act="' + (o.act || 'noop') + '">' + face(cl, o.badge, o.badgeVoice) +
+      '<span class="txt"><span class="nm"><b>' + cl.name + '</b>' + (o.meta ? '<small>' + o.meta + '</small>' : '') + (o.count ? '<i class="n-cpill' + (o.countCoach ? ' coach' : '') + '">' + o.count + '</i>' : '') + '</span>' +
+      (o.lines || []).map(function (l) { return '<span class="ln' + (o.clamp ? ' two' : '') + '">' + l + '</span>'; }).join('') +
+      (o.whys || []).map(function (w) { return '<span class="why">' + w + '</span>'; }).join('') + '</span>' + icon('chev-l', 'bi chev') + '</button>';
+  }
+  function door(ic, label, act, more) { return '<button class="n-door" data-act="' + act + '">' + icon(ic, 'bi') + '<span class="lbl">' + label + (more ? '<i> · ' + more + '</i>' : '') + '</span>' + icon('chev-l', 'bi chev') + '</button>'; }
+  function counter(tiles, sel, prefix, trainee) {
+    return '<div class="n-count' + (trainee ? ' trainee' : '') + '">' + tiles.map(function (t) {
+      return '<button class="n-tile' + (t[0] === sel ? ' on' : '') + '" data-act="' + prefix + ':' + t[0] + '"' + (t[3] ? ' aria-label="' + t[3] + '"' : '') + '>' + (t[4] ? '<span class="done">' + icon('check', 'bi') + '</span>' : '') + '<span class="num">' + t[1] + '</span><span class="lbl">' + t[2] + '</span></button>';
+    }).join('') + '</div>';
+  }
+  function seg(opts, sel, prefix) { return '<div class="n-seg">' + opts.map(function (o) { return '<button class="' + (o[0] === sel ? 'on' : '') + '" data-act="' + prefix + ':' + o[0] + '">' + o[1] + ' <b>' + o[2] + '</b></button>'; }).join('') + '</div>'; }
+  function tag(text, cls) { return '<span class="n-tag' + (cls ? ' ' + cls : '') + '"><span class="t">' + text + '</span></span>'; }
+  function opens(label, ic, act) { return '<div class="n-center"><button class="n-opens" data-act="' + act + '">' + icon(ic, 'bi') + label + '</button></div>'; }
+  function facts(cells, cols) { return '<div class="n-facts cols' + (cols || 2) + '">' + cells.map(function (c) { return '<span><small>' + c[0] + '</small><b' + (c[2] ? ' class="' + c[2] + '"' : '') + '>' + c[1] + '</b></span>'; }).join('') + '</div>'; }
+  function bigAv(cl, size, ring) { return av(cl.c, cl.ini, size, ring || 'trainee', null, cl.pic); }
+  function chipDate(d, w, small) { return '<span class="n-dchip' + (small ? ' sm' : '') + '"><b>' + d + '</b><small>' + w + '</small></span>'; }
+  function meetingCard2(id, o) {
+    var m = MEETINGS[id], cl = client(m.cl); o = o || {};
+    var cells = [['שעה', m.time], ['משך', m.dur + ' דקות'], ['פלטפורמה', m.platform]];
+    if (m.place) cells.push(['מיקום', m.place]);
+    return '<div class="n-card" role="button" tabindex="0" data-act="' + (o.act || 'sheet:tmeeting:' + id) + '"><div class="n-mhead">' + bigAv(cl, 44) + '<span class="name">' + cl.name + '</span>' + chipDate(m.dd, m.mon, true) + '</div>' +
+      (o.tags ? '<div class="n-gap12"></div><div class="n-center">' + o.tags + '</div>' : '') +
+      '<div class="n-topic">' + m.topic + '</div>' + facts(cells, m.place ? 2 : 3) + '<div class="n-gap16"></div>' + opens('לפרטי הפגישה', 'event-note', o.act || 'sheet:tmeeting:' + id) +
+      (m.footer ? '<div class="k-footer">' + icon('repeat', 'bi v-coach') + '<span>' + m.footer + '</span></div>' : '') + '</div>';
+  }
+  function requestCard2(r) {
+    var cells = [['שעה', r.time], ['משך', r.dur + ' דקות'], ['פלטפורמה', r.platform]];
+    if (r.place) cells.push(['מיקום', r.place]);
+    return '<div class="n-card" role="button" tabindex="0" data-act="' + (r.act || 'sheet:coord') + '"><div class="n-mhead">' + bigAv(r.cl, 44) + '<span class="name">' + r.cl.name + '</span>' + chipDate(dnum(r.off), monOf(r.off), true) + '</div>' +
+      '<div class="n-gap12"></div><div class="n-center">' + tag(r.status, r.cls || 'big') + '</div><div class="n-topic">' + r.topic + '</div>' + facts(cells, r.place ? 2 : 3) +
+      '<p class="n-month" style="margin:calc(14px * var(--k)) 0 calc(10px * var(--k))">התקבלה: ' + r.received + '</p>' + opens('לפרטי הפגישה', 'event-note', r.act || 'sheet:coord') + '</div>';
+  }
+  function clientCard(cl, extra, act) {
+    var reasons = clientReasons(cl.id);
+    var t = reasons.length ? tag(reasons[0] + (reasons.length > 1 ? ' +' + (reasons.length - 1) : '')) : tag('הכל תקין ✓', 'ok');
+    return '<div class="n-card" role="button" tabindex="0" data-act="' + (act || 'noop') + '"><div class="n-ctop">' + bigAv(cl, 46) + '<span class="name">' + cl.name + '</span>' + (extra && extra.tag !== undefined ? extra.tag : t) + '</div>' + (extra && extra.body ? extra.body : '') + '</div>';
+  }
+
+  /* ── ממשק המאמן ────────────────────────────────────────────────────── */
   var trainer = {
     tabs: [['home', 'home', 'בית'], ['clients', 'people', 'לקוחות'], ['chat', 'chat', "צ'אט"], ['meetings', 'calendar', 'פגישות'], ['payments', 'card', 'תשלום']],
     topbar: function (ph) {
-      if (ph.screen === 'profile' || ph.screen === 'thread') return '';        // שכבת-על מסך מלא — בלי סרגל עליון (home_screen showMain=false)
+      if (ph.screen === 'profile' || ph.screen === 'thread') return '';        // שכבת-על מסך מלא — בלי סרגל עליון
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
         '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-coach') + (unreadTotal() || requestsCount() ? '<i class="k-dot"></i>' : '') + '</button>' +
+        '<button class="k-tbtn" data-act="flip" aria-label="מעבר לממשק המתאמן">' + icon('swap', 'bi v-system') + '</button>' +
         (ph.screen === 'meetings' ? '<button class="k-tbtn" aria-label="הגדרות">' + icon('settings', 'bi v-system') + '</button>' : '') +
         '<span class="k-me ring-coach pic" aria-hidden="true"><i><svg class="k-face" viewBox="0 0 100 100"><use href="#a-yoav"/></svg></i></span>';
     },
     screens: {
-      home: function () {
-        var unread = unreadTotal(), needs = needsCount(), reqs = requestsCount();
-        function shell(ic, title, hi, body, avs, btn, act, note) {
-          return card('<div class="k-hcard-t">' + icon(ic, 'bi ' + (hi ? hi : 'v-muted')) + '<span>' + title + '</span></div><p class="k-hcard-b">' + body + '</p>' +
-            (note ? '<p class="k-hcard-n">' + note + '</p>' : '') + (avs ? '<div class="k-avrow">' + avs + '</div>' : '') + secondary(btn, act), 'home strong');
-        }
-        var msgAvs = (S.unreadByTrainer ? '<button data-act="go:thread" aria-label="דניאל כהן">' + cav(client('daniel'), 46, 'trainee') + '</button>' : '') + (S.ronUnread ? '<span>' + cav(client('ron'), 46, 'trainee') + '</span>' : '');
-        var needAvs = (danielReasons().length ? '<button data-act="go:profile" aria-label="דניאל כהן">' + cav(client('daniel'), 46, 'trainee') + '</button>' : '') + '<span>' + cav(client('ron'), 46, 'trainee') + '</span>';
-        var reqAvs = (S.ronPending ? '<span>' + cav(client('ron'), 46, 'trainee') + '</span>' : '') + '<span>' + cav(client('shira'), 46, 'trainee') + '</span>' + (S.traineeRequestSent ? '<button data-act="go:profile:connection">' + cav(client('daniel'), 46, 'trainee') + '</button>' : '');
-        return screenTitle('היום') + '<div class="k-gap10"></div>' +
-          shell('chat', 'הודעות', unread ? 'v-trainee' : '', unread ? unread + ' הודעות לא נקראו' : 'אין הודעות חדשות', unread ? msgAvs : '', "לכל הצ'אטים", 'go:chat') +
-          shell('priority', 'דורשים טיפול', needs ? 'v-attention' : '', needs ? needs + ' לקוחות דורשים טיפול' : 'כל הלקוחות מעודכנים ✓', needs ? needAvs : '', 'לכולם', 'go:clients:needs') +
-          card('<div class="k-hcard-t">' + icon('event', 'bi v-muted') + '<span>פגישות קרובות</span></div><p class="k-hcard-b">אין פגישות היום</p>' + secondary('לכל הפגישות', 'go:meetings'), 'home strong') +
-          shell('inbox', 'בקשות פגישה', reqs ? 'v-coach' : '', reqs ? reqs + ' בקשות ממתינות' : 'אין בקשות חדשות', reqs ? reqAvs : '', 'לכל הבקשות', 'mcat:requests', reqs ? 'הבקשה הישנה ביותר התקבלה: 08/09 · ' + (S.ronPending ? '09:40' : now()) : '');
+      home: function (ph) {
+        var reqRows = [], msgRows = [], needRows = [];
+        if (S.ronPending) reqRows.push(personRow(client('ron'), { badge: 'event-ok', badgeVoice: 'v-attention', meta: 'אתמול', lines: [wd(1) + ' ' + dm(1) + ' · <b>08:30</b> · 30 דק׳', 'טלפון · עדכון תוכנית אימונים'], act: 'sheet:coord' }));
+        reqRows.push(personRow(client('shira'), { badge: 'event-ok', badgeVoice: 'v-attention', meta: 'אתמול', lines: [wd(5) + ' ' + dm(5) + ' · <b>11:00</b> · 60 דק׳', 'פרונטלי · פגישת היכרות + מדידות'], act: 'mcat:requests' }));
+        if (S.traineeRequestSent) reqRows.push(personRow(client('daniel'), { badge: 'event-ok', badgeVoice: 'v-trainee', meta: now(), lines: [wd(2) + ' ' + dm(2) + ' · <b>18:00</b> · 30 דק׳', 'טלפון · עדכון תפריט'], act: 'sheet:coord2' }));
+        if (S.unreadByTrainer) msgRows.push(personRow(client('daniel'), { meta: S.chat[S.chat.length - 1].time, count: S.unreadByTrainer, lines: [esc(lastDanielPreview())], clamp: true, act: 'go:thread' }));
+        if (S.ronUnread) msgRows.push(personRow(client('ron'), { meta: 'אתמול', count: S.ronUnread, lines: ['תיאום פגישה · ' + (S.ronPending ? 'ממתין לאישורך' : 'אושרה ✓')], clamp: true, act: 'go:chat' }));
+        if (danielReasons().length) needRows.push(personRow(client('daniel'), { whys: danielReasons(), act: 'go:profile' }));
+        needRows.push(personRow(client('ron'), { whys: clientReasons('ron'), act: 'noop' }));
+        var tiles = [];
+        if (reqRows.length) tiles.push(['req', reqRows.length, reqRows.length === 1 ? 'בקשה' : 'בקשות']);
+        if (msgRows.length) tiles.push(['msg', unreadTotal(), unreadTotal() === 1 ? 'הודעה' : 'הודעות']);
+        if (needRows.length) tiles.push(['need', needRows.length, 'נדרש טיפול']);
+        var sel = ph.homeTile;
+        if (!tiles.some(function (t) { return t[0] === sel; })) sel = tiles.length ? tiles[0][0] : null;
+        var card = '';
+        if (sel === 'req') card = '<div class="n-ocard"><div class="n-ocard-h">' + icon('inbox', 'bi v-attention') + '<b>בקשות פגישה</b></div><div class="n-rows">' + reqRows.slice(0, 4).join('') + '</div>' + door('inbox', 'לכל הבקשות', 'mcat:requests') + '</div>';
+        if (sel === 'msg') card = '<div class="n-ocard"><div class="n-ocard-h">' + icon('chat', 'bi v-trainee') + '<b>הודעות</b></div><div class="n-rows">' + msgRows.join('') + '</div>' + door('chat', "לכל הצ'אטים", 'go:chat') + '</div>';
+        if (sel === 'need') card = '<div class="n-ocard"><div class="n-ocard-h">' + icon('priority', 'bi v-attention') + '<b>נדרש טיפול</b></div><div class="n-rows">' + needRows.join('') + '</div>' + door('people', 'לכולם', 'go:clients:needs') + '</div>';
+        var up = ['michal', 'yossi', 'daniel'].map(function (k) {
+          var m = MEETINGS[k];
+          return personRow(client(m.cl), { badge: 'event', badgeVoice: 'v-coach', lines: [m.wd + ' ' + dm(m.off) + ' · <b>' + m.time + '</b> · ' + m.dur + ' דק׳', m.platform + (m.place ? ' · ' + m.place : '')], act: 'sheet:tmeeting:' + k });
+        }).join('');
+        return '<div class="n-greet"><h2>' + greet() + ', יואב</h2><p>' + (tiles.length ? waitLine() : 'כרגע אף אחד לא מחכה לך') + '</p></div>' +
+          (tiles.length ? counter(tiles, sel, 'htile') : '') + card +
+          '<h3 class="n-sech">הפגישות הקרובות</h3><div class="n-rest">' + up + door('calendar', 'לכל הפגישות', 'go:meetings') + '</div>';
       },
       clients: function (ph) {
-        var needsOnly = !!ph.clientsNeeds;
+        var needsOnly = !!ph.clientsNeeds, nNeeds = CLIENTS.filter(function (c) { return clientReasons(c.id).length; }).length;
         var list = CLIENTS.filter(function (cl) { return !needsOnly || clientReasons(cl.id).length; }).map(function (cl) {
-          var reasons = clientReasons(cl.id), needs = reasons.length;
-          var meeting = cl.id === 'daniel' ? ['21', 'שני', 'בדיקת התקדמות + עדכון תפריט'] : cl.id === 'michal' ? ['14', 'שני', 'לקיחת מידות + תמונות'] : cl.id === 'yossi' ? ['20', 'ראשון', 'עדכון תוכנית אימון'] : null;
-          return card('<div class="k-crow">' + cav(cl, 46, 'trainee') + '<span class="col"><b>' + cl.name + '</b><small>' + cl.goal + ' · מאז ' + cl.since + '</small></span>' +
-            '<span class="tags">' + (needs ? badge('נדרש טיפול · ' + needs, 'needs') : badge('הכל תקין ✓', 'ok')) + '</span></div>' +
-            (meeting ? '<div class="k-mini"><div class="row"><span class="k-daybubble"><b>' + meeting[0] + '</b><small>' + meeting[1] + '</small></span><span class="col"><small>פגישה קרובה</small><b>' + meeting[2] + '</b></span></div><i class="k-div"></i><div class="k-center">' + pill('לפרטי הפגישה', 'event-note', cl.id === 'daniel' ? 'go:profile:connection' : 'sheet:tmeeting:' + cl.id) + '</div></div>' : ''),
-            'client', cl.id === 'daniel' ? 'go:profile' : 'noop');
+          var mk = cl.id === 'daniel' ? 'daniel' : cl.id === 'michal' ? 'michal' : cl.id === 'yossi' ? 'yossi' : null, m = mk && MEETINGS[mk];
+          var body = m ? '<div class="n-mini"><div class="row">' + chipDate(m.dd, m.wd) + '<span class="col"><small>פגישה קרובה</small><b>' + m.topic + '</b></span></div><i class="sep"></i>' + opens('לפרטי הפגישה', 'event-note', cl.id === 'daniel' ? 'go:profile:connection' : 'sheet:tmeeting:' + mk) + '</div>' : '';
+          return clientCard(cl, { body: body }, cl.id === 'daniel' ? 'go:profile' : 'noop');
         }).join('');
-        var count = needsOnly ? (CLIENTS.filter(function (c) { return clientReasons(c.id).length; }).length + ' לקוחות דורשים תשומת לב') : 'כל 6 הלקוחות';
-        return screenTitle('לקוחות') + search('חפש לפי שם...') + '<div class="k-filterrow"><button class="k-tbtn k-archive" aria-label="ארכיון">' + icon('archive', 'bi v-muted') + '</button>' + filterToggle(needsOnly ? 'נדרש טיפול' : 'כולם', 'cfilter') + '</div>' +
-          '<div class="k-count">' + count + '</div>' + list;
+        return screenTitle('לקוחות') + '<div class="k-gap8"></div>' + search('חפש לפי שם...') +
+          '<div class="n-segrow">' + seg([['needs', 'נדרש טיפול', nNeeds], ['all', 'כולם', CLIENTS.length]], needsOnly ? 'needs' : 'all', 'cseg') + '<button class="n-arch" aria-label="ארכיון">' + icon('archive', 'bi') + '</button></div>' + list;
       },
       profile: function (ph) {
         var cl = client('daniel'), reasons = danielReasons(), tab = ph.profileTab || 'progress';
-        var head = '<div class="k-phead"><button class="k-iconbtn" data-act="go:clients" aria-label="חזרה">' + icon('back', 'bi') + '</button><b>' + cl.name + '</b><button class="k-compact secondary" data-act="noop">' + icon('edit', 'bi') + 'עריכה</button></div>';
-        var hero = '<div class="k-hero"><div class="who">' + av(cl.c, cl.ini, 64, null, 'big', cl.pic) +
-          '<div class="facts"><span><i>גיל: </i><b>28 שנה</b></span><span><i>גובה: </i><b>180 ס"מ</b></span><span><i>משקל: </i><b>' + (S.weightLogged ? '76.5' : '76.8') + ' ק"ג</b></span><span><i>מאז: </i><b>' + cl.since + '</b></span></div></div>' +
-          '<div class="tagsbox"><div class="gt">מוגדר</div>' + badge('מזין ארוחות', 'noInfo', 'check') + badge('מזין אימונים', 'noInfo', 'check') + '<i class="k-div"></i><div class="gt">סטטוס</div>' +
-          (reasons.length ? badge('נדרש טיפול', 'needs') + reasons.map(function (r) { return '<small class="reason">• ' + r + '</small>'; }).join('') : badge('הכל תקין ✓', 'ok')) +
-          '<span class="k-goal">חיטוב</span></div></div>';
-        var tabs = '<div class="k-tabbar">' + [['progress', 'מעקב'], ['connection', 'יצירת קשר'], ['payments', 'תשלומים']].map(function (t) { return '<button class="' + (t[0] === tab ? 'on' : '') + '" data-act="ptab:' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
+        var head = '<div class="n-phead"><button class="back" data-act="go:clients" aria-label="חזרה">' + icon('arrow', 'bi') + '</button><b>' + cl.name + '</b><button class="n-edit" data-act="noop">' + icon('edit', 'bi') + 'עריכה</button></div>';
+        var hero = '<div class="n-hero"><div class="who">' + bigAv(cl, 92) + facts([['גיל', '28 שנה'], ['גובה', '180 ס"מ'], ['משקל', (S.weightLogged ? '76.5' : '76.8') + ' ק"ג'], ['מאז', cl.since]], 2) + '</div>' +
+          '<div class="n-tbox"><div class="pan"><b>מוגדר:</b><span class="it">מזין ארוחות' + icon('check', 'bi') + '</span><span class="it">מזין אימונים' + icon('check', 'bi') + '</span></div>' +
+          '<div class="pan"><b>סטטוס:</b><span class="it">' + (reasons.length ? tag('נדרש טיפול') : tag('הכל תקין ✓', 'ok')) + '</span><span class="it"><span class="lbl">תפריט:</span><span class="n-goalpill">חיטוב</span></span></div></div></div>';
+        var alert = reasons.length ? '<div class="n-alert">' + reasons.map(function (r) { return '<div class="r"><span>' + r + '</span><button data-act="go:thread">' + "לצ'אט" + icon('chev-l', 'bi') + '</button></div>'; }).join('') + '</div>' : '';
+        var tabs = '<div class="n-tabs">' + [['progress', 'מעקב'], ['connection', 'יצירת קשר'], ['payments', 'תשלומים']].map(function (t) { return '<button class="' + (t[0] === tab ? 'on' : '') + '" data-act="ptab:' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
         var body = '';
         if (tab === 'progress') {
-          var days = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'], today = 3;
-          var vine = '<div class="k-vine">' + days.map(function (d, i) {
-            var grapes = '';
-            if (i < today) grapes = '<i class="g ok"></i><i class="g ok"></i><i class="g ok"></i><i class="g miss"></i><i class="g ok"></i>';
-            else if (i === today) grapes = S.meals.map(function (m) { return '<i class="g ' + (m.eaten ? 'ok' : 'open') + '"></i>'; }).join('');
-            else if (i === 6) grapes = '<i class="g ex"></i><i class="g ex"></i><i class="g ex"></i>';
-            else grapes = '<i class="g fut"></i><i class="g fut"></i><i class="g fut"></i><i class="g fut"></i><i class="g fut"></i>';
-            return '<span class="day' + (i === today ? ' today' : i > today ? ' future' : '') + '"><i class="knot"></i><i class="branch"></i><b>' + d + '</b>' + grapes + '</span>';
+          var todayIdx = dayAt(0).getDay();
+          var vine = '<div class="n-vine">' + DAYL.map(function (d, i) {
+            var g = '';
+            if (i < todayIdx) g = ['eat', 'eat', 'eat', i % 3 === 1 ? 'miss' : 'eat', 'eat'].map(function (s) { return '<i class="g ' + s + '">' + (s === 'eat' ? icon('check', 'bi') : '') + '</i>'; }).join('');
+            else if (i === todayIdx) { var nextSet = false; g = S.meals.map(function (m) { var s = m.eaten ? 'eat' : (!nextSet ? (nextSet = true, 'next') : 'later'); return '<i class="g ' + s + '">' + (s === 'eat' ? icon('check', 'bi') : '') + '</i>'; }).join(''); }
+            else g = '<i class="g fut"></i><i class="g fut"></i><i class="g fut"></i><i class="g fut"></i><i class="g fut"></i>';
+            return '<span class="day' + (i === todayIdx ? ' today' : '') + '"><b>' + d + '</b><i class="knot"></i><span class="stem">' + g + '</span></span>';
           }).join('') + '</div>';
-          var wvine = '<div class="k-vine rest">' + days.map(function (d, i) {
-            var g = i === 1 ? 'ok' : i === 2 ? 'miss' : (i === 3 && S.workoutDone ? 'ok' : i > today ? 'fut' : 'ex');
-            return '<span class="day' + (i === today ? ' today' : i > today ? ' future' : '') + '"><i class="knot"></i><i class="branch"></i><b>' + d + '</b><i class="g ' + g + '"></i></span>';
-          }).join('') + '</div>';
-          var woOpen = !!ph.openPwo;
-          body = panelTitle('תזונה ותכנית אימונים') +
-            '<div class="k-expand open"><button class="head" data-act="xp:nut"><b>תזונה</b><small>2000 קלוריות ליום</small></button><div class="body"><i class="k-div"></i>' + vine +
-              '<div class="k-adapt"><span class="t">' + icon('book', 'bi v-coach') + 'תבנית: תפריט יומי 2000</span><i class="k-div"></i><div class="k-target"><span class="col"><small>היעד</small><b>2000 קק״ל</b></span><i class="vdiv"></i><span class="col"><small>המאכלים נותנים</small><b class="v-coach">1720–2140 קק״ל</b></span></div><i class="k-div"></i><b class="k-good">היעד נמצא בתוך הטווח</b></div>' +
-              secondary('התפריט המלא', 'noop', null, 'restaurant') + secondary('שינויים בתפריט', 'noop', null, 'history') + '</div></div>' +
-            '<div class="k-expand' + (woOpen ? ' open' : '') + '"><button class="head" data-act="xp:wo"><b>אימונים</b><small>3 אימונים בשבוע</small></button>' +
-              (woOpen ? '<div class="body"><i class="k-div"></i>' + wvine + '<p class="k-missed">פספס אימון אחד השבוע</p>' + '<div class="k-aero">' + icon('run', 'bi v-coach') + '<b' + (S.aerobic >= 3 ? ' class="v-positive"' : '') + '>אירובי · ריצה · ' + S.aerobic + ' מתוך 3 השבוע</b></div>' +
-                secondary('התוכנית המלאה', 'noop', null, 'fitness') + secondary('שינויים בתוכנית', 'noop', null, 'history') + secondary('התקדמות בכוח', 'noop', null, 'chart') + secondary('משך האימונים', 'noop', null, 'timer') + '</div>' : '') + '</div>' +
-            panelTitle('משקל') + '<div class="k-infobox">' + chart(WEIGHTS.concat(S.weightLogged ? [76.5] : []), '#F07C1A', 120, WDATES) + rangePicker(['חודש', 'שבועיים', 'שבוע'], 'חודש', 'noop') +
+          var eatenToday = S.meals.filter(function (m) { return m.eaten; }).length;
+          body = '<h3 class="n-psec">תזונה</h3><div class="n-pcard"><div class="first">2000 קלוריות ליום</div>' + vine + '<div class="sum"><b>' + eatenToday + '</b><span>מתוך ' + S.meals.length + ' ארוחות היום</span></div><button class="more" data-act="noop">עוד' + icon('expand', 'bi') + '</button></div>' +
+            '<h3 class="n-psec later">משקל</h3><div class="k-infobox">' + chart(WEIGHTS.concat(S.weightLogged ? [76.5] : []), '#F07C1A', 120, WDATES) + rangePicker(['חודש', 'שבועיים', 'שבוע'], 'חודש', 'noop') +
               '<div class="k-curw" role="button" tabindex="0" data-act="noop"><small>משקל נוכחי</small><b>' + (S.weightLogged ? '76.5' : '76.8') + ' ק"ג</b></div>' + secondary('היסטוריית המשקל', 'noop', null, 'history', 'joined') + '</div>' +
-            panelTitle('היקפים') + '<div class="k-expand' + (ph.openMe ? ' open' : '') + '"><button class="head" data-act="xp:me"><b>היקפים</b><small>2 היקפים</small></button>' +
-              (ph.openMe ? '<div class="body"><i class="k-div"></i>' + [['מותן', '83.5 ס"מ', '▼', 'v-positive', '01/09/2026'], ['ירך', '58.8 ס"מ', '▼', 'v-positive', '01/09/2026']].map(function (m) { return '<div class="k-mtrack"><b>' + m[0] + '</b><span class="val"><b class="v-coach">' + m[1] + '</b><i class="' + m[3] + '">' + m[2] + '</i></span><small>מדידה אחרונה: ' + m[4] + '</small><i class="k-div"></i><div class="btns"><button class="k-compact secondary" data-act="noop">' + icon('chart', 'bi') + 'גרף</button><button class="k-compact secondary" data-act="noop">' + icon('history', 'bi') + 'היסטוריה</button></div></div>'; }).join('') + primary('+ הזנת מדידה', 'noop', 'coach') + '</div>' : '') + '</div>' +
-            panelTitle('הערות') + '<div class="k-infobox"><div class="k-noteshead"><small>הערות קבועות</small><button class="k-textlink" data-act="noop">' + icon('edit', 'bi') + 'ערוך</button></div><p class="k-notes">אלרגיה לאגוזים. אימונים ביתיים בלבד. פגישות בטלפון בלבד.</p></div>' +
-            '<div class="k-gap20"></div>' + primary("לצ'אט", 'go:thread', 'coach');
+            '<h3 class="n-psec later">הערות</h3><div class="k-infobox"><div class="k-noteshead"><small>הערות קבועות</small><button class="k-textlink" data-act="noop">' + icon('edit', 'bi') + 'ערוך</button></div><p class="k-notes">אלרגיה לאגוזים. אימונים ביתיים בלבד. פגישות בטלפון בלבד.</p></div>';
         } else if (tab === 'connection') {
-          body = (S.traineeRequestSent ? panelTitle('בקשות') + card('<div class="k-tags">' + statusTag('ממתין לאישורך', 'coach') + '</div>' + heading('עדכון תפריט') + factPair(inline('שעה', '18:00'), inline('משך', '30 דקות')) + '<div class="k-center">' + inline('פלטפורמה', 'טלפון') + '</div><div class="k-received">התקבלה: 09/09 · ' + now() + '</div>' + '<div class="k-center">' + pill('לפרטי הפגישה', 'event-note', 'sheet:coord2') + '</div>', 'request', 'sheet:coord2') : '') +
-            panelTitle('פגישה קרובה') + meetingCard('daniel', { tags: S.attendance ? [['אישר הגעה ✓', 'ok']] : [] }) +
-            panelTitle('פגישה חוזרת') + '<div class="k-infobox"><div class="k-row-ic">' + icon('repeat', 'bi v-coach') + '<b>כל שבוע · שני · 10:00 · טלפון</b></div></div>' +
-            panelTitle('היסטוריית פגישות') + '<div class="k-infobox"><div class="k-center">' + inline('התקיימו', '4') + '</div><i class="k-div"></i><button class="k-door" data-act="noop">' + icon('history', 'bi v-muted') + '<b>4 פגישות</b>' + icon('chev-l', 'bi v-muted') + '</button></div>' +
-            panelTitle('תזכורת קצרה') + '<div class="k-infobox"><small class="k-hint center">הערה פרטית שלך על הלקוח. המתאמן לא רואה אותה.</small><p class="k-center">לוודא עדכון משקל לפני הפגישה ביום שני</p><div class="k-center"><button class="k-compact secondary" data-act="noop">' + icon('edit', 'bi') + 'עריכה</button></div></div>' +
-            '<div class="k-gap20"></div>' + primary("לצ'אט", 'go:thread', 'coach');
+          body = (S.traineeRequestSent ? '<h3 class="n-psec">בקשות</h3>' + requestCard2({ cl: cl, off: 2, status: 'ממתין לאישורך', topic: 'עדכון תפריט', time: '18:00', dur: 30, platform: 'טלפון', received: dm(0) + ' · ' + now(), act: 'sheet:coord2' }) : '') +
+            '<h3 class="n-psec">פגישה קרובה</h3>' + meetingCard2('daniel', { tags: S.attendance ? tag('אישר הגעה ✓', 'ok') : '' }) +
+            '<h3 class="n-psec later">פגישה חוזרת</h3><div class="k-infobox"><div class="k-row-ic">' + icon('repeat', 'bi v-coach') + '<b>כל שבוע · ' + MEETINGS.danielrec.wd + ' · 10:00 · טלפון</b></div></div>' +
+            '<h3 class="n-psec later">תזכורת קצרה</h3><div class="k-infobox"><small class="k-hint center">הערה פרטית שלך על הלקוח. המתאמן לא רואה אותה.</small><p class="k-center">לוודא עדכון משקל לפני הפגישה</p></div>';
         } else {
-          body = panelTitle('מבנה תשלום') + '<div class="k-infobox"><div class="k-center">' + inline('שם התבנית', 'מנוי סטנדרטי') + '</div>' + factPair(inline('תדירות תשלום', 'כל חודש'), inline('יום החיוב', '15')) + factPair(inline('תשלום הבא', S.danielPaid ? '15/10/2026' : '15/09/2026')) +
-            '<i class="k-div"></i><div class="k-center">' + inline('סבב החיוב הנוכחי', 'ספטמבר 2026') + '</div><div class="k-center">' + (S.danielPaid ? badge('שולם', 'ok') : badge('טרם שולם', 'noInfo')) + '</div><p class="k-center muted">' + (S.danielPaid ? 'התשלום הבא ב-15/10/2026' : 'התשלום הבא בעוד 6 ימים') + '</p>' +
-            (S.danielPaid ? '' : '<i class="k-div"></i><div class="k-center"><b class="k-ts">רישום תשלום</b></div>' + primary('רשום תשלום', 'sheet:pay', 'coach', 'receipt')) + '</div>' +
-            (S.danielPaid ? '<div class="k-infobox"><div class="k-confirm"><span class="ring">' + icon('check', 'bi') + '</span><b>התשלום נרשם</b><small>ביט · 09/09/2026</small></div><div class="k-center">' + inline('אמצעי תשלום', 'ביט') + '</div><div class="k-center">' + inline('לאיזה חודש', 'ספטמבר 2026') + '</div>' + secondary('מחק את הרישום', 'noop', null, 'close') + '</div>' : '') +
-            secondary('היסטוריית תשלומים (11)', 'noop', null, 'history') + '<div class="k-gap8"></div>' + primary("לצ'אט", 'go:thread', 'coach');
+          body = '<h3 class="n-psec">מבנה תשלום</h3><div class="n-card">' + facts([['סכום תשלום', '800 ₪'], ['מועד התשלום', '15/' + two(dayAt(0).getMonth() + 1) + '/' + dayAt(0).getFullYear()], ['שולם', S.danielPaid ? '800 ₪' : '0 ₪'], ['חוב מחודשים קודמים', '0 ₪']], 2) +
+            '<div class="n-gap16"></div><div class="n-center">' + (S.danielPaid ? tag('שולם ✓', 'paid') : tag('טרם שולם', 'quiet')) + '</div>' +
+            (S.danielPaid ? '' : '<div class="n-gap16"></div>' + '<button class="n-big coach" data-act="sheet:pay">' + icon('receipt', 'bi') + 'רשום תשלום</button>') + '</div>' +
+            secondary('היסטוריית תשלומים (11)', 'noop', null, 'history');
         }
-        return '<div class="k-profile">' + head + hero + tabs + '<div class="k-panel">' + body + '</div></div>';
+        return '<div class="k-profile">' + head + hero + alert + tabs + '<div class="n-ppanel">' + body + '</div></div>';
       },
-      chat: function () {
+      chat: function (ph) {
         var rows = [
-          { cl: client('or'), pv: 'סיימתי את האימון של היום, היה קשה 😅', t: 'אתמול', n: 0 },
           { cl: client('daniel'), pv: lastDanielPreview(), t: S.chat[S.chat.length - 1].time, n: S.unreadByTrainer, online: true, act: 'go:thread' },
-          { cl: client('michal'), pv: 'אישרתי את הפגישה ליום שני 👍', t: '09:12', n: 0 },
-          { cl: client('ron'), pv: 'תיאום פגישה · ' + (S.ronPending ? 'ממתין לאישור המאמן' : 'אושרה ✓'), t: 'אתמול', n: S.ronUnread },
+          { cl: client('ron'), pv: 'תיאום פגישה · ' + (S.ronPending ? 'ממתין לאישורך' : 'אושרה ✓'), t: 'אתמול', n: S.ronUnread },
+          { cl: client('or'), pv: 'סיימתי את האימון של היום, היה קשה 😅', t: 'אתמול', n: 0 },
+          { cl: client('michal'), pv: 'אישרתי את הפגישה ליום ' + MEETINGS.michal.wd + ' 👍', t: '09:12', n: 0 },
           { cl: client('shira'), pv: 'תיאום פגישה · הצעת חלופית - ממתין לאישור', t: 'אתמול', n: 0 }
         ];
-        return screenTitle("צ'אט") + search('חפש לפי שם...') + filterToggle('הכל', 'noop') +
-          rows.map(function (r) {
-            return card('<div class="k-crow chat"><span class="avwrap">' + cav(r.cl, 46, 'trainee') + (r.online ? '<i class="online"></i>' : '') + '</span><span class="col"><b>' + r.cl.name + '</b><small>' + esc(r.pv) + '</small></span><span class="meta"><time>' + r.t + '</time>' + (r.n ? '<span class="k-count-badge">' + r.n + '</span>' : '') + '</span></div>', 'chatrow', r.act || 'noop');
+        var unreadOnly = ph.chatSeg === 'unread', nUnread = rows.filter(function (r) { return r.n; }).length;
+        return screenTitle("צ'אט") + '<div class="k-gap8"></div>' + '<div class="n-segrow">' + seg([['all', 'הכל', rows.length], ['unread', 'לא נקראו', nUnread]], unreadOnly ? 'unread' : 'all', 'chatseg') + '</div>' +
+          rows.filter(function (r) { return !unreadOnly || r.n; }).map(function (r) {
+            return '<div class="n-card n-chatrow" role="button" tabindex="0" data-act="' + (r.act || 'noop') + '"><span class="avw">' + bigAv(r.cl, 46) + (r.online ? '<i class="online"></i>' : '') + '</span><span class="txt"><b>' + r.cl.name + '</b><span>' + esc(r.pv) + '</span></span><span class="meta"><time>' + r.t + '</time>' + (r.n ? '<i class="n-cpill coach">' + r.n + '</i>' : '') + '</span></div>';
           }).join('');
       },
       thread: function (ph) {
         var preset = trainerPresets[ph.presetIdx % trainerPresets.length];
-        return '<div class="k-thead"><button class="k-iconbtn" data-act="go:chat" aria-label="חזרה">' + icon('back', 'bi') + '</button><button class="who" data-act="go:profile">' + cav(client('daniel'), 40, 'trainee') + '<b>דניאל כהן</b></button></div>' +
+        return '<div class="n-chead"><button class="back" data-act="go:chat" aria-label="חזרה">' + icon('arrow', 'bi') + '</button><button class="who" data-act="go:profile" style="display:flex;align-items:center;gap:calc(12px * var(--k));flex:1">' + av(client('daniel').c, client('daniel').ini, 40, 'trainee', null, 'daniel') + '<span class="col"><b>דניאל כהן</b><small>מחובר עכשיו</small></span></button></div>' +
           '<div class="k-bubbles">' + S.chat.map(function (m) { return bubble(m, 'trainer'); }).join('') + '</div>' +
-          '<div class="k-input"><span class="field">' + esc(preset) + '</span>' + icon('photo', 'bi v-muted') + '<button class="send v-coach" data-act="send:trainer" aria-label="שלח">' + icon('send', 'bi') + '</button></div>';
+          '<div class="n-composer"><span class="field"><span>' + esc(preset) + '</span>' + icon('photo', 'bi') + '</span><button class="send" data-act="send:trainer" aria-label="שלח">' + icon('send', 'bi') + '</button></div>';
       },
       meetings: function (ph) {
         var cat = ph.meetCat || 'upcoming', open = !!ph.catOpen;
-        var bar = catBar([['upcoming', 'event', 'נקבעו'], ['requests', 'inbox', 'בקשות', cat === 'requests' && (ph.reqFilter || 'trainees') === 'trainees' ? 'trainee' : 'coach'], ['history', 'history', 'היסטוריה']], cat, 'mcat', open);
+        var bar = '<div class="n-catwrap">' + catBar([['upcoming', 'event', 'נקבעו'], ['requests', 'inbox', 'בקשות'], ['history', 'history', 'היסטוריה']], cat, 'mcat', open) + '</div>';
         var body = '';
         if (cat === 'upcoming') {
-          body = sectionTitle('קרובות — לפי הסדר') + meetingCard('michal') + meetingCard('yossi') + meetingCard('daniel', { tags: S.attendance ? [['אישר הגעה ✓', 'ok']] : [] }) +
-            '<div class="k-gap8"></div>' + sectionTitle('פגישות קבועות') + meetingCard('danielrec');
+          body = sectionTitle('קרובות — לפי הסדר') + meetingCard2('michal') + meetingCard2('yossi') + meetingCard2('daniel', { tags: S.attendance ? tag('אישר הגעה ✓', 'ok') : '' }) +
+            '<div class="k-gap8"></div>' + sectionTitle('פגישות קבועות') + meetingCard2('danielrec');
         } else if (cat === 'requests') {
           var f = ph.reqFilter || 'trainees';
-          body = filterToggle(f === 'trainees' ? 'בקשות מתאמנים' : 'בקשות שלי', 'mfilter', f === 'trainees' ? 'trainee' : 'coach') +
+          body = '<div class="n-segrow">' + seg([['trainees', 'בקשות מתאמנים', requestsCount()], ['mine', 'בקשות שלי', 1]], f, 'mseg') + '</div>' +
             (f === 'trainees'
-              ? (S.traineeRequestSent ? requestCard({ cl: client('daniel'), dd: '16', mon: 'ספט׳', status: 'ממתין לאישורך', color: 'coach', topic: 'עדכון תפריט', time: '18:00', dur: 30, platform: 'טלפון', received: '09/09 · ' + now(), act: 'sheet:coord2' }) : '') +
-                (S.ronPending ? requestCard({ cl: client('ron'), dd: '17', mon: 'ספט׳', status: 'ממתין לאישורך', color: 'coach', topic: 'עדכון תוכנית אימונים', time: '08:30', dur: 30, platform: 'טלפון', received: '08/09 · 09:40' }) : '') +
-                requestCard({ cl: client('shira'), dd: '21', mon: 'ספט׳', status: 'הצעת חלופית - ממתין לאישורך', color: 'coach', topic: 'פגישת היכרות + מדידות ראשוניות', time: '11:00', dur: 60, platform: 'פרונטלי', place: 'הסטודיו, רחוב הרצל 5', received: '08/09 · 14:20', act: 'noop' }) +
-                requestCard({ cl: client('daniel'), dd: '09', mon: 'ספט׳', status: 'פגה', color: 'muted', topic: 'שאלה על התפריט', time: '08:00', dur: 30, platform: 'טלפון', received: '06/09 · 21:15', act: 'noop' })
-              : requestCard({ cl: client('daniel'), dd: '13', mon: 'ספט׳', status: S.proposalApproved ? 'אושרה ✓' : 'ממתין לאישור המתאמן', color: S.proposalApproved ? 'positive' : 'coach', topic: 'בדיקת התקדמות', time: '17:30', dur: 45, platform: 'טלפון', received: '09/09 · 13:55', act: 'noop' }));
+              ? (S.traineeRequestSent ? requestCard2({ cl: client('daniel'), off: 2, status: 'ממתין לאישורך', topic: 'עדכון תפריט', time: '18:00', dur: 30, platform: 'טלפון', received: dm(0) + ' · ' + now(), act: 'sheet:coord2' }) : '') +
+                (S.ronPending ? requestCard2({ cl: client('ron'), off: 1, status: 'ממתין לאישורך', topic: 'עדכון תוכנית אימונים', time: '08:30', dur: 30, platform: 'טלפון', received: dm(-1) + ' · 09:40' }) : '') +
+                requestCard2({ cl: client('shira'), off: 5, status: 'הצעת חלופית - ממתין לאישורך', topic: 'פגישת היכרות + מדידות ראשוניות', time: '11:00', dur: 60, platform: 'פרונטלי', place: 'הסטודיו, רחוב הרצל 5', received: dm(-1) + ' · 14:20', act: 'noop' })
+              : requestCard2({ cl: client('daniel'), off: 3, status: S.proposalApproved ? 'אושרה ✓' : 'ממתין לאישור המתאמן', cls: S.proposalApproved ? 'ok' : 'big', topic: 'בדיקת התקדמות', time: '17:30', dur: 45, platform: 'טלפון', received: dm(0) + ' · 13:55', act: 'noop' }));
         } else {
-          body = search('חפש לפי שם...') + '<div class="k-gap12"></div>' + meetingCard('orh', { tags: [['התקיימה', 'ok']] }) + meetingCard('danielh', { tags: [['התקיימה', 'ok']] });
+          body = search('חפש לפי שם...') + meetingCard2('orh', { tags: tag('התקיימה', 'ok'), act: 'noop' }) + meetingCard2('danielh', { tags: tag('התקיימה', 'ok'), act: 'noop' });
         }
-        return screenTitle('פגישות') + bar + '<div class="k-gap12"></div>' + body;
+        return screenTitle('פגישות') + '<div class="k-gap8"></div>' + bar + body;
       },
       payments: function (ph) {
         var cat = ph.payCat || 'month', open = !!ph.catOpen;
-        var bar = catBar([['month', 'payments', 'החודש'], ['history', 'history', 'תשלומים אחרונים']], cat, 'pcat', open);
+        var bar = '<div class="n-catwrap">' + catBar([['month', 'payments', 'החודש'], ['history', 'history', 'תשלומים אחרונים']], cat, 'pcat', open) + '</div>';
+        var due = '15/' + two(dayAt(0).getMonth() + 1) + '/' + dayAt(0).getFullYear();
+        var P = {
+          or: ['טרם שולם', 'quiet', '800 ₪', '0 ₪', '0 ₪'], daniel: S.danielPaid ? ['שולם ✓', 'paid', '800 ₪', '800 ₪', '0 ₪'] : ['טרם שולם', 'quiet', '800 ₪', '0 ₪', '0 ₪'],
+          yossi: ['באיחור', 'bad', '650 ₪', '0 ₪', '650 ₪'], ron: ['טרם שולם', 'quiet', '700 ₪', '0 ₪', '0 ₪'], michal: null, shira: null };
         var body;
         if (cat === 'month') {
-          var st = { or: ['שולם ✓', 'ok'], daniel: S.danielPaid ? ['שולם ✓', 'ok'] : ['טרם שולם', 'noInfo'], yossi: ['באיחור', 'needs'], michal: ['לא הוגדר עדיין', 'noInfo'], shira: ['לא הוגדר עדיין', 'noInfo'], ron: ['אין מידע', 'noInfo'] };
-          body = '<p class="k-context">המידע בדף הוא על החודש הנוכחי</p>' + search('חפש לפי שם...') + filterToggle('כולם', 'noop') + '<div class="k-count">כל 6 הלקוחות</div>' +
-            CLIENTS.map(function (cl) {
-              return card('<div class="k-payhead">' + cav(cl, 46, 'trainee') + '<b>' + cl.name + '</b><span class="sp"></span></div><div class="k-center">' + badge(st[cl.id][0], st[cl.id][1]) + '</div><div class="k-center">' + pill('ערוך פרטים', 'edit', cl.id === 'daniel' ? 'go:profile:payments' : 'noop') + '</div>', 'pay', cl.id === 'daniel' ? 'go:profile:payments' : 'noop');
+          var unpaid = CLIENTS.filter(function (c) { var p = P[c.id]; return p && p[1] !== 'paid'; }).length, onlyUnpaid = ph.paySeg !== 'all';
+          body = '<p class="n-month">' + monthYear() + '</p>' + search('חפש לפי שם...') + '<div class="n-segrow">' + seg([['unpaid', 'לא שילמו', unpaid], ['all', 'כולם', CLIENTS.length]], onlyUnpaid ? 'unpaid' : 'all', 'payseg') + '</div>' +
+            CLIENTS.filter(function (c) { var p = P[c.id]; return !onlyUnpaid || (p && p[1] !== 'paid'); }).map(function (cl) {
+              var p = P[cl.id], act = cl.id === 'daniel' ? 'go:profile:payments' : 'noop';
+              if (!p) return clientCard(cl, { tag: tag('לא הוגדר עדיין', 'quiet'), body: '<div class="n-gap16"></div>' + opens('הגדרת תשלום', 'edit', act) }, act);
+              return clientCard(cl, { tag: tag(p[0], p[1]), body: '<div class="n-gap16"></div>' + facts([['סכום תשלום', p[2]], ['מועד התשלום', due], ['שולם', p[3]], ['חוב מחודשים קודמים', p[4], p[4] !== '0 ₪' ? 'neg' : '']], 2) + '<div class="n-gap16"></div>' + opens('לתשלומי הלקוח', 'payments', act) }, act);
             }).join('');
         } else {
-          body = '<p class="k-context">כל התשלומים שנרשמו, מהאחרון</p>' + search('חפש לפי שם...') + '<div class="k-gap12"></div>' +
-            (S.danielPaid ? card(clientHeader(client('daniel'), '09', 'ספט׳') + '<div class="k-center">' + inline('אמצעי תשלום', 'ביט') + '</div><div class="k-center">' + inline('לאיזה חודש', 'ספטמבר 2026') + '</div><div class="k-center">' + pill('היסטוריית תשלומים', 'receipt', 'noop') + '</div>', 'meeting', 'noop') : '') +
-            card(clientHeader(client('or'), '01', 'ספט׳') + '<div class="k-center">' + inline('אמצעי תשלום', 'העברה בנקאית') + '</div><div class="k-center">' + inline('לאיזה חודש', 'ספטמבר 2026') + '</div><div class="k-center">' + pill('היסטוריית תשלומים', 'receipt', 'noop') + '</div>', 'meeting', 'noop') +
-            card(clientHeader(client('yossi'), '15', 'אפר׳') + '<div class="k-center">' + inline('אמצעי תשלום', 'אשראי') + '</div><div class="k-center">' + inline('לאיזה חודש', 'אפריל – יוני 2026') + '</div><div class="k-center">' + pill('היסטוריית תשלומים', 'receipt', 'noop') + '</div>', 'meeting', 'noop');
+          body = '<p class="n-month">כל התשלומים שנרשמו, מהאחרון</p>' + search('חפש לפי שם...') +
+            (S.danielPaid ? clientCard(client('daniel'), { tag: tag('שולם ✓', 'paid'), body: '<div class="n-gap16"></div>' + facts([['אמצעי תשלום', 'ביט'], ['לאיזה חודש', monthYear()]], 2) }, 'noop') : '') +
+            clientCard(client('or'), { tag: tag('שולם ✓', 'paid'), body: '<div class="n-gap16"></div>' + facts([['אמצעי תשלום', 'העברה בנקאית'], ['לאיזה חודש', MONTHS[dayAt(-31).getMonth()] + ' ' + dayAt(-31).getFullYear()]], 2) }, 'noop');
         }
-        return screenTitle('תשלומים') + bar + '<div class="k-gap12"></div>' + body;
+        return screenTitle('תשלומים') + '<div class="k-gap8"></div>' + bar + body;
       }
     }
   };
 
   /* ── ממשק המתאמן ───────────────────────────────────────────────────── */
+  function mealOpenBody(m) {
+    var mi = S.meals.indexOf(m);
+    var parts = m.groups.map(function (g, gi) {
+      var choosable = !g.free && g.items.length > 1, chosen = S.choice[mi + ':' + gi];
+      if (!choosable) return '<p class="n-free"><b>' + g.type + ' · </b>' + (g.free ? 'חופשי — כמה שבא לך' + (g.items[0][0] !== 'סלט ירקות' ? ': ' + g.items[0][0] : '') : g.items[0][0] + ' ' + g.items[0][1] + ' גרם') + '</p>';
+      var n = g.items.length <= 3 ? g.items.length : 2;
+      return '<div class="n-ghead">' + g.type + ' · בחר אחד</div><div class="n-opts' + (chosen !== undefined ? ' picked' : '') + '" style="--n:' + n + '">' + g.items.map(function (it, ii) {
+        return '<button class="n-opt' + (chosen === ii ? ' on' : '') + '" data-act="choose:' + mi + ':' + gi + ':' + ii + '">' + (chosen === ii ? icon('check', 'bi ck') : '') + '<b>' + it[0] + '</b><small>' + it[1] + ' גרם</small></button>';
+      }).join('') + '</div>';
+    }).join('');
+    var t = mealMacros(m);
+    var macros = '<div class="n-macros">' + [['חלבון', t.p, 'גרם'], ['פחמימה', t.c, 'גרם'], ['שומן', t.f, 'גרם'], ['קלוריות', t.k, '']].map(function (x) { return '<span class="m"><small>' + x[0] + '</small><b>' + x[1] + (x[2] ? ' <i>' + x[2] + '</i>' : '') + '</b></span>'; }).join('') + '</div>';
+    return { parts: parts, macros: macros };
+  }
+  function mealLate(m) { var end = m.time.split('–')[1]; if (!end) return ''; var hm = end.split(':'), d = new Date(), e = new Date(); e.setHours(+hm[0], +hm[1], 0, 0); return d > e ? '<p class="n-late">הזמן המומלץ עבר ב-' + end + ' — אפשר לסמן גם עכשיו.</p>' : ''; }
+  function shelf(ic, voice, title, line, act, extra) { return '<button class="n-shelf" data-act="' + act + '"><span class="lead">' + icon(ic, 'bi ' + voice) + '</span><span class="txt"><b>' + title + '</b>' + (line ? '<span>' + line + '</span>' : '') + '</span>' + (extra || '') + icon('expand', 'bi chev') + '</button>'; }
+
   var trainee = {
     tabs: [['today', 'today', 'בית'], ['nutrition', 'restaurant', 'תזונה'], ['workouts', 'fitness', 'אימונים'], ['meetings', 'calendar', 'פגישות'], ['chat', 'chat', "צ'אט"]],
     topbar: function (ph) {
       if (ph.screen === 'chat' || ph.screen === 'workout') return '';
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
         '<button class="k-tbtn" aria-label="התראות">' + icon('bell', 'bi v-trainee') + (S.unreadByTrainee || !S.proposalApproved ? '<i class="k-dot"></i>' : '') + '</button>' +
+        '<button class="k-tbtn" data-act="flip" aria-label="מעבר לממשק המאמן">' + icon('swap', 'bi v-system') + '</button>' +
         (/nutrition|workouts|meetings/.test(ph.screen) ? '<button class="k-tbtn" aria-label="הגדרות">' + icon('settings', 'bi v-system') + '</button>' : '') +
         '<span class="k-me ring-trainee pic" aria-hidden="true"><i><svg class="k-face" viewBox="0 0 100 100"><use href="#a-daniel"/></svg></i></span>';
     },
     screens: {
       today: function (ph) {
-        var nm = nextMeal(), le = lastEaten();
-        var rows = [];
-        if (S.unreadByTrainee) rows.push('<button class="k-trow" data-act="go:chat">' + icon('campaign', 'bi v-coach') + '<span class="col"><small>הודעה מהמאמן</small><b>' + esc(lastTrainerText()) + '</b></span><span class="k-count-badge">' + S.unreadByTrainee + '</span></button>');
-        rows.push('<button class="k-trow" data-act="go:workouts">' + (S.workoutDone ? icon('check-circle-fill', 'bi v-trainee') : icon('fitness', 'bi v-coach')) + '<span class="col"><small>האימון של היום</small><b>אימון A – חזה + כתפיים' + (S.workoutDone ? ' · השלמת את האימון היום ✓' : '') + '</b></span></button>');
-        if (!S.weightLogged) rows.push('<button class="k-trow" data-act="weight">' + icon('weight', 'bi v-attention') + '<span class="col"><small>הזנת משקל</small><b>מומלץ לעדכן משקל השבוע</b></span></button>');
-        var todayCard = card(rows.join('<i class="k-div"></i>'), 'today');
-        var mealCard;
-        if (!nm) mealCard = card('<div class="k-empty compact stack">' + icon('check-circle', 'bi v-trainee') + '<b>סיימת את כל הארוחות של היום! הארוחה הבאה תהיה מחר.</b></div>', 'meal');
-        else if (le && ph.split) mealCard = card('<div class="k-split"><div class="half"><small>אכלת</small><b class="muted">' + le.name + '</b><span class="done">' + icon('check-circle-fill', 'bi v-trainee') + 'נאכל ✓</span></div><i class="vdiv"></i><div class="half"><span class="k-voicepill">' + icon('arrow', 'bi') + 'הארוחה הבאה</span><b>' + nm.name + '</b><small>מתי כדאי לאכול: ' + nm.time + '</small><button class="k-eat compact" data-act="eatnext">' + icon('check-circle', 'bi') + 'סמן גם אותה</button></div></div>', 'meal split');
-        else mealCard = card('<span class="k-voicepill">' + icon('arrow', 'bi') + 'הארוחה הבאה</span><b class="k-mealname">' + nm.name + '</b><span class="k-mealtime">' + icon('schedule', 'bi v-coach') + 'מתי כדאי לאכול: ' + nm.time + '</span>' + sources(nm, S.meals.indexOf(nm)) + macroCells(nm) + '<button class="k-eat" data-act="eatnext">' + icon('check-circle', 'bi') + 'סמן שאכלת</button>', 'meal');
-        var cat = ph.carousel || 'weight';
-        var carousel = segPills([['weight', 'משקל גוף'], ['measures', 'היקפים'], ['strength', 'כוח']], cat, 'car') + pane(cat, ph, 'var_' + cat);
-        return '<div class="k-gap8"></div>' + groupHeading('היום') + todayCard + '<div class="k-gap12"></div>' + mealCard + '<div class="k-gap24"></div>' + groupHeading('מעקב התקדמות') + carousel + FOOTNOTE;
+        var eaten = S.meals.filter(function (m) { return m.eaten; }).length, total = S.meals.length, nm = nextMeal();
+        var sel = ph.tTile || 'meals';
+        var tiles = [['meals', eaten + '<small>/' + total + '</small>', 'ארוחות היום', null, eaten === total], ['workouts', (S.workoutDone ? 1 : 0) + '<small>/3</small>', 'אימונים השבוע'], ['weight', '<i>ק"ג</i>' + (S.weightLogged ? '76.5' : '76.8'), 'משקל', null, S.weightLogged]];
+        var out = '';
+        if (S.unreadByTrainee) out += shelf('campaign', 'v-coach', 'הודעה מהמאמן', esc(lastTrainerText()), 'go:chat', '<i class="n-cpill coach">' + S.unreadByTrainee + '</i>');
+        // הארוחה
+        if (sel === 'meals') {
+          if (nm) { var b = mealOpenBody(nm); out += '<div class="n-open"><div class="n-slbl">' + icon('restaurant', 'bi v-coach') + 'הארוחה הבאה</div><div class="n-mrow"><b>' + nm.name + '</b><span class="n-tchip">' + icon('schedule', 'bi v-coach') + nm.time + '</span></div>' + mealLate(nm) + b.parts + '<button class="n-eat" data-act="eatnext">' + icon('check-circle', 'bi') + 'סמן שאכלת</button>' + b.macros + door('restaurant', 'לתפריט המלא', 'go:nutrition') + '</div>'; }
+          else out += '<div class="n-open nofoot"><div class="n-slbl">' + icon('restaurant', 'bi v-coach') + 'הארוחות של היום</div><p class="n-late" style="font-size:calc(15px * var(--k));color:var(--ink)">סיימת את כל הארוחות של היום. הארוחה הבאה תהיה מחר.</p>' + door('restaurant', 'לתפריט המלא', 'go:nutrition') + '</div>';
+        } else out += shelf('restaurant', 'v-coach', nm ? nm.name : 'הארוחות של היום', nm ? 'הארוחה הבאה · ' + nm.time : 'סיימת את כל הארוחות של היום', 'ttile:meals');
+        // האימון
+        var woName = S.workoutDone ? 'אימון C – רגליים' : 'אימון A – חזה + כתפיים', woLine = 'המאמן קבע: ' + wd(-1) + ' עד ' + wd(1);
+        if (sel === 'workouts') out += '<div class="n-open nofoot"><div class="n-slbl">' + icon('fitness', 'bi v-coach') + 'האימון הבא</div><div class="n-mrow"><b>' + woName + '</b></div><p class="n-late">' + (S.workoutDone ? 'השלמת את האימון היום ✓' : woLine) + '</p><div class="n-gap16"></div>' + (S.workoutDone ? '' : '<button class="n-big" data-act="go:workout">' + icon('play', 'bi') + 'התחל אימון</button>') + '</div>';
+        else out += shelf('fitness', 'v-coach', woName, S.workoutDone ? 'השלמת את האימון היום ✓' : woLine, 'ttile:workouts');
+        // השקילה
+        if (!S.weightLogged) {
+          if (sel === 'weight') out += '<div class="n-open nofoot"><div class="n-slbl">' + icon('weight', 'bi v-attention') + 'שקילה</div><div class="n-mrow"><b>מחכה מאתמול</b></div><p class="n-late">המאמן שלך ביקש שקילה פעם בשבוע.</p><div class="n-gap16"></div><button class="n-big" data-act="weight">' + icon('weight', 'bi') + 'הזנת משקל</button></div>';
+          else out += shelf('weight', 'v-attention', 'שקילה', 'מחכה מאתמול', 'ttile:weight');
+        }
+        var prows = '<div class="n-prows">' + [['weight', 'משקל גוף', (S.weightLogged ? '76.5' : '76.8') + ' ק"ג', 'ttile:weight'], ['chart', 'היקפים', 'מותן 83.5 ס"מ', 'go:nutrition'], ['fitness', 'כוח', '+18%', 'go:workouts']].map(function (r) {
+          return '<button class="n-prow" data-act="' + r[3] + '">' + icon(r[0], 'bi') + '<b>' + r[1] + '</b><span>' + r[2] + '</span>' + icon('chev-l', 'bi chev') + '</button>';
+        }).join('') + '</div>';
+        return '<div class="n-greet"><h2>' + greet() + ', דניאל</h2><p>' + waitLine() + '</p></div>' + counter(tiles, sel, 'ttile', true) + out +
+          '<h3 class="n-sech" style="margin-top:calc(22px * var(--k))">מעקב התקדמות</h3>' + prows + '<p class="n-fnote">הגרפים נבנים מהנתונים שמוזנים — שלך ושל המאמן. ככל שמזינים יותר, הם ברורים ומדויקים יותר.</p>';
       },
       nutrition: function (ph) {
-        var nm = nextMeal();
-        var next = nm ? card('<b class="k-mealname sm">' + nm.name + '</b><small class="k-lbl">מתי כדאי לאכול: ' + nm.time + '</small>' + sources(nm, S.meals.indexOf(nm)) + macroCells(nm) + '<button class="k-eatctl" data-act="eatnext">סמן שאכלת</button>', 'meal hi')
-          : card('<div class="k-celebrate"><span class="big">' + icon('check', 'bi') + '</span><b>סיימת את כל הארוחות של היום! הארוחה הבאה תהיה מחר.</b></div>', 'meal hi');
+        var nm = nextMeal(), next;
+        if (nm) { var b = mealOpenBody(nm); next = '<div class="n-card" style="padding:calc(16px * var(--k))"><div class="n-mrow" style="margin:0"><b style="font-size:calc(20px * var(--k))">' + nm.name + '</b></div><p class="n-whenl">מתי כדאי לאכול: ' + nm.time + '</p><div class="n-gap8"></div>' + b.parts + '<div class="n-hr"></div>' + b.macros.replace('n-macros', 'n-macros" style="margin-top:0') + '<button class="n-eat" data-act="eatnext" style="margin-top:calc(16px * var(--k))">' + icon('check-circle', 'bi') + 'סמן שאכלת</button></div>'; }
+        else next = '<div class="n-card"><div class="k-celebrate"><span class="big">' + icon('check', 'bi') + '</span><b>סיימת את כל הארוחות של היום! הארוחה הבאה תהיה מחר.</b></div></div>';
         var tiles = S.meals.map(function (m, i) {
           var open = ph.openMeal === i;
-          return '<div class="k-tile' + (open ? ' open' : '') + '"><button class="head" data-act="xm:' + i + '"><span class="col"><b>' + m.name + '</b><small>' + kcalText(m) + ' · ' + m.time + '</small></span>' + (m.eaten ? icon('check-circle-fill', 'bi v-positive') : '') + icon('expand', 'bi v-faint chev') + '</button>' +
+          return '<div class="k-tile' + (open ? ' open' : '') + '"><button class="head" data-act="xm:' + i + '"><span class="col"><b>' + m.name + '</b><small>' + kcalText(m) + ' · ' + m.time + '</small></span>' + (m.eaten ? icon('check-circle-fill', 'bi v-trainee') : '') + icon('expand', 'bi v-faint chev') + '</button>' +
             (open ? '<div class="body"><i class="k-div"></i>' + sources(m, i) + (m.eaten ? '<div class="k-eatrow"><span class="eaten">' + icon('check-circle-fill', 'bi') + 'נאכל</span><button class="undo" data-act="uneat:' + i + '">הורד סימון</button></div>' : '<button class="k-eatctl" data-act="eat:' + i + '">סמן שאכלת</button>') + '</div>' : '') + '</div>';
         }).join('');
-        return screenTitle('תזונה') + '<p class="k-goalline">חיטוב · 2000 קלוריות</p><div class="k-gap20"></div>' + sectionTitle('הארוחה הבאה') + next +
-          '<div class="k-gap20"></div>' + sectionTitle('היקפים') + pane('measures', ph, 'var_measures') + FOOTNOTE +
-          '<div class="k-gap20"></div>' + sectionTitle('התפריט המלא') + '<p class="k-dayname">יום רגיל</p>' + tiles + '<div class="k-gap8"></div>' + secondary('עריכת סדר', 'noop', null, 'swap-v');
+        return screenTitle('תזונה') + '<p class="n-goal">חיטוב · 2000 קלוריות</p>' + sectionTitle('הארוחה הבאה') + next +
+          '<div class="k-gap8"></div>' + sectionTitle('היקפים') + pane('measures', ph, 'var_measures') + FOOTNOTE +
+          '<div class="k-gap20"></div>' + sectionTitle('התפריט המלא') + '<p class="k-dayname">יום רגיל</p>' + tiles;
       },
       workouts: function (ph) {
         var nextName = S.workoutDone ? 'אימון C – רגליים' : 'אימון A – חזה + כתפיים', nextMin = S.workoutDone ? 62 : 58;
-        var next = sectionTitle('האימון הבא') + card('<div class="k-row-ic top">' + icon('fitness', 'bi v-coach lg') + '<span class="col"><b class="k-mealname">' + nextName + '</b><small>לקח ' + nextMin + ' דקות בפעם הקודמת שביצעת אימון זה</small></span></div><div class="k-gap20"></div>' + primary('התחל אימון', S.workoutDone ? 'noop' : 'go:workout', 'trainee', 'play'));
+        var next = sectionTitle('האימון הבא') + '<div class="n-card" style="padding:calc(16px * var(--k));margin-bottom:0"><div class="n-wo">' + icon('fitness', 'bi') + '<span><b>' + nextName + '</b><small>לקח ' + nextMin + ' דקות בפעם הקודמת שביצעת אימון זה</small></span></div><div class="n-gap16"></div>' +
+          (S.workoutDone ? '<div class="k-donebar">' + icon('check-circle-fill', 'bi v-trainee') + 'השלמת את האימון היום</div>' : '<button class="n-big" data-act="go:workout">' + icon('play', 'bi') + 'התחל אימון</button>') + '</div>';
+        var left = 3 - S.aerobic;
+        var cardio = '<div class="n-cardio"><span class="ic">' + icon('run', 'bi') + '</span><span class="txt"><b>' + (left ? 'אירובי: נשארו ' + left + ' השבוע' : 'סיימת את האירובי השבוע ✓') + '</b><small>ריצה · 30 דק׳ בכל פעם</small><span class="n-dashes">' + [0, 1, 2].map(function (i) { return '<i' + (i < S.aerobic ? ' class="on"' : '') + '></i>'; }).join('') + '</span></span>' +
+          (left ? '<button data-act="sheet:aerobic">סמן שביצעת</button>' : '<button data-act="aerundo" style="background:var(--cardAlt);color:var(--ink)">הורד סימון</button>') + '</div>';
         var WOS = [['אימון A – חזה + כתפיים', '4 תרגילים', S.workoutDone, [['לחיצת חזה במוט', '4 סטים · 8–12 חזרות'], ['לחיצת כתפיים', '4 סטים · 8–12 חזרות'], ['פרפר בכבלים', '3 סטים · 12–15 חזרות'], ['פלאנק', '3 סטים · 45 שנ׳']]],
           ['אימון B – גב + זרועות', '3 תרגילים', true, [['מתח', '4 סטים · 6–10 חזרות'], ['חתירה בהרכנה', '4 סטים · 8–12 חזרות'], ['כפיפת מרפק', '3 סטים · 10–12 חזרות']]],
           ['אימון C – רגליים', '3 תרגילים', false, [['סקוואט', '5 סטים · 6–10 חזרות'], ['לחיצת רגליים', '4 סטים · 10–12 חזרות'], ['כפיפת ברך', '3 סטים · 12–15 חזרות']]]];
@@ -422,16 +515,10 @@
           var open = ph.openWo === i;
           return '<div class="k-tile' + (open ? ' open' : '') + '"><button class="head" data-act="xw:' + i + '"><span class="col"><b class="fd">' + w[0] + '</b><small>' + w[1] + '</small></span>' + (w[2] ? '<span class="k-donechip">' + icon('check-circle-fill', 'bi v-trainee') + 'בוצע השבוע</span>' : '') + icon('expand', 'bi v-faint chev') + '</button>' +
             (open ? '<div class="body"><i class="k-div"></i>' + w[3].map(function (e) { return '<div class="k-exrow">' + icon('chev-l', 'bi v-faint') + '<span>' + e[0] + '</span><small>' + e[1] + '</small></div>'; }).join('') + '<div class="k-gap8"></div>' +
-              (w[2] ? '<div class="k-donebar">' + icon('check-circle-fill', 'bi v-trainee') + 'בוצע השבוע</div>' : primary('התחל אימון', i === 0 ? 'go:workout' : 'noop', 'trainee', 'play')) + '</div>' : '') + '</div>';
+              (w[2] ? '<div class="k-donebar">' + icon('check-circle-fill', 'bi v-trainee') + 'בוצע השבוע</div>' : '<button class="n-big" data-act="' + (i === 0 ? 'go:workout' : 'noop') + '">' + icon('play', 'bi') + 'התחל אימון</button>') + '</div>' : '') + '</div>';
         }).join('');
-        var aero = S.aerobic >= 3
-          ? '<div class="k-aerorow"><div class="k-donebar">' + icon('check-circle-fill', 'bi v-trainee') + 'סיימת את האירובי השבוע</div><button class="k-undo pill" data-act="aerundo">הורד סימון</button></div>'
-          : '<div class="k-aerorow">' + primary('סמן שביצעת', 'sheet:aerobic', 'trainee') + (S.aerobic ? '<button class="k-undo pill" data-act="aerundo">הורד סימון</button>' : '') + '</div>';
-        var reported = S.aerobic ? '<small class="k-lbl2">מה שדיווחת</small><div class="k-chips">' + Array.apply(null, Array(S.aerobic)).map(function () { return '<span class="k-chip">30 דק׳</span>'; }).join('') + '</div>' : '';
-        return screenTitle('אימונים') + '<div class="k-gap20"></div>' + next + '<div class="k-gap20"></div>' + sectionTitle('התקדמות כוח') + pane('strength', ph, 'var_strength') + FOOTNOTE +
-          '<div class="k-gap12"></div>' + card('<div class="k-row-ic top">' + icon('note', 'bi v-trainee') + '<span class="col"><small class="lbl">הערה לעצמי · אימון A – חזה + כתפיים</small><b class="normal">להעלות משקל בלחיצת חזה בפעם הבאה</b></span></div>', 'selfnote') +
-          '<div class="k-gap20"></div>' + sectionTitle('האימונים שלי') + list + '<div class="k-gap20"></div>' + sectionTitle('אירובי') +
-          card('<div class="k-row-ic top">' + icon('run', 'bi v-coach lg') + '<span class="col"><b class="k-mealname">ריצה</b><small>ריצה · 3 פעמים בשבוע · 30 דק׳ בכל פעם</small></span></div>' + reported + '<div class="k-gap20"></div>' + aero);
+        return screenTitle('אימונים') + '<div class="k-gap12"></div>' + next + cardio + sectionTitle('התקדמות כוח') + pane('strength', ph, 'var_strength') + FOOTNOTE +
+          '<div class="k-gap20"></div>' + sectionTitle('האימונים שלי') + list;
       },
       workout: function (ph) {
         return '<div class="k-ahead"><button class="k-iconbtn" data-act="go:workouts" aria-label="חזרה">' + icon('back', 'bi') + '</button><b>אימון A – חזה + כתפיים</b><span class="k-timer">' + icon('timer', 'bi') + '07:12</span></div>' +
@@ -440,32 +527,32 @@
               '<button class="k-field num' + (ph.focusEx === i ? ' focus' : '') + '" data-act="set:' + i + '" aria-label="משקל"><small>משקל</small><b>' + (e.w === null ? '' : e.w) + '</b><i>ק"ג</i></button></div>';
           }).join('') +
           '<div class="k-note"><small>הערה לעצמי</small><span class="k-fieldbox">כתוב הערה...</span></div><div class="k-note"><small>הערה למאמן</small><span class="k-fieldbox">כתוב הערה...</span></div>' +
-          primary('סיים אימון', 'finish', 'trainee', 'check-circle') + '</div>';
+          '<button class="n-big" data-act="finish">' + icon('check-circle', 'bi') + 'סיים אימון</button></div>';
       },
       meetings: function (ph) {
         var cat = ph.tMeetCat || 'upcoming', open = !!ph.catOpen;
-        var bar = catBar([['upcoming', 'event', 'קרובות'], ['history', 'history', 'היסטוריה']], cat, 'ncat', open, 'trainee');
-        var banner = S.traineeRequestSent ? card('<div class="k-row-ic top">' + icon('info', 'bi v-coach') + '<span>יש לך כבר בקשת פגישה פתוחה — אפשר לפתוח בקשה חדשה אחרי שהמאמן יענה עליה</span></div><button class="k-disclose" data-act="noop">איך זה עובד?' + icon('expand', 'bi') + '</button>', 'block' + (ph.pulse ? ' pulse' : '')) : '';
+        var bar = '<div class="n-catwrap">' + catBar([['upcoming', 'event', 'קרובות'], ['history', 'history', 'היסטוריה']], cat, 'ncat', open, 'trainee') + '</div>';
+        var banner = S.traineeRequestSent ? card('<div class="k-row-ic top">' + icon('info', 'bi v-coach') + '<span>יש לך כבר בקשת פגישה פתוחה — אפשר לפתוח בקשה חדשה אחרי שהמאמן יענה עליה</span></div>', 'block' + (ph.pulse ? ' pulse' : '')) : '';
         var body;
         if (cat === 'upcoming') {
-          var m21 = function (hi) { return card(heading('בדיקת התקדמות + עדכון תפריט') + factPair(inline('תאריך', '21/09/2026'), inline('שעה', '10:00')) + factPair(inline('משך', '60 דקות'), inline('פלטפורמה', 'טלפון')) + (S.attendance ? '<p class="k-center good">אישרת שאתה מגיע ✓</p>' : '') + '<div class="k-center">' + pill('לפרטי הפגישה', 'event-note', 'sheet:meeting') + '</div>', 'meeting pad20' + (hi ? ' hi' : ''), 'sheet:meeting'); };
-          var m13 = function (hi) { return card(heading('בדיקת התקדמות') + factPair(inline('תאריך', '13/09/2026'), inline('שעה', '17:30')) + factPair(inline('משך', '45 דקות'), inline('פלטפורמה', 'טלפון')) + '<div class="k-center">' + pill('לפרטי הפגישה', 'event-note', 'noop') + '</div>', 'meeting pad20' + (hi ? ' hi' : ''), 'noop'); };
-          var openReqs = (S.proposalApproved ? '' : card('<div class="k-tags">' + statusTag('ממתין לאישורך', 'coach') + '</div>' + heading('בדיקת התקדמות') + factPair(inline('תאריך', '13/09/2026'), inline('שעה', '17:30')) + factPair(inline('משך', '45 דקות'), inline('פלטפורמה', 'טלפון')) +
-              '<div class="k-center">' + pill('לפרטי הפגישה', 'event-note', 'noop') + '</div><div class="k-actions"><div class="row">' + primary('אישור', 'approve', 'trainee') + secondary('דחייה', 'noop', 'trainee') + '</div>' + secondary('הצע פגישה חלופית', 'noop', 'trainee', 'edit-cal') + '</div>', 'request', 'noop')) +
-            (S.traineeRequestSent ? card('<div class="k-tags">' + statusTag('ממתין לאישור המאמן', 'coach') + '</div>' + heading('עדכון תפריט') + factPair(inline('תאריך', '16/09/2026'), inline('שעה', '18:00')) + factPair(inline('משך', '30 דקות'), inline('פלטפורמה', 'טלפון')) + '<div class="k-center">' + pill('לפרטי הפגישה', 'event-note', 'noop') + '</div><div class="k-actions">' + secondary('בטל', 'noop', 'trainee', 'close') + '</div>', 'request', 'noop') : '');
-          body = banner + (openReqs ? sectionTitle('בקשות פתוחות') + openReqs : '') +
-            sectionTitle('הפגישה הקרובה') + (S.proposalApproved ? m13(true) + sectionTitle('פגישות עתידיות') + m21(false) : m21(true)) +
-            sectionTitle('פגישה קבועה') + card(heading('פגישת מעקב') + factPair(inline('תאריך', '14/09/2026'), inline('שעה', '10:00')) + factPair(inline('משך', '30 דקות'), inline('פלטפורמה', 'טלפון')) + '<div class="k-center">' + pill('לפרטי הפגישה', 'event-note', 'noop') + '</div><i class="k-div"></i><p class="k-center muted">זו פגישה קבועה שנקבעה כל שבוע. יש עוד 8 כאלה ביומן שלך.</p>', 'meeting pad20', 'noop');
+          var m21 = MEETINGS.daniel, m13 = { off: 3, time: '17:30', dur: 45 };
+          var req = (S.proposalApproved ? '' : '<div class="n-card n-req" style="padding:calc(16px * var(--k))">' + tag('ממתין לאישורך', 'big') + '<div class="n-topic" style="margin-top:calc(8px * var(--k))">בדיקת התקדמות</div>' + facts([['תאריך', dmy(m13.off)], ['שעה', m13.time], ['משך', m13.dur + ' דקות'], ['פלטפורמה', 'טלפון']], 2) +
+              '<div class="n-gap16"></div>' + opens('לפרטי הפגישה', 'event-note', 'noop') + '<div class="n-acts"><div class="row"><button class="n-ok" data-act="approve">אישור</button><button class="n-no" data-act="noop">דחייה</button></div><button class="n-no" data-act="noop">' + icon('edit-cal', 'bi') + 'הצע פגישה חלופית</button></div></div>') +
+            (S.traineeRequestSent ? '<div class="n-card n-req" style="padding:calc(16px * var(--k))">' + tag('ממתין לאישור המאמן', 'big') + '<div class="n-topic" style="margin-top:calc(8px * var(--k))">עדכון תפריט</div>' + facts([['תאריך', dmy(2)], ['שעה', '18:00'], ['משך', '30 דקות'], ['פלטפורמה', 'טלפון']], 2) + '<div class="n-gap16"></div>' + opens('לפרטי הפגישה', 'event-note', 'noop') + '<div class="n-acts"><button class="n-no" data-act="noop">' + icon('close', 'bi') + 'בטל</button></div></div>' : '');
+          var soon = function (topic, off, time, dur) { return '<div class="n-soon" role="button" tabindex="0" data-act="sheet:meeting"><div class="n-topic" style="margin:0">' + topic + '</div>' + facts([['תאריך', dmy(off)], ['שעה', time], ['משך', dur + ' דקות'], ['פלטפורמה', 'טלפון']], 2) + (S.attendance ? '<p class="k-center good">אישרת שאתה מגיע ✓</p>' : '') + '<div class="n-gap16"></div>' + opens('לפרטי הפגישה', 'event-note', 'sheet:meeting') + '</div>'; };
+          body = banner + (req ? sectionTitle('בקשות פתוחות') + req : '') + sectionTitle('הפגישה הקרובה') +
+            (S.proposalApproved ? soon('בדיקת התקדמות', m13.off, m13.time, m13.dur) : soon(m21.topic, m21.off, m21.time, m21.dur)) +
+            '<div class="k-gap20"></div>' + sectionTitle('פגישה קבועה') + '<div class="n-card" style="padding:calc(16px * var(--k))"><div class="n-topic" style="margin:0">פגישת מעקב</div>' + facts([['יום', MEETINGS.danielrec.wd], ['שעה', '10:00'], ['משך', '30 דקות'], ['פלטפורמה', 'טלפון']], 2) + '<div class="n-gap12"></div><p class="k-center muted">פגישה קבועה, כל שבוע. יש עוד 8 כאלה ביומן שלך.</p></div>';
         } else {
-          body = banner + card(heading('מדידות + עדכון תפריט') + factPair(inline('תאריך', '10/08/2026'), inline('שעה', '10:00')) + factPair(inline('משך', '60 דקות'), inline('פלטפורמה', 'טלפון')) + '<div class="k-center">' + pill('לפרטי הפגישה', 'event-note', 'noop') + '</div>', 'meeting pad20', 'noop');
+          body = banner + '<div class="n-card" style="padding:calc(16px * var(--k))"><div class="n-center">' + tag('התקיימה', 'ok') + '</div><div class="n-topic">מדידות + עדכון תפריט</div>' + facts([['תאריך', dmy(-17)], ['שעה', '10:00'], ['משך', '60 דקות'], ['פלטפורמה', 'טלפון']], 2) + '</div>';
         }
-        return screenTitle('פגישות') + bar + '<div class="k-gap12"></div>' + body;
+        return screenTitle('פגישות') + '<div class="k-gap8"></div>' + bar + body;
       },
       chat: function (ph) {
         var preset = traineePresets[ph.presetIdx % traineePresets.length];
-        return '<button class="k-thead trainee" data-act="noopcoach"><span class="k-av ring-coach pic" style="--s:44px"><i class="av-green"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-yoav"/></svg></i></span><span class="col"><b>יואב</b><small>שיחה ישירה עם המאמן</small></span></button>' +
+        return '<button class="n-chead" data-act="noopcoach"><span class="k-av ring-coach pic" style="--s:44px"><i class="av-green"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-yoav"/></svg></i></span><span class="col"><b>יואב</b><small>שיחה ישירה עם המאמן</small></span></button>' +
           '<div class="k-bubbles' + (ph.typing ? '' : ' navpad') + '">' + S.chat.map(function (m) { return bubble(m, 'trainee'); }).join('') + '</div>' +
-          (ph.typing ? '<div class="k-input trainee"><span class="field">' + esc(preset) + '</span><span class="btns">' + icon('photo', 'bi v-muted') + '<button class="send v-trainee" data-act="send:trainee" aria-label="שלח">' + icon('send', 'bi') + '</button><button class="apps" data-act="typingoff" aria-label="הצג ניווט">' + icon('apps', 'bi') + '</button></span></div>' : '');
+          (ph.typing ? '<div class="n-composer"><span class="field"><span>' + esc(preset) + '</span>' + icon('photo', 'bi') + '</span><button class="send v-trainee" data-act="send:trainee" aria-label="שלח">' + icon('send', 'bi') + '</button><button class="apps" data-act="typingoff" aria-label="הצג ניווט">' + icon('apps', 'bi') + '</button></div>' : '');
       }
     }
   };
@@ -473,14 +560,15 @@
   function bubble(m, viewer) {
     var mine = m.from === viewer;
     if (m.card) {
-      var st = S.proposalApproved ? ['אושרה ✓', 'positive'] : viewer === 'trainer' ? ['ממתין לאישור המתאמן', 'coach'] : ['ממתין לאישורך', 'coach'];
+      var st = S.proposalApproved ? ['אושרה ✓', 'ok'] : viewer === 'trainer' ? ['ממתין לאישור המתאמן', 'big'] : ['ממתין לאישורך', 'big'];
       var actions = '';
-      if (viewer === 'trainee' && !S.proposalApproved) actions = '<div class="k-actions"><div class="row">' + primary('אישור', 'approve', 'trainee') + secondary('דחייה', 'noop', 'trainee') + '</div>' + secondary('הצע פגישה חלופית', 'noop', 'trainee', 'edit-cal') + '</div>';
-      else if (S.proposalApproved && !S.calendarSynced) actions = '<div class="k-actions">' + secondary('הוסף ליומן', 'calsync', viewer === 'trainee' ? 'trainee' : null, 'calendar-today') + '</div>';
-      return '<div class="k-bub cardwrap ' + (mine ? 'mine' : 'theirs') + ' from-' + m.from + '"><div class="k-coord"><div class="t">' + icon('event', 'bi v-coach') + 'תיאום פגישה</div>' + heading('בדיקת התקדמות') + '<div class="k-tags">' + statusTag(st[0], st[1]) + '</div>' +
-        factPair(inline('תאריך', '13/09/2026'), inline('שעה', '17:30')) + factPair(inline('משך', '45 דקות'), inline('פלטפורמה', 'טלפון')) + actions + '<small class="stamp">' + m.time + '</small></div></div>';
+      if (viewer === 'trainee' && !S.proposalApproved) actions = '<div class="n-acts"><div class="row"><button class="n-ok" data-act="approve">אישור</button><button class="n-no" data-act="noop">דחייה</button></div><button class="n-no" data-act="noop">' + icon('edit-cal', 'bi') + 'הצע פגישה חלופית</button></div>';
+      else if (S.proposalApproved && !S.calendarSynced) actions = '<div class="n-acts"><button class="n-no' + (viewer === 'trainer' ? ' coach' : '') + '" data-act="calsync">' + icon('calendar-today', 'bi') + 'הוסף ליומן</button></div>';
+      return '<div class="k-bub cardwrap ' + (mine ? 'mine' : 'theirs') + ' from-' + m.from + '"><div class="n-coord"><div class="t">' + icon('event', 'bi') + 'תיאום פגישה</div><div class="n-topic">בדיקת התקדמות</div><div class="n-gap8"></div><div class="n-center">' + tag(st[0], st[1]) + '</div>' +
+        facts([['תאריך', dmy(3)], ['שעה', '17:30'], ['משך', '45 דקות'], ['פלטפורמה', 'טלפון']], 2) + actions + '<small class="stamp">' + m.time + '</small></div></div>';
     }
-    return '<div class="k-bub ' + (mine ? 'mine' : 'theirs') + ' from-' + m.from + '"><span>' + esc(m.text) + '</span><time>' + m.time + '</time></div>';
+    var tick = m.from === 'trainee' ? '<span class="tick">' + icon('check', 'bi') + '</span>' : '';
+    return '<div class="k-bub ' + (mine ? 'mine' : 'theirs') + ' from-' + m.from + '"><span>' + esc(m.text) + '</span><time>' + (m.from === 'trainee' ? '<span class="tick">' + m.time + icon('check', 'bi') + '</span>' : m.time) + '</time></div>';
   }
   function wordmark() {
     return '<b class="fit">FIT</b><svg class="o" viewBox="0 0 100 100" aria-hidden="true"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><b class="polis">POLIS</b>';
@@ -707,6 +795,12 @@
     else if (p[0] === 'xw') { ph.openWo = ph.openWo === +p[1] ? -1 : +p[1]; }
     else if (p[0] === 'xp') { if (p[1] === 'wo') ph.openPwo = !ph.openPwo; else if (p[1] === 'me') ph.openMe = !ph.openMe; else ph.hint = 'טאב התזונה נשאר פתוח בדמו'; }
     else if (p[0] === 'cfilter') { ph.clientsNeeds = !ph.clientsNeeds; ph.scrollTop = 0; }
+    else if (p[0] === 'htile') { ph.homeTile = p[1]; }                                   // מסך הבית של המאמן: איזה מונה פתוח
+    else if (p[0] === 'ttile') { ph.tTile = p[1]; if (ph.screen !== 'today') { ph.screen = 'today'; ph.scrollTop = 0; } }   // ושל המתאמן
+    else if (p[0] === 'cseg') { ph.clientsNeeds = p[1] === 'needs'; ph.scrollTop = 0; }
+    else if (p[0] === 'chatseg') { ph.chatSeg = p[1]; }
+    else if (p[0] === 'mseg') { ph.reqFilter = p[1]; }
+    else if (p[0] === 'payseg') { ph.paySeg = p[1]; }
     else if (p[0] === 'set') { var e = S.exercises[+p[1]]; e.w = (e.w === e.prev || e.w === null) ? (e.prev ? e.prev + 2.5 : 0) : e.prev; ph.focusEx = +p[1]; }
     else if (p[0] === 'finish') { S.workoutDone = true; ph.screen = 'workouts'; ph.scrollTop = 0; ph.hint = 'האימון נשמר ✓'; }
     else if (p[0] === 'aerosave') { S.aerobic = Math.min(3, S.aerobic + 1); ph.sheetKind = null; }
@@ -736,7 +830,7 @@
     else if (p[0] === 'mfilter') { ph.reqFilter = (ph.reqFilter || 'trainees') === 'trainees' ? 'mine' : 'trainees'; }
     else if (p[0] === 'car') { ph.carousel = p[1]; }
     else if (/^var_/.test(p[0])) { var list = PANES[p[0].slice(4)]; ph[p[0]] = Math.max(0, Math.min(list.length - 1, +p[1])); }
-    else if (p[0] === 'reset') { S = initial(); S.meals[0].eaten = true; phones.forEach(function (x) { x.screen = x.side === 'trainer' ? 'home' : 'today'; x.navOpen = false; x.sheetKind = null; x.typing = false; x.split = false; x.presetIdx = 0; x.scrollTop = 0; x.catOpen = false; x.openMeal = -1; x.openWo = -1; x.openPwo = false; x.openMe = false; x.clientsNeeds = false; x.carousel = 'weight'; x.var_measures = 0; x.var_strength = 0; }); }
+    else if (p[0] === 'reset') { S = initial(); S.meals[0].eaten = true; phones.forEach(function (x) { x.screen = x.side === 'trainer' ? 'home' : 'today'; x.navOpen = false; x.sheetKind = null; x.typing = false; x.split = false; x.presetIdx = 0; x.scrollTop = 0; x.catOpen = false; x.openMeal = -1; x.openWo = -1; x.openPwo = false; x.openMe = false; x.clientsNeeds = false; x.carousel = 'weight'; x.var_measures = 0; x.var_strength = 0; x.homeTile = null; x.tTile = null; x.chatSeg = null; x.paySeg = null; x.reqFilter = null; }); }
     renderAll();
   }
   function scheduleClose(ph, ms) { clearTimeout(ph.closeT); ph.closeT = setTimeout(function () { if (ph.saved) { ph.sheetKind = null; ph.saved = false; renderAll(); } }, reduceMotion ? 1200 : ms); }
