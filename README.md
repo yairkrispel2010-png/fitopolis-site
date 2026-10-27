@@ -39,7 +39,7 @@ GitHub Pages מגיש את `style.css` עם מטמון של 10 דקות, ואי 
 שבחמשת הדפים (`index`, `support`, `accessibility`, `404`,
 `invite/index`). הכתובת משתנה, והדפדפן נאלץ להוריד מחדש.
 אותו כלל ל-`js/main.js` ול-`js/demo.js` (מקושרים רק מדף הבית): `main.js?v=N`, `demo.js?v=N`.
-המצב כרגע: `style.css?v=23` (בכל הדפים, כולל `invite/`), `phone.css?v=18`, `main.js?v=11`, `demo.js?v=24`, `intro.css?v=1`, `intro.js?v=1` (27/10/2026, ענף `design/site-v2`: הפתיח, המכשיר המרונדר).
+המצב כרגע: `style.css?v=23` (בכל הדפים, כולל `invite/`), `phone.css?v=19`, `main.js?v=11`, `demo.js?v=24`, `intro.css?v=1`, `intro.js?v=1` (27/10/2026, ענף `design/site-v2`: הפתיח, המכשיר המרונדר).
 
 ## הפתיח — `css/intro.css` + `js/intro.js` (27/10/2026, רק בדף הבית)
 
@@ -53,8 +53,8 @@ GitHub Pages מגיש את `style.css` עם מטמון של 10 דקות, ואי 
 
 המסגרת, הזכוכית, האי בראש המסך, הלחצנים והגב הם שתי תמונות שרונדרו בבלנדר, במבנה של אייפון 18 פרו מקס
 בשחור (הבעלים, 27/10): `assets/phone-front.webp` (חלון המסך שקוף; המסך החי יושב מתחתיו) ו-`assets/phone-back.webp`.
-המקור, וההרצה מחדש: `~/FitManage-design/2026-10-site-redesign/blender/phone3.py`
-(`blender -b -P phone3.py -- front|back <out.png> 4 384`, ואז `cwebp -q 90 -alpha_q 100 -resize 942 1914`).
+המקור, וההרצה מחדש: `~/FitManage-design/2026-10-site-redesign/blender/phone4.py`
+(`blender -b -P phone4.py -- front|back <out.png> 4 384`, ואז `cwebp -q 90 -alpha_q 100 -resize 942 1914`).
 `.dp` הוא 300 × 628 (78.0 × 163.4 מ"מ), המסך 282 × 610; התמונה רחבה ב-7/5 פיקסלים מכל צד בשביל הלחצנים.
 
 ## הדמו האינטראקטיבי בטלפונים — `js/demo.js` + `css/phone.css` (09/09/2026)
