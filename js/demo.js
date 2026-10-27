@@ -769,10 +769,122 @@
     c.remove();
   }
 
+  /* ── "התחל אימון": אותה ספירה לאחור כמו באפליקציה (הבעלים, 27/10: "שתיהיה את האנימציה שיש כשמתחילים את
+     האימון באפליקציה"). הערכים — של הסרטון שהאפליקציה בנויה ממנו: פס בצבע המתאמן נולד בצורת הכפתור, נוטה
+     באלכסון ונפתח על כל המסך; משקולת; 3, 2, 1 שנוחתים בחבטה; שם האימון; והצבע נחתך באותו אלכסון ושני
+     החצאים עפים — מתחת מסך האימון. נגיעה אחרי 400ms מדלגת לחשיפה. בהפחתת תנועה — ישר למסך האימון ── */
+  var CD_T = 5400, CD_ANG = -18, CD_IMPACTS = [1300, 2300, 3300], CD_NAME = 4300, CD_REVEAL = 4950, CD_END = 5370, CD_COVERED = 520;
+  function countdown(ph, btn) {
+    var scr = ph.root.querySelector('.dp-screen');
+    if (!scr || !scr.animate || reduceMotion || ph.counting) return false;
+    ph.counting = true;
+    var W = scr.clientWidth, H = scr.clientHeight, k = W / 360, sr = scr.getBoundingClientRect();
+    var br = btn && btn.getBoundingClientRect && btn.getBoundingClientRect();
+    if (!br || !br.width) br = { left: sr.left + W * 0.08, top: sr.top + H * 0.3, width: W * 0.84, height: 42 * k };
+    var bx = br.left - sr.left + br.width / 2, by = br.top - sr.top, bh = br.height, bw = br.width;
+    var parts = 'אימון A – חזה + כתפיים'.split(' – ');
+    var o = document.createElement('div');
+    o.className = 'dp-cd'; o.setAttribute('aria-hidden', 'true');
+    o.innerHTML = '<div class="cd-band"></div><div class="cd-half a"></div><div class="cd-half b"></div><div class="cd-shake">' +
+      '<div class="cd-ghost">3</div><div class="cd-ghost">2</div><div class="cd-ghost">1</div><div class="cd-streak"></div><div class="cd-streak"></div>' +
+      '<div class="cd-dumb">' + icon('fitness') + '</div><div class="cd-n">3</div><div class="cd-n">2</div><div class="cd-n">1</div>' +
+      '<div class="cd-name"><b>' + parts[0] + '</b><span>' + parts[1] + ' · ' + S.exercises.length + ' תרגילים</span></div></div>';
+    scr.appendChild(o);
+    var q = function (s) { return o.querySelector(s); }, qa = function (s) { return o.querySelectorAll(s); };
+    // הפס: בגובה הכפתור ובמרכזו, ארוך פי שלושה מהמסך, ומתחיל מכווץ לרוחב הכפתור
+    var band = q('.cd-band'), bandW = W * 3, sy = 2.2 * Math.sqrt(W * W + H * H) / bh;
+    band.style.cssText = 'left:' + (bx - bandW / 2) + 'px;top:' + by + 'px;width:' + bandW + 'px;height:' + bh + 'px;border-radius:' + (bh / 2) + 'px';
+    // שני החצאים: קו החיתוך עובר במרכז המסך (קצת מתחתיו, כמו בסרטון) באותה זווית
+    var m = 40 * k, t = Math.tan(-CD_ANG * Math.PI / 180), hc = H * 0.524, yl = hc + (W / 2 + m) * t + m, yr = hc - (W / 2 + m) * t + m, X = W + 2 * m, Y = H + 2 * m, seam = 3 * k;
+    qa('.cd-half').forEach(function (h) { h.style.inset = (-m) + 'px'; });
+    q('.cd-half.a').style.clipPath = 'polygon(0 0,' + X + 'px 0,' + X + 'px ' + yr + 'px,0 ' + yl + 'px)';
+    q('.cd-half.b').style.clipPath = 'polygon(0 ' + (yl - seam) + 'px,' + X + 'px ' + (yr - seam) + 'px,' + X + 'px ' + Y + 'px,0 ' + Y + 'px)';
+    qa('.cd-streak')[0].style.top = (H * 250 / 724) + 'px';
+    qa('.cd-streak')[1].style.top = (H * 470 / 724) + 'px';
+    q('.cd-name').style.top = (H * 300 / 724) + 'px';
+
+    var out = 'cubic-bezier(.16,1,.3,1)', hit = 'cubic-bezier(.55,0,1,.45)', away = 'cubic-bezier(.7,0,.84,0)';
+    var K = function (f) { return f.map(function (x) { var r = { offset: Math.min(1, Math.max(0, x[0] / CD_T)) }; for (var key in x[1]) r[key] = x[1][key]; return r; }); };
+    var anims = [], run = function (el, frames) { anims.push(el.animate(K(frames), { duration: CD_T, fill: 'both', easing: 'linear' })); };
+    var px = function (v) { return (v * k).toFixed(1) + 'px'; };
+    var sx0 = bw / bandW, rot = 'rotate(' + CD_ANG + 'deg) ';
+    run(band, [[0, { opacity: 0, transform: 'rotate(0deg) scale(' + sx0 + ',1)' }], [99, { opacity: 0, transform: 'rotate(0deg) scale(' + sx0 + ',1)' }],
+      [100, { opacity: 1, transform: 'rotate(0deg) scale(' + sx0 + ',1)', easing: out }], [240, { opacity: 1, transform: rot + 'scale(1,1.4)', easing: 'cubic-bezier(.5,0,.2,1)' }],
+      [CD_COVERED, { opacity: 1, transform: rot + 'scale(1,' + sy + ')' }], [540, { opacity: 0, transform: rot + 'scale(1,' + sy + ')' }], [CD_T, { opacity: 0, transform: rot + 'scale(1,' + sy + ')' }]]);
+    var half = function (el, dx, dy) {
+      run(el, [[0, { opacity: 0, transform: 'translate(0,0)' }], [CD_COVERED - 1, { opacity: 0, transform: 'translate(0,0)' }], [CD_COVERED, { opacity: 1, transform: 'translate(0,0)' }],
+        [CD_REVEAL, { opacity: 1, transform: 'translate(0,0)', easing: away }], [CD_END, { opacity: 1, transform: 'translate(' + px(dx) + ',' + px(dy) + ')' }], [CD_T, { opacity: 1, transform: 'translate(' + px(dx) + ',' + px(dy) + ')' }]]);
+    };
+    half(q('.cd-half.a'), -150, -470); half(q('.cd-half.b'), 150, 470);
+    run(q('.cd-dumb'), [[0, { opacity: 0, transform: 'rotate(-35deg) scale(.3)' }], [560, { opacity: 0, transform: 'rotate(-35deg) scale(.3)', easing: out }],
+      [700, { opacity: 1, transform: 'rotate(4deg) scale(1.15)' }], [790, { opacity: 1, transform: 'rotate(0deg) scale(1)' }],
+      [1080, { opacity: 1, transform: 'rotate(0deg) scale(1.04)', easing: hit }], [1160, { opacity: 0, transform: 'rotate(0deg) scale(1.04,0)' }], [CD_T, { opacity: 0, transform: 'rotate(0deg) scale(1.04,0)' }]]);
+    qa('.cd-n').forEach(function (n, i) {
+      var s = CD_IMPACTS[i] - 130;
+      run(n, [[0, { opacity: 0, transform: 'scale(3)' }], [s, { opacity: 0, transform: 'scale(3)', easing: hit }], [s + 40, { opacity: 1, transform: 'scale(2.3)', easing: hit }],
+        [s + 130, { opacity: 1, transform: 'scale(1.1,.88)', easing: out }], [s + 210, { opacity: 1, transform: 'scale(.97,1.03)', easing: out }], [s + 280, { opacity: 1, transform: 'scale(1)' }],
+        [s + 920, { opacity: 1, transform: 'scale(1.06)', easing: hit }], [s + 1000, { opacity: 0, transform: 'scale(.86)' }], [CD_T, { opacity: 0, transform: 'scale(.86)' }]]);
+    });
+    qa('.cd-ghost').forEach(function (g, i) {
+      var s = CD_IMPACTS[i] - 60;
+      run(g, [[0, { opacity: 0, transform: 'translateX(' + px(-30) + ') scale(1.15)' }], [s, { opacity: 0, transform: 'translateX(' + px(-30) + ') scale(1.15)', easing: out }],
+        [s + 160, { opacity: 0.2, transform: 'translateX(0px) scale(1)' }], [s + 900, { opacity: 0.2, transform: 'translateX(' + px(24) + ') scale(1)', easing: hit }],
+        [s + 970, { opacity: 0, transform: 'translateX(' + px(30) + ') scale(1)' }], [CD_T, { opacity: 0, transform: 'translateX(' + px(30) + ') scale(1)' }]]);
+    });
+    [-300, -260].forEach(function (base, i) {
+      var f = [[0, { opacity: 0, transform: rot + 'translateX(' + px(420) + ')' }]];
+      CD_IMPACTS.concat([CD_NAME]).forEach(function (tt) {
+        f.push([tt - 1, { opacity: 0, transform: rot + 'translateX(' + px(420) + ')' }]);
+        f.push([tt, { opacity: 0.55, transform: rot + 'translateX(' + px(420) + ')', easing: out }]);
+        f.push([tt + 260, { opacity: 0, transform: rot + 'translateX(' + px(base) + ')' }]);
+      });
+      f.push([CD_T, { opacity: 0, transform: rot + 'translateX(' + px(base) + ')' }]);
+      run(qa('.cd-streak')[i], f);
+    });
+    var shake = [[0, { transform: 'translate(0,0)' }]];
+    CD_IMPACTS.map(function (tt) { return [tt, 1]; }).concat([[CD_NAME, 2]]).forEach(function (x) {
+      var tt = x[0], a = x[1];
+      shake.push([tt - 1, { transform: 'translate(0,0)' }]);
+      shake.push([tt + 30, { transform: 'translate(' + px(7 * a) + ',' + px(-4 * a) + ')' }]);
+      shake.push([tt + 65, { transform: 'translate(' + px(-5 * a) + ',' + px(3 * a) + ')' }]);
+      shake.push([tt + 100, { transform: 'translate(' + px(3 * a) + ',' + px(-2 * a) + ')' }]);
+      shake.push([tt + 135, { transform: 'translate(' + px(-1 * a) + ',' + px(1 * a) + ')' }]);
+      shake.push([tt + 170, { transform: 'translate(0,0)' }]);
+    });
+    shake.push([CD_T, { transform: 'translate(0,0)' }]);
+    run(q('.cd-shake'), shake);
+    run(q('.cd-name b'), [[0, { opacity: 0, transform: 'scale(2)' }], [CD_NAME - 130, { opacity: 0, transform: 'scale(2)', easing: hit }], [CD_NAME - 90, { opacity: 1, transform: 'scale(1.6)', easing: hit }],
+      [CD_NAME, { opacity: 1, transform: 'scale(1.06,.92)', easing: out }], [CD_NAME + 100, { opacity: 1, transform: 'scale(1)' }], [CD_T, { opacity: 1, transform: 'scale(1)' }]]);
+    run(q('.cd-name span'), [[0, { opacity: 0, transform: 'translateX(' + px(-70) + ')' }], [CD_NAME + 30, { opacity: 0, transform: 'translateX(' + px(-70) + ')', easing: out }],
+      [CD_NAME + 260, { opacity: 0.9, transform: 'translateX(0px)' }], [CD_T, { opacity: 0.9, transform: 'translateX(0px)' }]]);
+    run(q('.cd-name'), [[0, { transform: 'translate(0,0)' }], [CD_REVEAL, { transform: 'translate(0,0)', easing: away }], [CD_END, { transform: 'translate(' + px(-150) + ',' + px(-470) + ')' }], [CD_T, { transform: 'translate(' + px(-150) + ',' + px(-470) + ')' }]]);
+
+    // מתחת לצבע, כשהוא כבר מכסה הכל: מסך האימון
+    var arrived = false, arrive = function () { if (arrived) return; arrived = true; act(ph, 'go:workout'); };
+    var arriveT = setTimeout(arrive, CD_COVERED);
+    var done = false, finish = function () { if (done) return; done = true; clearTimeout(arriveT); clearTimeout(safety); arrive(); o.remove(); ph.counting = false; ph.cdStop = null; };
+    var safety = setTimeout(finish, CD_T + 400);
+    anims[0].finished.then(finish, finish);
+    var t0 = performance.now();
+    o.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (performance.now() - t0 < 400) return;                        // החצי השני של לחיצה כפולה על הכפתור
+      arrive();
+      anims.forEach(function (an) { if (an.currentTime < CD_REVEAL) an.currentTime = CD_REVEAL; });
+    });
+    // סיבוב הטלפון או איפוס באמצע: הספירה נעלמת בלי לעבור למסך האימון
+    ph.cdStop = function () { done = true; clearTimeout(arriveT); clearTimeout(safety); anims.forEach(function (an) { an.cancel(); }); o.remove(); ph.counting = false; ph.cdStop = null; };
+    return true;
+  }
+
   /* ── פעולות ───────────────────────────────────────────────────────── */
   function act(ph, a) {
     var p = a.split(':');
     if (p[0] === 'start') { startAll(ph); return; }
+    if (p[0] === 'flip' && ph.cdStop) ph.cdStop();
+    if (p[0] === 'reset') phones.forEach(function (x) { if (x.cdStop) x.cdStop(); });
+    // "התחל אימון" מהמסכים של המתאמן: קודם הספירה לאחור, והיא עוברת למסך האימון כשהצבע מכסה הכל
+    if (p[0] === 'go' && p[1] === 'workout' && ph.side === 'trainee' && !ph.counting && ph.screen !== 'workout' && countdown(ph, ph.lastBtn)) return;
     if (p[0] === 'noop') { ph.hint = 'בדמו הזה זה עוצר כאן — באפליקציה זה ממשיך'; }
     else if (p[0] === 'noopcoach') { ph.hint = 'באפליקציה נפתח כאן דף המאמן'; }
     else if (p[0] === 'go') {
@@ -898,7 +1010,7 @@
       if (ph.sheetKind && e.target.closest('.dp-sheet') && !e.target.closest('.k-form, .k-detsheet')) { ph.sheetKind = null; render(ph); return; }
       if ((ph.navOpen || ph.catOpen) && !e.target.closest('.dp-nav, .k-catbar')) { ph.navOpen = false; ph.catOpen = false; if (!b) { render(ph); return; } }
       if (!b || !root.contains(b) || b.disabled) return;
-      e.preventDefault(); act(ph, b.getAttribute('data-act'));
+      e.preventDefault(); ph.lastBtn = b; act(ph, b.getAttribute('data-act'));
     });
     root.addEventListener('keydown', function (e) {                    // כרטיסים לחיצים (role=button) גם מהמקלדת
       if ((e.key === 'Enter' || e.key === ' ') && e.target.getAttribute && e.target.getAttribute('role') === 'button' && e.target.hasAttribute('data-act')) { e.preventDefault(); act(ph, e.target.getAttribute('data-act')); }

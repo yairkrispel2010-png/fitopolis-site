@@ -992,3 +992,17 @@ p.k-center { display: block; margin: 0; }
 .sides .scroll-btn { background: var(--dark-2); border-color: var(--dark-line); color: #FFFFFF; }
 .sides .scroll-btn svg { stroke: #FFFFFF; }
 .n-facts.cols2 { --cols: 2; } .n-facts.cols3 { --cols: 3; }
+
+/* ── "התחל אימון": הספירה לאחור של האפליקציה (countdown ב-demo.js; הגדלים של מסך 360, כפול --k) ── */
+.dp-cd { position: absolute; inset: 0; z-index: 10; overflow: hidden; cursor: pointer; }
+.dp-cd .cd-band, .dp-cd .cd-half { position: absolute; background: var(--trainee); opacity: 0; }
+.dp-cd .cd-band { transform-origin: 50% 50%; }
+.dp-cd .cd-shake { position: absolute; inset: 0; }
+.dp-cd .cd-ghost, .dp-cd .cd-n, .dp-cd .cd-dumb { position: absolute; inset: 0; display: grid; place-items: center; color: var(--onTrainee); opacity: 0; }
+.dp-cd .cd-ghost { font: 400 calc(460px * var(--k)) / 1 var(--font-digits); color: transparent; -webkit-text-stroke: calc(2px * var(--k)) var(--onTrainee); }
+.dp-cd .cd-n { font: 400 calc(170px * var(--k)) / 1 var(--font-digits); }
+.dp-cd .cd-dumb svg { width: calc(96px * var(--k)); height: calc(96px * var(--k)); }
+.dp-cd .cd-streak { position: absolute; left: 0; width: calc(260px * var(--k)); height: calc(9px * var(--k)); border-radius: calc(5px * var(--k)); background: var(--onTrainee); opacity: 0; }
+.dp-cd .cd-name { position: absolute; left: 0; right: 0; text-align: center; color: var(--onTrainee); }
+.dp-cd .cd-name b { display: block; font: 600 calc(48px * var(--k)) / calc(54px * var(--k)) var(--font-display); opacity: 0; }
+.dp-cd .cd-name span { display: block; font: 500 calc(18px * var(--k)) / calc(24px * var(--k)) var(--font-body); margin-top: calc(6px * var(--k)); opacity: 0; }
