@@ -21,7 +21,9 @@
   var fit = intro && intro.querySelector('.fit');
   var polis = intro && intro.querySelector('.polis');
   var cue = intro && intro.querySelector('.intro-cue');
-  if (!intro || !pin || !slot || !ring || !veil || !edgeT || !edgeB) { root.classList.remove('intro-on'); return; }
+  if (!intro || !pin || !slot || !ring || !veil || !edgeT || !edgeB) { root.classList.remove('intro-on', 'intro-frame'); return; }
+  // בלי הזום — רק המסגרת: הדף נפתח כמו בסוף הזום, הקצוות בפינות עד הבלוק הכהה (הבעלים, 27/10)
+  var frameOnly = root.classList.contains('intro-frame');
   var svgT = edgeT.ownerSVGElement;
   var svgB = edgeB.ownerSVGElement;
 
@@ -60,8 +62,8 @@
     H = boxH();
     hv = window.innerHeight;
     top0 = pin.getBoundingClientRect().top + (window.scrollY || 0);
-    run = Math.round(H * 1.2);     // ה-O גדל
-    stay = Math.round(H * 0.6);    // האתר עומד במקום, וקצוות ה-O בפינות
+    run = frameOnly ? 0 : Math.round(H * 1.2);     // ה-O גדל
+    stay = frameOnly ? 0 : Math.round(H * 0.6);    // האתר עומד במקום, וקצוות ה-O בפינות
     root.style.setProperty('--intro-run', (run + stay) + 'px');
     // מקום ה-O בלוגו, יחסית לראש הפתיח (הלוגו במרכז המסך הקטן — svh — אז הוא לא זז כששורת הכתובת זזה)
     var box = intro.getBoundingClientRect();
@@ -168,7 +170,7 @@
     if (sy < stopAt) {
       setMode('fixed');
       hv = window.innerHeight;
-      var p = clamp((sy - top0) / run);
+      var p = frameOnly ? 1 : clamp((sy - top0) / run);
       if (p < 1) {
         setFramed(false);
         // התוכן שמאחורי הלוח הלבן לא נגיש למקלדת עד שהחור כבר גדול
@@ -207,7 +209,7 @@
 
   // מקלדת: Tab בזמן הפתיח מדלג לסופו — האתר פתוח, הפינות במקומן — ומשם ממשיכים לתוכן כרגיל
   document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Tab' || (window.scrollY || 0) - top0 >= run) { return; }
+    if (frameOnly || e.key !== 'Tab' || (window.scrollY || 0) - top0 >= run) { return; }
     window.scrollTo({ top: top0 + run, behavior: 'instant' });
     pin.inert = false;
   });

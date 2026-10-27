@@ -27,22 +27,25 @@
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="css/style.css?v=23">
   <link rel="stylesheet" href="css/phone.css?v=26">
-  <link rel="stylesheet" href="css/intro.css?v=8">
+  <link rel="stylesheet" href="css/intro.css?v=9">
   <link rel="stylesheet" href="css/sections.css?v=8">
-  <!-- הפתיח: נקבע לפני הציור הראשון, כדי שהאתר לא יהבהב לפני הלוגו. עם הפחתת תנועה, קישור לעוגן או חזרה לאמצע הדף — בלי פתיח.
-       ומי שכבר ראה אותו בביקור הזה וחוזר לדף הבית מדף אחר (קישור או "אחורה") — בלי פתיח (הבעלים, 27/10); ריענון של הדף מראה אותו שוב. -->
+  <!-- הפתיח: נקבע לפני הציור הראשון, כדי שהאתר לא יהבהב לפני הלוגו. עם הפחתת תנועה או קישור לעוגן — בלי הזום.
+       ומי שכבר ראה אותו בביקור הזה וחוזר לדף הבית מדף אחר (קישור או "אחורה") — בלי הזום (הבעלים, 27/10); ריענון של הדף מראה אותו שוב.
+       בלי הזום — רק המסגרת, קצוות הלוגו בפינות (intro-frame). הבעלים, 27/10: "אני כן רוצה שהם ישארו תמיד בדף הבית - כשזה נעלם ככה זה
+       מרגיש כאילו משהו שבור". -->
   <script>
     (function () {
       try {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
-        if (location.hash && location.hash !== '#') { return; }
+        var root = document.documentElement;
+        var frameOnly = window.matchMedia('(prefers-reduced-motion: reduce)').matches || !!(location.hash && location.hash !== '#');
         var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
         var seen = false;
         try { seen = sessionStorage.getItem('fp-intro-seen') === '1'; } catch (e) {}
-        if (seen && !(nav && nav.type === 'reload')) { return; }
+        if (seen && !(nav && nav.type === 'reload')) { frameOnly = true; }
+        if (frameOnly) { root.classList.add('intro-on', 'intro-frame'); return; }
         try { sessionStorage.setItem('fp-intro-seen', '1'); } catch (e) {}
         if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
-        document.documentElement.classList.add('intro-on', 'intro-hold');
+        root.classList.add('intro-on', 'intro-hold');
       } catch (e) {}
     })();
   </script>
@@ -397,7 +400,7 @@
   </div>
 </footer>
 
-<script src="js/intro.js?v=7"></script>
+<script src="js/intro.js?v=8"></script>
 <script src="js/main.js?v=11"></script>
 <script src="js/demo.js?v=32"></script>
 </body>
