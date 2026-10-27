@@ -122,6 +122,15 @@
 @media (max-width: 560px) {
   .hero .sub { font-size: 16px; line-height: 1.6; }
 }
+/* "מי צריך אותך היום": בטור אחד (טלפון וטאבלט) התמונה באה לפני הרשימה, מיד אחרי הפסקה (הבעלים, 27/10: "תחליף את
+   המיקום של הטקסט הזה עם המיקום של התמונה שמתחתיו"). הטקסט נפרש לתוך השורה כדי שהתמונה תיכנס באמצעו;
+   הרווחים — של הטקסט עצמו, ו-32px מעל התמונה כמו קודם */
+@media (max-width: 960px) {
+  .fx-row-list { gap: 0; }
+  .fx-row-list > .fx-copy { display: contents; }
+  .fx-row-list > .fx-art { margin-top: 32px; }
+  .fx-row-list > .fx-copy > .fx-points { order: 1; }
+}
 /* הכפתור והשורה שמתחתיו: השורה ממורכזת מתחת לכפתור (הבעלים, 27/10). אותו רווח כמו בין שאר החלקים */
 .hero-cta { display: flex; flex-direction: column; align-items: center; gap: 18px; }
 .hero-cta .note { text-align: center; }
