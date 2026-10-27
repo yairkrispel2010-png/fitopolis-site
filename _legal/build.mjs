@@ -55,6 +55,13 @@ const CHROME = {
   },
 };
 
+// A temporary closing line while the approved list does not yet cover the whole draft (planning, 27/10/2026).
+// It goes by itself once every section is approved - nothing to remove by hand.
+const PARTIAL_NOTE = {
+  he: 'שאר הסעיפים של המדיניות יעלו כאן בימים הקרובים.',
+  en: 'The remaining sections of this policy will be added here in the coming days.',
+};
+
 const MONTHS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const LOGO = '<span class="logotype" aria-label="FITOPOLIS">\n        <span class="fit">FIT</span>\n        <svg aria-hidden="true" class="o-mark" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>\n        <span class="polis">POLIS</span>\n      </span>';
@@ -171,11 +178,13 @@ function render(doc, ap, lang, dateStr) {
     }
   }
   const slugOf = doc.slug;
+  let partial = false;
   for (const s of doc.sections) {
     const whole = ap.whole.has(s.num);
     const preOn = whole || ap.pre.has(s.num);
     const subsOn = s.subs.filter((x) => whole || ap.subs.has(x.id));
-    if (!preOn && subsOn.length === 0) continue;
+    if (!whole && subsOn.length < s.subs.length) partial = true;
+    if (!preOn && subsOn.length === 0) { partial = true; continue; }
     out.push('  <section>', `    <h2 id="${slugOf(s.num)}">${inline(`${s.num}. ${s.title}`, lang)}</h2>`);
     if (preOn) for (const b of s.pre) out.push(indent(b));
     for (const x of subsOn) {
@@ -184,7 +193,7 @@ function render(doc, ap, lang, dateStr) {
     }
     out.push('  </section>', '');
   }
-  return { lead, body: out.join('\n') };
+  return { lead, body: out.join('\n'), partial };
 }
 
 const indent = (html) => html.split('\n').map((l) => '    ' + l).join('\n');
@@ -236,8 +245,7 @@ function page(docKey, lang, doc, rendered) {
   <h1 class="reveal">${doc.title}</h1>
 ${rendered.lead.map((l, k) => `  <p class="lead reveal d${k + 1}">${l}</p>`).join('\n')}
 
-${rendered.body}
-</main>
+${rendered.body}${rendered.partial ? `  <section>\n    <p class="mini-note">${PARTIAL_NOTE[lang]}</p>\n  </section>\n` : ''}</main>
 
 <footer class="closing inner-footer">
   <div class="container">
