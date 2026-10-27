@@ -40,7 +40,7 @@ GitHub Pages מגיש את `style.css` עם מטמון של 10 דקות, ואי 
 שבחמשת הדפים (`index`, `support`, `accessibility`, `404`,
 `invite/index`). הכתובת משתנה, והדפדפן נאלץ להוריד מחדש.
 אותו כלל ל-`js/main.js` ול-`js/demo.js` (מקושרים רק מדף הבית): `main.js?v=N`, `demo.js?v=N`.
-המצב כרגע: `style.css?v=23` (דף הבית, `support`, `accessibility`, `404`, `invite/`) ו-`?v=24` (הדפים המשפטיים), `phone.css?v=23`, `sections.css?v=3`, `main.js?v=11`, `demo.js?v=27`, `intro.css?v=7`, `intro.js?v=7` (27/10/2026 לילה, ענף `design/site-v2`: "גללו למטה", ושכבות הקצוות נעוצות לראש ולתחתית).
+המצב כרגע: `style.css?v=23` (דף הבית, `support`, `accessibility`, `404`, `invite/`) ו-`?v=24` (הדפים המשפטיים), `phone.css?v=25`, `sections.css?v=8`, `main.js?v=11`, `demo.js?v=31`, `intro.css?v=8`, `intro.js?v=7` (27/10/2026 לילה, ענף `design/site-v2`, אחרי בדיקת הנגישות של המיתוג: קישור הדילוג נוחת על הפתיח ולא על התפריט, והוא קבוע מעל אנימציית הפתיחה; הספרות במקטע האמצעי ו"איפוס" מתחת לטלפון קיבלו גוון כהה יותר, 4.9:1; בתוויות של שתי ההדגמות כבר לא כתוב "כל כפתור לחיץ").
 
 ## הפתיח — `css/intro.css` + `js/intro.js` (27/10/2026, רק בדף הבית)
 

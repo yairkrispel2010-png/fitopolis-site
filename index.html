@@ -27,8 +27,8 @@
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="css/style.css?v=23">
   <link rel="stylesheet" href="css/phone.css?v=25">
-  <link rel="stylesheet" href="css/intro.css?v=7">
-  <link rel="stylesheet" href="css/sections.css?v=7">
+  <link rel="stylesheet" href="css/intro.css?v=8">
+  <link rel="stylesheet" href="css/sections.css?v=8">
   <!-- הפתיח: נקבע לפני הציור הראשון, כדי שהאתר לא יהבהב לפני הלוגו. עם הפחתת תנועה, קישור לעוגן או חזרה לאמצע הדף — בלי פתיח.
        ומי שכבר ראה אותו בביקור הזה וחוזר לדף הבית מדף אחר (קישור או "אחורה") — בלי פתיח (הבעלים, 27/10); ריענון של הדף מראה אותו שוב. -->
   <script>
@@ -71,7 +71,8 @@
   </script>
 </head>
 <body>
-<a class="skip-link" href="#main">דלג לתוכן הראשי</a>
+<!-- הדילוג נוחת על הפתיח ולא על main: בדף הבית התפריט יושב בתוך main, כי בזמן האנימציה הוא נעוץ יחד עם הפתיח -->
+<a class="skip-link" href="#hero">דלג לתוכן הראשי</a>
 <!-- ספרייט אייקונים לאב-הטיפוס — קווי-מתאר בסגנון Material (outlined),
      אותם אייקונים שהאפליקציה משתמשת בהם, מצוירים ביד ב-24×24. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -172,7 +173,7 @@
 </header>
 
   <!-- ══ הפתיח ══ -->
-  <section class="hero">
+  <section class="hero" id="hero" tabindex="-1">
     <div class="ring-layer" data-depth="18" aria-hidden="true">
       <span class="ring" style="left: 3%; top: -40px; transform: rotate(-14deg); opacity: 0.16;"><svg aria-hidden="true" class="drift-a" viewBox="0 0 100 100" style="width: 170px; height: 170px;"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg></span>
       <span class="blob drift-b" style="left: 44%; bottom: 30px; width: 54px; height: 54px; background: #F07C1A; opacity: 0.13;"></span>
@@ -199,7 +200,7 @@
              ברירת המחדל כאן — הצד של המאמן; הכפתור מתחת מסובב לצד של המתאמן. -->
         <div class="dp-wrap">
           <a class="skip-link" href="#after-demo">דלג על ההדגמה האינטראקטיבית</a>
-          <div class="dp" data-demo data-side="trainer" role="group" aria-label="הדגמה אינטראקטיבית של ממשק המאמן — כל כפתור לחיץ"></div>
+          <div class="dp" data-demo data-side="trainer" role="group" aria-label="הדגמה אינטראקטיבית של ממשק המאמן"></div>
           <button class="flip-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-swap"/></svg><span>לממשק המתאמן</span></button>
           <p class="demo-hint">הדגמה חיה של חלק מהממשק — מוזמן להתנסות<br>נשמח לחוות דעת <button class="reset-btn" type="button">איפוס</button></p>
         </div>
@@ -362,7 +363,7 @@
         <div class="sides-phone scroll-reveal">
           <div class="dp-wrap">
             <a class="skip-link" href="#closing">דלג על ההדגמה האינטראקטיבית</a>
-            <div class="dp" data-demo data-side="trainee" role="group" aria-label="הדגמה אינטראקטיבית של ממשק המתאמן — כל כפתור לחיץ"></div>
+            <div class="dp" data-demo data-side="trainee" role="group" aria-label="הדגמה אינטראקטיבית של ממשק המתאמן"></div>
             <button class="flip-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-swap"/></svg><span>לממשק המאמן</span></button>
             <p class="demo-hint">אותו מידע כמו בטלפון שלמעלה. <button class="reset-btn" type="button">איפוס</button></p>
           </div>
@@ -398,6 +399,6 @@
 
 <script src="js/intro.js?v=7"></script>
 <script src="js/main.js?v=11"></script>
-<script src="js/demo.js?v=30"></script>
+<script src="js/demo.js?v=31"></script>
 </body>
 </html>

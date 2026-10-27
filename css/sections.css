@@ -27,7 +27,8 @@
 .fx-row + .fx-row { margin-top: 120px; }
 .fx-row.flip .fx-art { order: -1; }
 .fx-copy { max-width: 520px; }
-.fx-num { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-digits); font-size: 15px; letter-spacing: 0.12em; color: var(--trainer-text); }
+/* הטורקיז של הטקסט (#0E767E) יורד ל-4.15:1 בחלק הכהה של הרקע האפור (#E4E2DD). לטקסט קטן שיושב שם יש גוון כהה יותר: 4.9:1 */
+.fx-num { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-digits); font-size: 15px; letter-spacing: 0.12em; color: #0B6A71; }
 .fx-num::after { content: ""; width: 36px; height: 2px; border-radius: 2px; background: currentColor; opacity: 0.45; }
 .fx-title { margin: 14px 0 18px; font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 3.1vw, 40px); line-height: 1.16; }
 .fx-lead { margin: 0 0 14px; font-size: 19px; line-height: 1.6; font-weight: 500; color: var(--ink); }
@@ -137,3 +138,5 @@
 @media (max-width: 920px) {
   .hero-cta { align-self: stretch; }   /* בטלפון הכפתור ברוחב מלא, והשורה במרכז שלו */
 }
+/* "איפוס" מתחת לטלפון יושב בחלק הכהה של רקע הפתיח, ולכן מקבל את הגוון הכהה של .fx-num */
+.hero .demo-hint .reset-btn { color: #0B6A71; }

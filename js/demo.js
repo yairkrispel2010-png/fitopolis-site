@@ -667,7 +667,7 @@
     var lab = ph.root.parentNode.querySelector('.flip-btn');
     if (lab) lab.querySelector('span').textContent = ph.side === 'trainer' ? 'לממשק המתאמן' : 'לממשק המאמן';
     ph.root.setAttribute('data-side', ph.side);
-    ph.root.setAttribute('aria-label', 'הדגמה אינטראקטיבית של ' + (ph.side === 'trainer' ? 'ממשק המאמן' : 'ממשק המתאמן') + ' — כל כפתור לחיץ');
+    ph.root.setAttribute('aria-label', 'הדגמה אינטראקטיבית של ' + (ph.side === 'trainer' ? 'ממשק המאמן' : 'ממשק המתאמן'));
     syncMore(ph);
   }
   // הכפתור מופיע רק כשבאמת יש עוד מה לראות, ומתהפך לחזרה למעלה בסוף המסך
