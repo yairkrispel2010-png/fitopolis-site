@@ -2,7 +2,7 @@
 @property --tilt-y { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @property --tilt-x { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 
-/* ═══ הטלפון: מעטפת תלת-ממדית + ערכת הממשק (k-*) — העתק של lib/theme ו-lib/widgets ═══
+/* ═══ הטלפון: מעטפת תלת-ממדית + ערכת הממשק (k-*) — העתק של רכיבי האפליקציה ═══
    כל המידות ב-dp של האפליקציה × --k (0.78). הסולם הניטרלי הקר + שבעת התפקידים — נעולים. */
 .dp {
   --k: 0.78;
@@ -635,12 +635,10 @@ p.k-center { display: block; margin: 0; }
 .k-av.pic i, .k-me.pic i { overflow: hidden; padding: 0; }
 .k-face { width: 100%; height: 100%; display: block; }
 
-/* ═══ המכשיר המרונדר (בלנדר, 27/10/2026) — במבנה של אייפון 18 פרו מקס בשחור ═══════════════
-   הבעלים: "תסתכל איך אייפון פרו מקס נראה - תעשה אותו באותו מבנה" · "אייפון 18 פרו מקס" · "תסתכל על הצבע השחור".
-   הפרופורציות מהמפרט של אפל (78.0 × 163.4 מ"מ) → 300 × 628. המסגרת, הזכוכית, האי בראש המסך, הלחצנים והגב
-   הם תמונות (המקור: ~/FitManage-design/2026-10-site-redesign/blender/phone4.py), עם 7/5 פיקסלים בכל צד
-   בשביל הלחצנים. חלון המסך בתמונה שקוף, והמסך החי יושב מתחתיו; פינות המסך החי קטנות מפינות החלון,
-   כדי שהמסגרת תסתיר את הקצה שלו בכל זווית. על הגב — הסמל שלנו, במקום שבו יושב הסמל במכשיר. */
+/* ═══ המכשיר המרונדר (27/10/2026) ═══════════════════════════════════════════════════════
+   300 × 628. המסגרת, הזכוכית, האי בראש המסך, הלחצנים והגב הם תמונות (איך הן נוצרות — ב-README),
+   עם 7/5 פיקסלים בכל צד בשביל הלחצנים. חלון המסך בתמונה שקוף, והמסך החי יושב מתחתיו; פינות המסך החי
+   קטנות מפינות החלון, כדי שהמסגרת תסתיר את הקצה שלו בכל זווית. על הגב — הסמל שלנו. */
 .dp {
   border-radius: 45px;
   background: none;
@@ -669,9 +667,7 @@ p.k-center { display: block; margin: 0; }
 .dp-back .brand { top: calc(53% + 40px); font-size: 11px; }   /* הבעלים: "הלוגו שלנו יושב נמוך מידי" (62% → 53%) */
 
 /* ═══ הממשק העדכני — אחרי סבב העיצוב של אוקטובר 2026 (n-*) ════════════════════════════════
-   נמדד מהקוד של האפליקציה (HEAD 51c32ae5, 27/10/2026): lib/widgets/home/*, client_card, meeting_card,
-   collapsible_category_bar, template_stat_grid, detail_row, trainee_shelf_bodies, meal_sources ועוד.
-   כל מידה ב-dp × --k. אין "קצה תחתון כהה" בקוד — העומק הוא מעבר משטח אפור למורם, ועליו הצל. */
+   כל מידה ב-dp × --k, כמו באפליקציה. העומק הוא מעבר ממשטח אפור למורם, ועליו הצל. */
 .dp {
   --rest: #E9EEF0; --raisedStroke: #DCE3E7; --restLine: #D6DEE3; --amberSoft: #F6EFDF; --amberInk: #7B580F; --coachDeep: #10838C;
   --sh-card: 0 calc(4px * var(--k)) calc(15px * var(--k)) rgba(20, 33, 42, 0.07);
@@ -981,3 +977,15 @@ p.k-center { display: block; margin: 0; }
 .n-chead .back { width: calc(40px * var(--k)); height: calc(40px * var(--k)); display: inline-flex; align-items: center; justify-content: center; flex: none; }
 .n-chead .back svg { width: calc(24px * var(--k)); height: calc(24px * var(--k)); }
 
+
+/* Touch screens: the big scroll button under the phone, beside the flip button (replaces the small in-screen arrow) */
+.dp-ctrls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; position: relative; z-index: 1; }
+.dp-wrap.is-idle .dp-ctrls { display: none; }
+.dp-more { display: none !important; }
+.scroll-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 20px 0 16px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: 15.5px; font-weight: 600; cursor: pointer; box-shadow: var(--shadow-sm); position: relative; z-index: 1; -webkit-tap-highlight-color: transparent; }
+.scroll-btn[hidden] { display: none; }
+.scroll-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--trainer); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: rotate 0.22s ease; }
+.scroll-btn.up svg { rotate: 180deg; }
+.scroll-btn:active { transform: scale(0.97); }
+.sides .scroll-btn { background: var(--dark-2); border-color: var(--dark-line); color: #FFFFFF; }
+.sides .scroll-btn svg { stroke: #FFFFFF; }

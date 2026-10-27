@@ -1,6 +1,6 @@
 /* ═══ הדמו האינטראקטיבי — העתק נאמן של שני הממשקים (לפי מפרטי הקוד + ביקורת נאמנות, 09/09/2026)
    מצב אחד משותף (S) לכל הטלפונים בדף: מה שהמתאמן מסמן — המאמן רואה, ולהפך.
-   כל המחרוזות, הסדר והמידות — מ-lib/screens ו-lib/widgets של האפליקציה. ═══ */
+   כל המחרוזות, הסדר והמידות — מהאפליקציה עצמה. ═══ */
 (function () {
   'use strict';
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -676,7 +676,12 @@
     var el = ph.stage, max = el.scrollHeight - el.clientHeight;
     var show = max > 24 && !ph.root.classList.contains('is-idle');
     if (ph.more.hidden === show) ph.more.hidden = !show;
-    if (show) ph.more.classList.toggle('up', el.scrollTop > max - 24);
+    if (show) {
+      var up = el.scrollTop > max - 24;
+      ph.more.classList.toggle('up', up);
+      var lab = ph.more.querySelector('span'), t = up ? 'חזרה למעלה' : 'גלילה במסך';
+      if (lab && lab.textContent !== t) lab.textContent = t;
+    }
   }
   function renderAll() { phones.forEach(render); }
   // הבר וה-FAB הם צמתים קבועים: מעדכנים מחלקות במקום לבנות מחדש, כדי שמעברי ה-CSS (גלולה, שקיפות הטאבים, הכפתור) ירוצו
@@ -872,13 +877,22 @@
       '<div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
       '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden></div><div class="dp-sheen" aria-hidden="true"></div>' +
       '<div class="dp-cover"><span class="wm" dir="ltr">' + wordmark() + '</span><p>הדגמה חיה של הממשק — כל כפתור לחיץ</p><button class="dp-start" data-act="start">התחל הדגמה</button></div></div>' +
-      '<i class="dp-face" aria-hidden="true"></i>' +   // המסגרת המרונדרת (בלנדר) — מעל המסך, שקופה בחלון המסך
+      '<i class="dp-face" aria-hidden="true"></i>' +   // המסגרת המרונדרת — מעל המסך, שקופה בחלון המסך
       edges() +'<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><b class="flash"></b><u class="lidar"></u><s class="mic"></s></span><svg viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><span class="brand">FIT<svg class="brand-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z"/></svg>POLIS</span></div>';
     var ground = document.createElement('div'); ground.className = 'dp-ground'; ground.setAttribute('aria-hidden', 'true');
     root.parentNode.insertBefore(ground, root);
     var placeGround = function () { ground.style.top = (root.offsetTop + root.offsetHeight - 12) + 'px'; };
     placeGround(); window.addEventListener('resize', placeGround);
     ph.topbar = root.querySelector('.dp-topbar'); ph.stage = root.querySelector('.dp-stage'); ph.more = root.querySelector('.dp-more'); ph.nav = root.querySelector('.dp-nav'); ph.sheet = root.querySelector('.dp-sheet'); ph.navwrap = root.querySelector('.dp-navwrap'); ph.toast = root.querySelector('.dp-toast');
+    // מסך מגע: כפתור גדול מתחת לטלפון, ליד כפתור המעבר, מגלגל את המסך שבפנים (הבעלים, 27/10: "תשים כפתור במובייל בשביל גלילה בתוך הטלפון")
+    var flipB = root.parentNode.querySelector('.flip-btn');
+    if (coarse && flipB) {
+      var row = document.createElement('div'); row.className = 'dp-ctrls';
+      flipB.parentNode.insertBefore(row, flipB); row.appendChild(flipB);
+      var sb = document.createElement('button'); sb.type = 'button'; sb.className = 'scroll-btn'; sb.hidden = true;
+      sb.innerHTML = icon('nav-down', 'bi') + '<span>גלילה במסך</span>';
+      row.appendChild(sb); ph.more = sb;
+    }
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]');
       if (ph.sheetKind && e.target.closest('.dp-sheet') && !e.target.closest('.k-form, .k-detsheet')) { ph.sheetKind = null; render(ph); return; }
