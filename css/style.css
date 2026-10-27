@@ -1397,7 +1397,7 @@ a.logotype { min-height: 44px; }
 }
 
 
-/* ── כרטיס "הלוגו וצבעי המערכת": המבנה האמיתי של שני מקטעי ההגדרות (logo_section.dart, palette_editor.dart), מצומצם ── */
+/* ── כרטיס "הלוגו וצבעי המערכת": המבנה האמיתי של שני מקטעי ההגדרות, מצומצם ── */
 .brand-ui { display: flex; flex-direction: column; gap: 12px; }
 .brand-ui .bs { display: flex; flex-direction: column; gap: 8px; }
 .brand-ui .bt { font-family: var(--font-display); font-weight: 600; font-size: 16px; color: var(--pf-ink); }
