@@ -43,9 +43,10 @@
   function zoom(t) { var c = 1 - t * t * t; return 1 - c * c; }
 
   function measure() {
-    // אחרי הסוף הפתיח מוסתר (display:none), ומדידה של אלמנט מוסתר מחזירה אפסים — מציגים לרגע
-    var hidden = intro.classList.contains('is-done');
-    if (hidden) { intro.classList.remove('is-done'); }
+    // כשהמסגרת עולה עם הדף הלוגו מוסתר, ואחרי הסוף כל הפתיח (display:none) — ומדידה של אלמנט מוסתר
+    // מחזירה אפסים. מציגים לרגע; המיקום נמדד יחסית לפתיח עצמו, אז לא משנה איפה הוא עומד
+    var saved = intro.className;
+    intro.classList.remove('is-done', 'is-scroll');
     if (fit) { fit.style.transform = ''; }
     if (polis) { polis.style.transform = ''; }
     W = root.clientWidth;
@@ -65,7 +66,7 @@
     spread = W * 0.6;
     lastW = W; lastH = H;
     lastA = -1; lastCue = lastT = lastD = lastTop = '';
-    if (hidden) { intro.classList.add('is-done'); }
+    intro.className = saved;
   }
 
   // כמה ה-O גדל בסוף: החור מגיע כמעט עד הפינות, וקצוות הטבעת נשארים בהן. העומק בפינה — לפי

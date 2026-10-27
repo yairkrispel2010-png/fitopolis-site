@@ -16,12 +16,14 @@
   height: 100lvh;
   z-index: 200;
   pointer-events: none;
-  /* FIT ו-POLIS יוצאים מעבר לקצוות; כשהפתיח עולה עם הדף זה היה מרחיב את הדף לצדדים */
-  overflow: hidden;
 }
 /* המסגרת (קצוות ה-O בפינות) נעוצה למסך עד שהבלוק הכהה מגיע לתחתית המסך; משם היא עוברת לעמוד עצמו,
    במקום שבו עמדה, ועולה יחד איתו (top ו-height נקבעים ב-intro.js) */
 .intro-on .intro.is-scroll { position: absolute; }
+/* FIT ו-POLIS כבר שקופים ומחוץ למסך; כשהפתיח עולה עם הדף הם היו מרחיבים את הדף לצדדים. לא overflow:hidden
+   על הפתיח: בטלפון של הבעלים POLIS נעלם לרגע, וחיתוך על שכבה נעוצה בדף מימין לשמאל הוא חשוד מוכר */
+.intro-on .intro.is-scroll .intro-logo,
+.intro-on .intro.is-scroll .intro-cue { display: none; }
 .intro-on .intro.is-done { display: none; }
 
 /* המסלול: הפתיח והראש של הדף נעוצים במקום בזמן שה-O גדל, ועוד קצת אחרי שנעצר */
@@ -50,8 +52,9 @@
   height: 0.78em;
   margin: 0 0.03em;
 }
+/* בלי will-change: שכבה נפרדת לכל מילה לא נחוצה לתזוזה הקצרה הזאת, ובטלפון היא יכולה להיעלם לרגע */
 .intro-logo .fit,
-.intro-logo .polis { display: inline-block; will-change: transform, opacity; }
+.intro-logo .polis { display: inline-block; }
 
 .intro-logo, #intro-ring { animation: introIn 0.9s cubic-bezier(0.22, 0.8, 0.35, 1) 0.1s both; }
 @keyframes introIn { from { opacity: 0; } to { opacity: 1; } }
