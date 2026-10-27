@@ -2,7 +2,8 @@
 // שבתוכו חושף את האתר — ונעצר כשקצוות הטבעת יושבים בפינות המסך. משם עוד קצת גלילה
 // הראש של האתר עומד במקום; אחר כך האתר נגלל בתוך המסגרת הזאת עד הבלוק הכהה שלמטה,
 // ושם המסגרת עולה יחד עם הקצה העליון שלו.
-// אין ספרייה: SVG אחד בגודל המסך — מלבן לבן עם חור עגול (evenodd, בלי מסכה), וחישוב לפי scrollY.
+// אין ספרייה. בזמן הזום — SVG אחד בגודל המסך: מלבן לבן עם חור עגול (evenodd, בלי מסכה) והטבעת.
+// אחרי הזום — שתי שכבות של קצוות ה-O, אחת נעוצה לראש המסך ואחת לתחתית שלו. הכל לפי scrollY.
 (function () {
   'use strict';
 
@@ -15,18 +16,24 @@
   var slot = intro && intro.querySelector('.intro-o-slot');
   var ring = document.getElementById('intro-ring');
   var veil = document.getElementById('intro-veil-p');
+  var edgeT = document.getElementById('intro-edge-t');
+  var edgeB = document.getElementById('intro-edge-b');
   var fit = intro && intro.querySelector('.fit');
   var polis = intro && intro.querySelector('.polis');
   var cue = intro && intro.querySelector('.intro-cue');
-  if (!intro || !pin || !slot || !ring || !veil) { root.classList.remove('intro-on'); return; }
+  if (!intro || !pin || !slot || !ring || !veil || !edgeT || !edgeB) { root.classList.remove('intro-on'); return; }
+  var svgT = edgeT.ownerSVGElement;
+  var svgB = edgeB.ownerSVGElement;
 
   var R_IN = 23.5;    // הרדיוס הפנימי של הסמל (viewBox 100)
-  var W = 0, H = 0, top0 = 0, run = 1, stay = 0, dx0 = 0, dy0 = 0, k0 = 1, spread = 0;
+  var W = 0, H = 0, top0 = 0, run = 1, stay = 0, cx0 = 0, cy0 = 0, k0 = 1, spread = 0;
+  var hv = 0;         // הגובה שרואים עכשיו (בטלפון — עם שורת הכתובת או בלעדיה): לפיו המסגרת
   var mode = '';      // 'fixed' נעוצה למסך · 'scroll' עולה עם הבלוק הכהה · 'done' כבר מעל המסך
+  var framed = false; // אחרי הזום: שתי שכבות הקצוות במקום הלוח הלבן
 
-  // הגובה של הפתיח: המסך הגדול (100lvh) — בטלפון זה המסך בלי שורת הכתובת. כשהשורה נעלמת בגלילה המסך
-  // גדל, ופתיח בגובה "המסך הנוכחי" היה נגמר לפני התחתית (נמדד בטלפון של הבעלים: 60px בלי כיסוי).
-  // הגובה הזה לא משתנה כשהשורה נעלמת ונחזרת, ולכן גם המסלול והציור לא קופצים
+  // הגובה של הזום: המסך הגדול (100lvh) — בטלפון זה המסך בלי שורת הכתובת, ולכן הלוח הלבן מכסה עד התחתית
+  // גם כשהשורה נעלמת (נמדד בטלפון של הבעלים: בלי זה 60px בתחתית נשארו בלי כיסוי). הגובה הזה לא משתנה
+  // כשהשורה נעלמת ונחזרת, אז המסלול לא קופץ
   var probe = document.createElement('div');
   probe.setAttribute('aria-hidden', 'true');
   probe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:100vh;height:100lvh;visibility:hidden;pointer-events:none';
@@ -34,7 +41,7 @@
   function boxH() { return Math.round(probe.getBoundingClientRect().height) || window.innerHeight; }
   var raf = null;
   var released = false;
-  var lastA = -1, lastCue = '', lastT = '', lastD = '', lastTop = '';
+  var lastA = -1, lastCue = '', lastT = '', lastD = '', lastTop = '', lastE = '';
   var lastW = -1, lastH = -1;
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
@@ -43,29 +50,30 @@
   function zoom(t) { var c = 1 - t * t * t; return 1 - c * c; }
 
   function measure() {
-    // כשהמסגרת עולה עם הדף הלוגו מוסתר, ואחרי הסוף כל הפתיח (display:none) — ומדידה של אלמנט מוסתר
-    // מחזירה אפסים. מציגים לרגע; המיקום נמדד יחסית לפתיח עצמו, אז לא משנה איפה הוא עומד
+    // אחרי הזום הלוגו מוסתר, ואחרי הסוף כל הפתיח (display:none) — ומדידה של אלמנט מוסתר מחזירה אפסים.
+    // מציגים לרגע; המיקום נמדד יחסית לפתיח עצמו, אז לא משנה איפה הוא עומד
     var saved = intro.className;
-    intro.classList.remove('is-done', 'is-scroll');
+    intro.classList.remove('is-done', 'is-scroll', 'is-framed');
     if (fit) { fit.style.transform = ''; }
     if (polis) { polis.style.transform = ''; }
     W = root.clientWidth;
     H = boxH();
+    hv = window.innerHeight;
     top0 = pin.getBoundingClientRect().top + (window.scrollY || 0);
     run = Math.round(H * 1.2);     // ה-O גדל
     stay = Math.round(H * 0.6);    // האתר עומד במקום, וקצוות ה-O בפינות
     root.style.setProperty('--intro-run', (run + stay) + 'px');
-    // מקום ה-O בלוגו, יחסית למרכז הפתיח (הלוגו ממורכז בו, גם כשגובה המסך משתנה)
+    // מקום ה-O בלוגו, יחסית לראש הפתיח (הלוגו במרכז המסך הקטן — svh — אז הוא לא זז כששורת הכתובת זזה)
     var box = intro.getBoundingClientRect();
     var r = slot.getBoundingClientRect();
     if (r.width > 0) {
-      dx0 = r.left + r.width / 2 - (box.left + box.width / 2);
-      dy0 = r.top + r.height / 2 - (box.top + box.height / 2);
+      cx0 = r.left - box.left + r.width / 2;
+      cy0 = r.top - box.top + r.height / 2;
       k0 = r.width / 100;
     }
     spread = W * 0.6;
     lastW = W; lastH = H;
-    lastA = -1; lastCue = lastT = lastD = lastTop = '';
+    lastA = -1; lastCue = lastT = lastD = lastTop = lastE = '';
     intro.className = saved;
   }
 
@@ -78,7 +86,9 @@
   }
 
   function veilPath(cx, cy, r, h) {
-    var d = 'M-2 -2H' + (W + 2) + 'V' + (h + 2) + 'H-2Z';
+    // הלוח הלבן עד תחתית הפתיח (המסך הגדול), גם כשרואים פחות: בטלפון, בזמן ששורת הכתובת זזה, רואים
+    // מתחת לגובה שנמדד עוד לפני שהציור הבא מתעדכן
+    var d = 'M-2 -2H' + (W + 2) + 'V' + (Math.max(h, H) + 2) + 'H-2Z';
     if (r <= 0.05) { return d; }
     return d + 'M' + (cx - r).toFixed(2) + ' ' + cy.toFixed(2) + 'a' + r.toFixed(2) + ' ' + r.toFixed(2) + ' 0 1 0 ' + (2 * r).toFixed(2) + ' 0a' + r.toFixed(2) + ' ' + r.toFixed(2) + ' 0 1 0 ' + (-2 * r).toFixed(2) + ' 0Z';
   }
@@ -101,10 +111,10 @@
     var co = clamp(1 - p * 6).toFixed(3);
     if (cue && co !== lastCue) { lastCue = co; cue.style.opacity = co; }
 
-    // ה-O עובר למרכז המסך, ובמקביל גדל — לאט בהתחלה, מהר באמצע, ונעצר בעדינות בפינות
+    // ה-O עובר למרכז מה שרואים, ובמקביל גדל — לאט בהתחלה, מהר באמצע, ונעצר בעדינות בפינות
     var c = easeInOut(clamp(p / 0.3));
-    var cx = W / 2 + dx0 * (1 - c);
-    var cy = h / 2 + dy0 * (1 - c);
+    var cx = cx0 + (W / 2 - cx0) * c;
+    var cy = cy0 + (h / 2 - cy0) * c;
     var k = k0 * Math.pow(kStopFor(h) / k0, zoom(p));
     // בהתחלה ה-O הוא הסמל כמו שהוא, עם רקע לבן בפנים; החור נפתח עם הגלילה
     var hole = R_IN * k * easeInOut(clamp(p / 0.14));
@@ -114,6 +124,26 @@
     if (t !== lastT) { lastT = t; ring.setAttribute('transform', t); }
     if (d !== lastD) { lastD = d; veil.setAttribute('d', d); }
     return hole / (Math.sqrt(W * W + h * h) / 2);
+  }
+
+  // המסגרת, לפי הגובה שרואים (h). כל שכבה בגובה חצי מסך: העליונה מציירת את חצי המעגל העליון ביחס לראש
+  // המסך, והתחתונה את התחתון ביחס לתחתית. אמצע כל צלע תמיד בתוך החור, אז אין ביניהן תפר; וכשבטלפון
+  // שורת הכתובת זזה, הדפדפן מזיז את השכבה התחתונה עם התחתית — הפינות לא נחתכות ולא נעלמות
+  function drawEdges(h) {
+    var key = W + '|' + h;
+    if (key === lastE) { return; }
+    lastE = key;
+    var half = Math.ceil(h / 2);
+    var s = ') scale(' + kStopFor(h).toFixed(4) + ') translate(-50 -50)';
+    svgT.style.height = svgB.style.height = half + 'px';
+    edgeT.setAttribute('transform', 'translate(' + (W / 2).toFixed(2) + ' ' + (h / 2).toFixed(2) + s);
+    edgeB.setAttribute('transform', 'translate(' + (W / 2).toFixed(2) + ' ' + (half - h / 2).toFixed(2) + s);
+  }
+
+  function setFramed(on) {
+    if (on === framed) { return; }
+    framed = on;
+    intro.classList.toggle('is-framed', on);
   }
 
   function setMode(m) {
@@ -127,25 +157,36 @@
   function paint() {
     raf = null;
     var sy = window.scrollY || 0;
+    // כשהמסגרת נעוצה — לפי מה שרואים עכשיו; כשהיא כבר עולה עם הדף — הגובה שהיה ברגע המעבר
+    if (mode === 'fixed' || mode === '') { hv = window.innerHeight; }
     // המקום בדף שבו הבלוק הכהה נוגע בתחתית המסך: עד שם המסגרת נעוצה (קוראים לפני שכותבים משהו).
     // בלי בלוק כהה — המסגרת עולה עם הראש של האתר, מיד אחרי העצירה
     var stopAt = top0 + run + stay;
-    if (dark) { stopAt = Math.max(stopAt, dark.getBoundingClientRect().top + sy - H); }
+    if (dark) { stopAt = Math.max(stopAt, dark.getBoundingClientRect().top + sy - hv); }
     var hold = false;
 
     if (sy < stopAt) {
       setMode('fixed');
-      // התוכן שמאחורי הלוח הלבן לא נגיש למקלדת עד שהחור כבר גדול
-      hold = draw(clamp((sy - top0) / run), H) < 0.3;
+      hv = window.innerHeight;
+      var p = clamp((sy - top0) / run);
+      if (p < 1) {
+        setFramed(false);
+        // התוכן שמאחורי הלוח הלבן לא נגיש למקלדת עד שהחור כבר גדול
+        hold = draw(p, hv) < 0.3;
+      } else {
+        drawEdges(hv);
+        setFramed(true);
+      }
     } else {
       // המסגרת עוברת לעמוד עצמו, בדיוק במקום שבו עמדה — מכאן הדפדפן מזיז אותה יחד עם הבלוק הכהה
-      draw(1, H);
-      setMode(sy < stopAt + H ? 'scroll' : 'done');
-      var tp = stopAt + '|' + H;
+      drawEdges(hv);
+      setFramed(true);
+      setMode(sy < stopAt + hv ? 'scroll' : 'done');
+      var tp = stopAt + '|' + hv;
       if (mode === 'scroll' && tp !== lastTop) {
         lastTop = tp;
         intro.style.top = stopAt + 'px';
-        intro.style.height = H + 'px';
+        intro.style.height = hv + 'px';
       }
     }
 
@@ -158,7 +199,7 @@
   function relayout() { measure(); paint(); }
 
   // מודדים מחדש רק כשהרוחב או המסך הגדול משתנים (סיבוב, שינוי חלון). שורת הכתובת שנעלמת ונחזרת
-  // משנה את גובה החלון אבל לא את המסך הגדול — אז המסלול והציור נשארים במקום
+  // משנה רק את הגובה שרואים — המסלול נשאר, והמסגרת מתעדכנת בציור הבא
   function onResize() {
     if (root.clientWidth !== lastW || boxH() !== lastH) { relayout(); }
     else { schedule(); }

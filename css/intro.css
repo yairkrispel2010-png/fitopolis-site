@@ -20,10 +20,21 @@
 /* המסגרת (קצוות ה-O בפינות) נעוצה למסך עד שהבלוק הכהה מגיע לתחתית המסך; משם היא עוברת לעמוד עצמו,
    במקום שבו עמדה, ועולה יחד איתו (top ו-height נקבעים ב-intro.js) */
 .intro-on .intro.is-scroll { position: absolute; }
-/* FIT ו-POLIS כבר שקופים ומחוץ למסך; כשהפתיח עולה עם הדף הם היו מרחיבים את הדף לצדדים. לא overflow:hidden
-   על הפתיח: בטלפון של הבעלים POLIS נעלם לרגע, וחיתוך על שכבה נעוצה בדף מימין לשמאל הוא חשוד מוכר */
-.intro-on .intro.is-scroll .intro-logo,
-.intro-on .intro.is-scroll .intro-cue { display: none; }
+
+/* אחרי הזום — המסגרת: שתי שכבות של קצוות ה-O, העליונה נעוצה לראש המסך והתחתונה לתחתית שלו. בטלפון
+   שורת הכתובת מופיעה ונעלמת ומשנה את גובה המסך; שכבה שנעוצה לתחתית (bottom:0) זזה איתה מיד, בלי לחכות
+   ל-JS. כך הפינות התחתונות תמיד בתחתית מה שרואים (הבעלים, 27/10: "החלק התחתון לא מופיע").
+   הלוח הלבן, הלוגו והחץ מוסתרים — הם כבר שקופים או מחוץ למסך, וכך גם לא מרחיבים את הדף לצדדים.
+   לא overflow:hidden על הפתיח: בטלפון של הבעלים POLIS נעלם לרגע, וחיתוך על שכבה נעוצה בדף RTL הוא חשוד מוכר */
+.intro-edge { display: none; position: fixed; left: 0; width: 100%; }
+.intro-edge-top { top: 0; }
+.intro-edge-bottom { bottom: 0; }
+.intro-on .intro.is-framed .intro-veil,
+.intro-on .intro.is-framed .intro-logo,
+.intro-on .intro.is-framed .intro-cue { display: none; }
+.intro-on .intro.is-framed .intro-edge { display: block; }
+/* כשהמסגרת עולה עם הבלוק הכהה, שתי השכבות עוברות לפתיח עצמו (שגובהו נקבע ב-intro.js) */
+.intro-on .intro.is-scroll .intro-edge { position: absolute; }
 .intro-on .intro.is-done { display: none; }
 
 /* המסלול: הפתיח והראש של הדף נעוצים במקום בזמן שה-O גדל, ועוד קצת אחרי שנעצר */
@@ -59,19 +70,24 @@
 .intro-logo, #intro-ring { animation: introIn 0.9s cubic-bezier(0.22, 0.8, 0.35, 1) 0.1s both; }
 @keyframes introIn { from { opacity: 0; } to { opacity: 1; } }
 
+/* "גללו למטה" והחץ שמתחתיו (הבעלים, 27/10); החץ נשאר במקום שבו היה — 34px מתחתית המסך */
 .intro-cue {
   position: absolute;
   left: 50%;
-  top: calc(100% - 64px);
-  top: calc(100svh - 64px);
-  width: 30px;
-  height: 30px;
-  margin-left: -15px;
+  top: calc(100% - 86px);
+  top: calc(100svh - 86px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   color: var(--ink-soft);
 }
-/* האנימציה על החץ עצמו: על המיכל היא הייתה דורסת את השקיפות שהגלילה קובעת */
+.intro-cue-t { font-size: 15px; font-weight: 500; line-height: 18px; white-space: nowrap; }
+/* האנימציה על הטקסט ועל החץ עצמם: על המיכל היא הייתה דורסת את השקיפות שהגלילה קובעת */
+.intro-cue-t,
 .intro-cue svg { animation: introCue 0.7s ease 1.3s both; }
-.intro-cue svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.intro-cue svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 @keyframes introCue {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: none; }
