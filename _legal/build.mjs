@@ -94,7 +94,13 @@ function inline(raw, lang) {
   s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
   s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   // [fitopolis.co.il/page.html] -> a link to the page in the same language
-  s = s.replace(/\[fitopolis\.co\.il\/([a-z-]+)\.html\]/g, (_, p) => `<a href="/${p}${c.suffix}.html">fitopolis.co.il/${p}${c.suffix}.html</a>`);
+  // A page that is not in the repo yet (the deletion page, the terms) is named as plain text, never as a dead link; it turns into a link by itself the build after the page exists.
+  s = s.replace(/\[fitopolis\.co\.il\/([a-z-]+)\.html\]/g, (_, p) => {
+    const file = `${p}${c.suffix}.html`;
+    return fs.existsSync(path.join(ROOT, file))
+      ? `<a href="/${file}">fitopolis.co.il/${file}</a>`
+      : `fitopolis.co.il/${file}`;
+  });
   s = s.replace(/\[([^\]]+)\]/g, (_, t) => `<span class="fill-in" data-fill-in>[${t}]</span>`);
   s = s.replace(/support@fitopolis\.co\.il/g, '<a href="mailto:support@fitopolis.co.il">support@fitopolis.co.il</a>');
   return s;
