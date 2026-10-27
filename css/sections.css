@@ -112,3 +112,4 @@
 }
 .n-alert .r .n-cta { display: inline-flex; align-items: center; justify-content: center; gap: calc(6px * var(--k)); height: calc(36px * var(--k)); min-width: calc(120px * var(--k)); padding: calc(4px * var(--k)) calc(8px * var(--k)); background: var(--accentSoft); color: var(--coach); border-radius: 999px; font-size: calc(14px * var(--k)); font-weight: 700; box-sizing: border-box; }
 .n-alert .r .n-cta svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
+.fx-cap { margin: calc(10px * var(--k)) 0 0; text-align: center; font-size: calc(12.5px * var(--k)); color: var(--muted); }
