@@ -1,0 +1,63 @@
+/* ══ הפתיח: הלוגו, ובגלילה ה-O גדל וחושף את האתר ══════════════════════
+   רק בדף הבית, ורק כשאין "הפחתת תנועה" (המחלקה intro-on נקבעת בראש
+   ה-head, לפני הציור הראשון). בלי JS או עם הפחתת תנועה — אין פתיח בכלל. */
+
+.intro { display: none; }
+
+.intro-on .intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+.intro-on .intro.is-done { display: none; }
+
+/* המסלול: הפתיח והראש של הדף נעוצים במקום בזמן שה-O גדל */
+/* מקום ריק בתוך המיכל, לא ריפוד: אלמנט נעוץ לא נכנס לשטח הריפוד של ההורה */
+.intro-on .intro-pin::after { content: ""; display: block; height: var(--intro-run, 130vh); }
+.intro-on .intro-pinned { position: sticky; top: 0; }
+
+.intro-veil { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.intro-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(54px, 12vw, 168px);
+  white-space: nowrap;
+}
+/* מקום שמור ל-O: הטבעת עצמה מצוירת ב-SVG שמעליו, כדי שתישאר חדה בכל גודל */
+.intro-logo .intro-o-slot {
+  display: inline-block;
+  width: 0.78em;
+  height: 0.78em;
+  margin: 0 0.03em;
+}
+.intro-logo .fit,
+.intro-logo .polis { display: inline-block; will-change: transform, opacity; }
+
+.intro-logo, #intro-ring { animation: introIn 0.9s cubic-bezier(0.22, 0.8, 0.35, 1) 0.1s both; }
+@keyframes introIn { from { opacity: 0; } to { opacity: 1; } }
+
+.intro-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  width: 30px;
+  height: 30px;
+  margin-left: -15px;
+  color: var(--ink-soft);
+}
+/* האנימציה על החץ עצמו: על המיכל היא הייתה דורסת את השקיפות שהגלילה קובעת */
+.intro-cue svg { animation: introCue 0.7s ease 1.3s both; }
+.intro-cue svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes introCue {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* האנימציות של הפתיח עצמו מחכות עד שהחור נפתח (ההחלפה ב-intro.js) */
+.intro-on.intro-hold .hero .reveal,
+.intro-on.intro-hold .topbar .logotype .o-mark { animation-play-state: paused; }

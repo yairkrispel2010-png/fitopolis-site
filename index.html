@@ -26,7 +26,19 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/fredoka-600-hebrew.woff2" crossorigin>
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="css/style.css?v=23">
-  <link rel="stylesheet" href="css/phone.css?v=15">
+  <link rel="stylesheet" href="css/phone.css?v=18">
+  <link rel="stylesheet" href="css/intro.css?v=1">
+  <!-- הפתיח: נקבע לפני הציור הראשון, כדי שהאתר לא יהבהב לפני הלוגו. עם הפחתת תנועה, קישור לעוגן או חזרה לאמצע הדף — בלי פתיח. -->
+  <script>
+    (function () {
+      try {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+        if (location.hash && location.hash !== '#') { return; }
+        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+        document.documentElement.classList.add('intro-on', 'intro-hold');
+      } catch (e) {}
+    })();
+  </script>
   <link rel="canonical" href="https://fitopolis.co.il/">
   <!-- לגוגל: שם האתר בתוצאות החיפוש (גם מי שמחפש באנגלית) והסמל של העסק. הכל כבר גלוי באתר — שום פרט חדש -->
   <script type="application/ld+json">
@@ -125,7 +137,25 @@
   </defs>
 </svg>
 
-<header class="container topbar topbar-menu">
+<!-- ══ הפתיח: הלוגו, וה-O שגדל וחושף את האתר (css/intro.css, js/intro.js) ══ -->
+<div class="intro" aria-hidden="true">
+  <svg class="intro-veil">
+    <defs>
+      <mask id="intro-hole" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+        <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+        <circle id="intro-hole-c" cx="0" cy="0" r="0" fill="#000"/>
+      </mask>
+    </defs>
+    <rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF" mask="url(#intro-hole)"/>
+    <g id="intro-ring"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></g>
+  </svg>
+  <span class="logotype intro-logo"><span class="fit">FIT</span><span class="intro-o-slot"></span><span class="polis">POLIS</span></span>
+  <span class="intro-cue"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+</div>
+
+<main id="main" tabindex="-1">
+<div class="intro-pin"><div class="intro-pinned">
+<header class="container topbar topbar-menu" role="banner">
   <span class="logotype" aria-label="FITOPOLIS">
     <span class="fit">FIT</span>
     <svg class="o-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>
@@ -137,7 +167,6 @@
   </nav>
 </header>
 
-<main id="main" tabindex="-1">
   <!-- ══ הפתיח ══ -->
   <section class="hero">
     <div class="ring-layer" data-depth="18" aria-hidden="true">
@@ -171,6 +200,7 @@
       </div>
     </div>
   </section>
+</div></div>
 
   <!-- ══ המבנה המרכזי ══ -->
   <section class="features" id="after-demo">
@@ -329,7 +359,8 @@
   </div>
 </footer>
 
+<script src="js/intro.js?v=1"></script>
 <script src="js/main.js?v=11"></script>
-<script src="js/demo.js?v=23"></script>
+<script src="js/demo.js?v=24"></script>
 </body>
 </html>
