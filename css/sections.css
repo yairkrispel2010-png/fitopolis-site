@@ -1,0 +1,114 @@
+/* ═══ האמצע של דף הבית — בין הטלפון לבלוק הכהה (27/10/2026) ═══════════════════════════════
+   הבעלים: "אני רוצה גם שתעשה מחדש את כל החלק שבין הטלפון לבין הבלוק התחתון השחור".
+   כל חלק הוא שורה: טקסט בצד אחד, ובצד השני פיסה אמיתית של המסך העדכני של האפליקציה (רכיבי n-*),
+   על משטח בגוון של התפקיד. השורות מתחלפות צד. רק בדף הבית. */
+
+.fx { padding-block: 104px 128px; }
+
+/* אסימוני הממשק מחוץ לטלפון — אותם ערכים כמו בתוך .dp, בקנה מידה מלא */
+.ui-kit {
+  --k: 0.94;
+  --bg: #F2F5F6; --card: #FFFFFF; --cardAlt: #E9EEF0; --ink: #14212A; --onInk: #F2F5F6; --muted: #5C6B75; --faint: #93A1AA;
+  --border: #DCE3E7; --borderStrong: #C1CBD1; --accentSoft: #E3F1F2; --goodSoft: #E7F2EC; --badSoft: #F9EBEB; --shadow: rgba(20, 33, 42, 0.07);
+  --coach: #12939D; --onCoach: #FFFFFF; --trainee: #F07C1A; --onTrainee: #331B04; --system: #B0599A; --attention: #C08A18; --positive: #37945F; --negative: #CC5555; --neutral: #8A8A8A;
+  --rest: #E9EEF0; --raisedStroke: #DCE3E7; --restLine: #D6DEE3; --amberSoft: #F6EFDF; --amberInk: #7B580F; --coachDeep: #10838C;
+  --fd: var(--font-display); --fb: var(--font-body); --fn: var(--font-digits);
+  --sh-card: 0 calc(4px * var(--k)) calc(15px * var(--k)) rgba(20, 33, 42, 0.07);
+  --sh-seg: 0 1px 2px rgba(20, 33, 42, 0.06), 0 calc(4px * var(--k)) calc(12px * var(--k)) rgba(20, 33, 42, 0.08);
+  --sh-raised: 0 calc(2px * var(--k)) calc(6px * var(--k)) rgba(20, 33, 42, 0.06), 0 calc(16px * var(--k)) calc(32px * var(--k)) rgba(20, 33, 42, 0.10);
+  font-family: var(--fb); color: var(--ink); text-align: start; line-height: 1.4; font-size: calc(15px * var(--k));
+}
+.ui-kit svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.ui-kit .bi { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
+.ui-kit h2, .ui-kit p { margin: 0; }
+
+/* השורה */
+.fx-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 76px; align-items: center; }
+.fx-row + .fx-row { margin-top: 120px; }
+.fx-row.flip .fx-art { order: -1; }
+.fx-copy { max-width: 520px; }
+.fx-num { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-digits); font-size: 15px; letter-spacing: 0.12em; color: var(--trainer-text); }
+.fx-num::after { content: ""; width: 36px; height: 2px; border-radius: 2px; background: currentColor; opacity: 0.45; }
+.fx-title { margin: 14px 0 18px; font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 3.1vw, 40px); line-height: 1.16; }
+.fx-lead { margin: 0 0 14px; font-size: 19px; line-height: 1.6; font-weight: 500; color: var(--ink); }
+.fx-copy > p { margin: 0; font-size: 17px; line-height: 1.75; color: var(--ink-soft); }
+.fx-points { list-style: none; margin: 26px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.fx-points li { display: flex; gap: 12px; align-items: flex-start; font-size: 16.5px; line-height: 1.55; }
+.fx-points li svg { width: 22px; height: 22px; flex: none; margin-top: 1px; fill: none; stroke: var(--trainer-text); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* המשטח של האיור */
+.fx-art { position: relative; isolation: isolate; border-radius: 32px; padding: 52px 44px; min-height: 440px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(20, 33, 42, 0.05); }
+.fx-art::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(110% 80% at 88% 0%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 58%); }
+.fx-art .fx-o { position: absolute; z-index: -1; width: 340px; height: 340px; inset-inline-start: -110px; bottom: -120px; opacity: 0.09; transform: rotate(-18deg); }
+.fx-art.tint-coach { background: linear-gradient(158deg, #E6F2F3 0%, #D3E8EA 100%); }
+.fx-art.tint-trainee { background: linear-gradient(158deg, #FBEFE4 0%, #F5DECB 100%); }
+.fx-art.tint-system { background: linear-gradient(158deg, #F5EBF2 0%, #EAD6E4 100%); }
+.fx-art.tint-ink { background: linear-gradient(158deg, #ECF1F3 0%, #DCE4E8 100%); }
+
+/* פיסת מסך: רקע האפליקציה, פינות ומעט עומק */
+.fx-ui { position: relative; width: 100%; max-width: 440px; }
+.fx-screen { background: var(--bg); border-radius: 26px; padding: calc(20px * var(--k)); box-shadow: 0 2px 6px rgba(20, 33, 42, 0.06), 0 30px 60px -18px rgba(20, 33, 42, 0.28); }
+.fx-screen.flush { padding: 0; overflow: hidden; }
+.fx-ui .n-count { margin-top: calc(14px * var(--k)); }
+
+/* התבניות */
+.fx-tpl { display: flex; align-items: center; gap: calc(12px * var(--k)); padding: calc(14px * var(--k)) calc(16px * var(--k)); margin-bottom: calc(10px * var(--k)); background: var(--card); border: 1px solid var(--border); border-radius: calc(18px * var(--k)); box-shadow: var(--sh-card); }
+.fx-tpl .ic { width: calc(44px * var(--k)); height: calc(44px * var(--k)); border-radius: calc(14px * var(--k)); background: var(--accentSoft); color: var(--coach); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.fx-tpl .ic svg { width: calc(22px * var(--k)); height: calc(22px * var(--k)); }
+.fx-tpl .col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: calc(2px * var(--k)); }
+.fx-tpl .col b { font-family: var(--fd); font-weight: 600; font-size: calc(18px * var(--k)); line-height: 1.25; }
+.fx-tpl .col small { font-size: calc(13px * var(--k)); color: var(--muted); }
+.fx-tpl .stack { display: inline-flex; align-items: center; flex: none; }
+.fx-tpl .stack .k-av { margin-inline-start: calc(-10px * var(--k)); }
+.fx-tpl .stack .k-av:first-child { margin-inline-start: 0; }
+.fx-tpl .stack .more { margin-inline-start: calc(6px * var(--k)); font-size: calc(12px * var(--k)); font-weight: 700; color: var(--muted); }
+.fx-ask { margin-top: calc(14px * var(--k)); background: var(--card); border: 1px solid var(--raisedStroke); border-radius: calc(20px * var(--k)); box-shadow: var(--sh-raised); padding: calc(16px * var(--k)); }
+.fx-ask b { display: block; font-size: calc(16px * var(--k)); font-weight: 700; margin-bottom: calc(4px * var(--k)); }
+.fx-ask p { font-size: calc(14px * var(--k)); color: var(--muted); line-height: 1.45; }
+.fx-ask .btns { display: flex; gap: calc(8px * var(--k)); margin-top: calc(12px * var(--k)); }
+.fx-ask .btns span { flex: 1; min-height: calc(42px * var(--k)); border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: calc(14px * var(--k)); font-weight: 700; text-align: center; padding: 0 calc(8px * var(--k)); }
+.fx-ask .btns .pri { background: var(--coach); color: #fff; }
+.fx-ask .btns .sec { border: 1.5px solid var(--coach); color: var(--ink); background: var(--card); }
+
+/* הלוגו והצבעים */
+.fx-brandbar { display: flex; align-items: center; gap: calc(10px * var(--k)); padding: calc(12px * var(--k)) calc(14px * var(--k)); background: var(--card); border: 1px solid var(--border); border-radius: calc(18px * var(--k)); box-shadow: var(--sh-card); }
+.fx-brandbar .mark { width: calc(40px * var(--k)); height: calc(40px * var(--k)); border-radius: calc(12px * var(--k)); background: #3D2B6B; color: #fff; font-family: var(--fd); font-weight: 600; font-size: calc(16px * var(--k)); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.fx-brandbar .nm { flex: 1; font-family: var(--fd); font-weight: 600; font-size: calc(18px * var(--k)); color: #3D2B6B; }
+.fx-brandbar .k-tbtn { width: calc(34px * var(--k)); height: calc(34px * var(--k)); border-radius: 999px; background: var(--card); border: 1.5px solid var(--borderStrong); display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+.fx-brandbar .k-tbtn svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
+.fx-bubs { display: flex; flex-direction: column; gap: calc(8px * var(--k)); margin: calc(16px * var(--k)) 0; }
+.fx-bubs span { max-width: 78%; padding: calc(9px * var(--k)) calc(12px * var(--k)); border-radius: calc(16px * var(--k)); font-size: calc(14.5px * var(--k)); line-height: 1.4; }
+.fx-bubs .c { align-self: flex-start; background: #6A4FB0; color: #fff; }
+.fx-bubs .t { align-self: flex-end; background: #E2A93B; color: #3A2604; }
+.fx-roles { display: flex; flex-direction: column; gap: calc(8px * var(--k)); }
+.fx-role { display: flex; align-items: center; gap: calc(12px * var(--k)); padding: calc(10px * var(--k)) calc(14px * var(--k)); background: var(--card); border: 1px solid var(--border); border-radius: calc(16px * var(--k)); }
+.fx-role i { width: calc(30px * var(--k)); height: calc(30px * var(--k)); border-radius: 999px; flex: none; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5); }
+.fx-role span { flex: 1; display: flex; flex-direction: column; }
+.fx-role b { font-size: calc(15px * var(--k)); font-weight: 700; }
+.fx-role small { font-size: calc(12.5px * var(--k)); color: var(--muted); line-height: 1.35; }
+.fx-pick { margin-top: calc(14px * var(--k)); display: flex; justify-content: center; }
+.fx-pick span { display: inline-flex; align-items: center; gap: calc(8px * var(--k)); min-height: calc(44px * var(--k)); padding: 0 calc(20px * var(--k)); border-radius: 999px; background: #6A4FB0; color: #fff; font-size: calc(14.5px * var(--k)); font-weight: 700; }
+
+/* פגישות ותשלומים: שני כרטיסים, השני נכנס מתחת לראשון */
+.fx-pair { position: relative; width: 100%; max-width: 440px; padding-bottom: 8px; }
+.fx-pair .n-card { margin: 0; }
+.fx-pair .n-card + .n-card { position: relative; margin-top: -22px; margin-inline-start: 46px; box-shadow: 0 2px 6px rgba(20, 33, 42, 0.06), 0 26px 50px -16px rgba(20, 33, 42, 0.3); }
+.fx-pair .n-card:first-child { margin-inline-end: 46px; padding-bottom: calc(40px * var(--k)) !important; }
+
+@media (max-width: 960px) {
+  .fx { padding-block: 72px 88px; }
+  .fx-row, .fx-row.flip { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .fx-row.flip .fx-art { order: 0; }
+  .fx-row + .fx-row { margin-top: 84px; }
+  .fx-copy { max-width: none; }
+  .fx-art { padding: 34px 18px; min-height: 0; border-radius: 26px; }
+  .ui-kit { --k: 0.82; }
+  .fx-pair .n-card + .n-card { margin-inline-start: 22px; }
+  .fx-pair .n-card:first-child { margin-inline-end: 22px; }
+}
+@media (max-width: 420px) {
+  .ui-kit { --k: 0.74; }
+  .fx-art { padding: 28px 14px; }
+}
+.n-alert .r .n-cta { display: inline-flex; align-items: center; justify-content: center; gap: calc(6px * var(--k)); height: calc(36px * var(--k)); min-width: calc(120px * var(--k)); padding: calc(4px * var(--k)) calc(8px * var(--k)); background: var(--accentSoft); color: var(--coach); border-radius: 999px; font-size: calc(14px * var(--k)); font-weight: 700; box-sizing: border-box; }
+.n-alert .r .n-cta svg { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }

@@ -26,8 +26,9 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/fredoka-600-hebrew.woff2" crossorigin>
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="css/style.css?v=23">
-  <link rel="stylesheet" href="css/phone.css?v=22">
+  <link rel="stylesheet" href="css/phone.css?v=23">
   <link rel="stylesheet" href="css/intro.css?v=1">
+  <link rel="stylesheet" href="css/sections.css?v=2">
   <!-- הפתיח: נקבע לפני הציור הראשון, כדי שהאתר לא יהבהב לפני הלוגו. עם הפחתת תנועה, קישור לעוגן או חזרה לאמצע הדף — בלי פתיח. -->
   <script>
     (function () {
@@ -197,93 +198,123 @@
 </div></div>
 
   <!-- ══ המבנה המרכזי ══ -->
-  <section class="features" id="after-demo">
+  <section class="features fx" id="after-demo">
     <div class="container">
-      <!-- ══ מי צריך אותך היום: למי זה, הכאב, ומסך הבית של המאמן כתור טיפול ══ -->
-      <div class="triage scroll-reveal">
-        <div class="triage-copy">
-          <h2 class="section-title">מי צריך אותך היום — ולמה</h2>
-          <p class="lead">זה נבנה למאמן שמלווה אנשים לאורך זמן — תוכנית, תפריט ומעקב. לא לסטודיו עם חוגים, ולא למערכת תורים.</p>
+
+      <!-- ══ מי צריך אותך היום — ולמה: הכרטיס שמתחת למונה במסך הבית ══ -->
+      <div class="fx-row scroll-reveal">
+        <div class="fx-copy">
+          <h2 class="fx-title">מי צריך אותך היום — ולמה</h2>
+          <p class="fx-lead">זה נבנה למאמן שמלווה אנשים לאורך זמן — תוכנית, תפריט ומעקב. לא לסטודיו עם חוגים, ולא למערכת תורים.</p>
           <p>עם עשרים מתאמנים אתה זוכר מי נעלם השבוע. עם מאתיים — מישהו צריך להגיד לך. מסך הבית שלך הוא תור טיפול: הודעות שלא נקראו, מי דורש טיפול ולמה, פגישות ובקשות. לא עוברים על כל הכרטיסים — פותחים את מי שצריך.</p>
-          <ul>
-            <li>מתאמן חדש נכנס בקישור הזמנה: מוסיפים אותו, שולחים לו קישור, וזהו.</li>
-            <li>גם מתאמן שלא יוריד כלום מנוהל מכאן — תוכנית, תפריט, פגישות ותשלומים, בלי מעקב שהוא לא יזין.</li>
-            <li>שעות הארוחות שלו מחושבות מזמני הקימה והשינה שהזנת — לא מוקלדות ארוחה-ארוחה.</li>
+          <ul class="fx-points">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg>מתאמן חדש נכנס בקישור הזמנה: מוסיפים אותו, שולחים לו קישור, וזהו.</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg>גם מתאמן שלא יוריד כלום מנוהל מכאן — תוכנית, תפריט, פגישות ותשלומים, בלי מעקב שהוא לא יזין.</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg>שעות הארוחות שלו מחושבות מזמני הקימה והשינה שהזנת — לא מוקלדות ארוחה-ארוחה.</li>
           </ul>
         </div>
-        <div class="struct-ui triage-ui" aria-hidden="true">
-          <div class="dp-tcard hcard"><div class="hcard-t"><svg class="ic v-trainee"><use href="#i-chat"/></svg><b>הודעות</b></div><span class="hcard-b">2 הודעות לא נקראו</span><span class="avs"><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-daniel"/></svg></span><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-ron"/></svg></span></span></div>
-          <div class="dp-tcard hcard"><div class="hcard-t"><svg class="ic v-attention"><use href="#i-priority"/></svg><b>דורשים טיפול</b></div><span class="hcard-b">2 לקוחות דורשים טיפול</span>
-            <div class="why"><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-daniel"/></svg></span><span>לא עדכן משקל השבוע</span></div>
-            <div class="why"><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-ron"/></svg></span><span>נדרשות מידות</span></div>
-          </div>
-          <div class="dp-tcard hcard"><div class="hcard-t"><svg class="ic"><use href="#i-inbox"/></svg><b>בקשות פגישה</b></div><span class="hcard-b">2 בקשות ממתינות</span></div>
+        <div class="fx-art tint-coach" aria-hidden="true">
+          <svg class="fx-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#12939D"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>
+          <div class="fx-ui ui-kit"><div class="fx-screen">
+            <div class="n-greet"><h2>בוקר טוב, יואב</h2><p>מה מחכה לך היום</p></div>
+            <div class="n-count"><span class="n-tile"><span class="num">2</span><span class="lbl">בקשות</span></span><span class="n-tile"><span class="num">3</span><span class="lbl">הודעות</span></span><span class="n-tile on"><span class="num">2</span><span class="lbl">נדרש טיפול</span></span></div>
+            <div class="n-ocard"><div class="n-ocard-h"><svg class="bi v-attention"><use href="#i-priority"/></svg><b>נדרש טיפול</b></div>
+              <div class="n-rows">
+                <div class="n-row"><span class="n-face"><span class="k-av ring-trainee tight pic" style="--s:34px"><i class="av-blue"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-daniel"/></svg></i></span></span><span class="txt"><span class="nm"><b>דניאל כהן</b></span><span class="why">אין עדכון משקל השבוע</span></span><svg class="bi chev"><use href="#i-chev-l"/></svg></div>
+                <div class="n-row"><span class="n-face"><span class="k-av ring-trainee tight pic" style="--s:34px"><i class="av-amber"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-ron"/></svg></i></span></span><span class="txt"><span class="nm"><b>רון גולדברג</b></span><span class="why">נדרשים היקפים</span></span><svg class="bi chev"><use href="#i-chev-l"/></svg></div>
+              </div>
+              <div class="n-door"><svg class="bi"><use href="#i-people"/></svg><span class="lbl">לכולם</span><svg class="bi chev"><use href="#i-chev-l"/></svg></div>
+            </div>
+          </div></div>
         </div>
       </div>
-      <div class="section-head scroll-reveal">
+
+      <div class="section-head scroll-reveal" style="margin-top: 136px;">
         <svg class="section-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>
         <h2 class="section-title">המבנה המרכזי של <span dir="ltr">FITOPOLIS</span></h2>
         <p class="section-intro">לא רשימת יכולות — שלד. ארבעה דברים שכל השאר נבנה מהם.</p>
       </div>
-      <div class="struct-grid">
-        <div class="struct-card scroll-reveal">
-          <div class="struct-ui" aria-hidden="true">
-            <div class="dp-hero"><span class="av av-blue lg pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-daniel"/></svg></span>
-              <div class="facts"><span><b>גובה</b>180 ס"מ</span><span><b>משקל</b>76.8 ק"ג</span><span><b>גיל</b>28</span><span><b>מאז</b>10/2025</span></div>
-              <div class="tags"><span class="tag-set">מזין ארוחות</span><span class="tag-set">מזין אימונים</span><i></i><span class="badge-needs">נדרש טיפול</span></div>
-            </div>
-            <div class="dp-tabs"><span class="on">מעקב</span><span>יצירת קשר</span><span>תשלומים</span></div>
-            <div class="dp-tcard">
-              <div class="dp-row"><svg class="ic v-attention"><use href="#i-weight"/></svg><span class="col"><span class="lbl">משקל</span><span class="val">76.8 ק"ג · לא עודכן השבוע</span></span></div>
-            </div>
-          </div>
-          <h3>כרטיס המתאמן</h3>
+
+      <!-- 01 · כרטיס המתאמן -->
+      <div class="fx-row flip scroll-reveal">
+        <div class="fx-copy">
+          <span class="fx-num">01</span>
+          <h3 class="fx-title">כרטיס המתאמן</h3>
           <p>מתאמן אחד — מקום אחד: פרטים, הערות שרק אתה רואה, התוכנית והתפריט שלו, משקל והיקפים לאורך זמן, פגישות, תשלומים והשיחה ביניכם. כל שינוי שעשית לו נשמר, עם תאריך. מכאן אתה מנהל אותו, ומכאן נולד הממשק שהוא רואה.</p>
         </div>
-
-        <div class="struct-card scroll-reveal">
-          <div class="struct-ui" aria-hidden="true">
-            <div class="tpl"><svg class="ic"><use href="#i-fitness"/></svg><span class="col"><b>תכנית 4 ימים</b><small>4 אימונים בשבוע · 6 מתאמנים מקושרים</small></span><span class="linked"><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-daniel"/></svg></span><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-michal"/></svg></span><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-yossi"/></svg></span><span class="more">+3</span></span></div>
-            <div class="tpl"><svg class="ic"><use href="#i-restaurant"/></svg><span class="col"><b>תפריט חיטוב</b><small>5 ארוחות ביום · 4 מתאמנים מקושרים</small></span><span class="linked"><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-daniel"/></svg></span><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-shira"/></svg></span><span class="more">+2</span></span></div>
-            <div class="tpl"><svg class="ic"><use href="#i-card"/></svg><span class="col"><b>מנוי סטנדרטי</b><small>חודשי · 8 מתאמנים מקושרים</small></span><span class="linked"><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-michal"/></svg></span><span class="av pic"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-or"/></svg></span><span class="more">+6</span></span></div>
-          </div>
-          <h3>התבניות</h3>
-          <p>תוכנית, תפריט ומבנה תשלום — בונים פעם אחת, מקצים בלחיצה, ומשנים לכל מתאמן רק מה שצריך. וכשאתה עורך תבנית, האפליקציה שואלת קודם: לעדכן את כל מי שמקושר אליה, או לשמור כתבנית נוספת. ההתאמות האישיות של כל אחד נשמרות בדרך.</p>
-        </div>
-
-        <div class="struct-card scroll-reveal">
-          <div class="struct-ui brand-ui" aria-hidden="true">
-            <div class="bs">
-              <b class="bt">הלוגו</b>
-              <div class="prev2">
-                <span class="pv"><span class="box start"><span class="mark">רן</span><em>רן פיטנס</em></span><small>בראש הדף</small></span>
-                <span class="pv"><span class="box center"><span class="mark">רן</span></span><small>בפתיחה</small></span>
-              </div>
-              <span class="btn-primary">קח את הצבעים מהלוגו</span>
-            </div>
-            <div class="bs">
-              <b class="bt">צבעי המערכת</b>
-              <div class="bubbles"><span class="bub coach">איך היה אתמול? ראיתי שסיימת הכול 💪</span><span class="bub trainee">קשה אבל טוב 😅 בסקוואט האחרון כבר לא הרגשתי את הרגליים</span></div>
-              <div class="rolecard"><span class="dot" style="background:#12939D"><svg class="ic"><use href="#i-campaign"/></svg></span><span class="col"><b>צבע המאמן</b><small>כל מה שמגיע ממך: התוכנית, ההודעות שלך, הכפתורים שלך</small></span></div>
-              <div class="rolecard"><span class="dot" style="background:#F07C1A"><svg class="ic"><use href="#i-people"/></svg></span><span class="col"><b>צבע המתאמן</b><small>כל מה שהמתאמן עושה: ההודעות שלו, סימוני "בוצע"</small></span></div>
-              <span class="caption">ועוד חמישה תפקידים — דורש טיפול, חיובי, שלילי, ניטרלי, מערכת</span>
-            </div>
-          </div>
-          <h3>הלוגו וצבעי המערכת</h3>
-          <p>הלוגו שלך — לא שלי — פותח את האפליקציה ויושב בראש כל מסך, גם אצל המתאמנים שלך. מרגע שהעלית אותו, לחיצה אחת גוזרת ממנו את צבע המאמן, צבע המתאמן וצבע המערכת. לכל צבע באפליקציה תפקיד אחד: אתה בוחר את הגוון, המשמעות נשארת.</p>
-        </div>
-
-        <div class="struct-card scroll-reveal">
-          <div class="struct-ui" aria-hidden="true">
-            <span class="flow-label">פגישה</span>
-            <div class="flow"><span class="step who-trainee">הוא מבקש<small>יום ושעה</small></span><svg class="arr"><use href="#i-arrow"/></svg><span class="step who-trainer">אתה מאשר<small>או מציע זמן אחר</small></span><svg class="arr"><use href="#i-arrow"/></svg><span class="step who-trainee">הוא מאשר הגעה<small>ביום הפגישה</small></span></div>
-            <span class="flow-label">תשלום</span>
-            <div class="flow"><span class="step who-trainer">מבנה תשלום<small>סכום ותדירות</small></span><svg class="arr"><use href="#i-arrow"/></svg><span class="step">תקופות<small>נגזרות מהמבנה</small></span><svg class="arr"><use href="#i-arrow"/></svg><span class="step who-trainer">רישום<small>נסגר מול תקופה</small></span></div>
-          </div>
-          <h3>פגישות ותשלומים</h3>
-          <p>פגישה היא תיאום, לא הודעה: כל שלב מסומן, ואף אחד לא נשאר לנחש אם נקבע. קבועה נקבעת פעם אחת, ומאושרת נכנסת ליומן של הטלפון. תשלום הוא תקופה, לא סכום: כל רישום נסגר מול תקופה, ותמיד ברור מי שילם על מה.</p>
+        <div class="fx-art tint-trainee" aria-hidden="true">
+          <svg class="fx-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#F07C1A"/></svg>
+          <div class="fx-ui ui-kit"><div class="fx-screen flush">
+            <div class="n-phead"><span class="back"><svg class="bi"><use href="#i-arrow"/></svg></span><b>דניאל כהן</b><span class="n-edit"><svg class="bi"><use href="#i-edit"/></svg>עריכה</span></div>
+            <div class="n-hero"><div class="who"><span class="k-av ring-trainee pic" style="--s:84px"><i class="av-blue"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-daniel"/></svg></i></span>
+              <div class="n-facts cols2"><span><small>גיל</small><b>28 שנה</b></span><span><small>גובה</small><b>180 ס"מ</b></span><span><small>משקל</small><b>76.8 ק"ג</b></span><span><small>מאז</small><b>10/2025</b></span></div></div>
+              <div class="n-tbox"><div class="pan"><b>מוגדר:</b><span class="it">מזין ארוחות<svg class="bi"><use href="#i-check"/></svg></span><span class="it">מזין אימונים<svg class="bi"><use href="#i-check"/></svg></span></div>
+                <div class="pan"><b>סטטוס:</b><span class="it"><span class="n-tag"><span class="t">נדרש טיפול</span></span></span><span class="it"><span class="lbl">תפריט:</span><span class="n-goalpill">חיטוב</span></span></div></div></div>
+            <div class="n-alert" style="margin-bottom: calc(20px * var(--k));"><div class="r"><span>אין עדכון משקל השבוע</span><span class="n-cta">לצ'אט<svg class="bi"><use href="#i-chev-l"/></svg></span></div></div>
+          </div></div>
         </div>
       </div>
+
+      <!-- 02 · התבניות -->
+      <div class="fx-row scroll-reveal">
+        <div class="fx-copy">
+          <span class="fx-num">02</span>
+          <h3 class="fx-title">התבניות</h3>
+          <p>תוכנית, תפריט ומבנה תשלום — בונים פעם אחת, מקצים בלחיצה, ומשנים לכל מתאמן רק מה שצריך. וכשאתה עורך תבנית, האפליקציה שואלת קודם: לעדכן את כל מי שמקושר אליה, או לשמור כתבנית נוספת. ההתאמות האישיות של כל אחד נשמרות בדרך.</p>
+        </div>
+        <div class="fx-art tint-coach" aria-hidden="true">
+          <svg class="fx-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#12939D"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>
+          <div class="fx-ui ui-kit">
+            <div class="fx-tpl"><span class="ic"><svg><use href="#i-fitness"/></svg></span><span class="col"><b>תכנית 4 ימים</b><small>4 אימונים בשבוע · 6 מתאמנים מקושרים</small></span><span class="stack"><span class="k-av ring-trainee pic" style="--s:24px"><i class="av-blue"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-daniel"/></svg></i></span><span class="k-av ring-trainee pic" style="--s:24px"><i class="av-amber"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-michal"/></svg></i></span><span class="k-av ring-trainee pic" style="--s:24px"><i class="av-purple"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-yossi"/></svg></i></span><span class="more">+3</span></span></div>
+            <div class="fx-tpl"><span class="ic"><svg><use href="#i-restaurant"/></svg></span><span class="col"><b>תפריט חיטוב</b><small>5 ארוחות ביום · 4 מתאמנים מקושרים</small></span><span class="stack"><span class="k-av ring-trainee pic" style="--s:24px"><i class="av-blue"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-daniel"/></svg></i></span><span class="k-av ring-trainee pic" style="--s:24px"><i class="av-green"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-shira"/></svg></i></span><span class="more">+2</span></span></div>
+            <div class="fx-tpl"><span class="ic"><svg><use href="#i-card"/></svg></span><span class="col"><b>מנוי סטנדרטי</b><small>חודשי · 8 מתאמנים מקושרים</small></span><span class="stack"><span class="k-av ring-trainee pic" style="--s:24px"><i class="av-amber"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-michal"/></svg></i></span><span class="k-av ring-trainee pic" style="--s:24px"><i class="av-green"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-or"/></svg></i></span><span class="more">+6</span></span></div>
+            <div class="fx-ask"><b>עריכת "תפריט חיטוב"</b><p>4 מתאמנים מקושרים לתבנית הזאת.</p><div class="btns"><span class="pri">לעדכן את כולם</span><span class="sec">לשמור כתבנית נוספת</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 · הלוגו וצבעי המערכת -->
+      <div class="fx-row flip scroll-reveal">
+        <div class="fx-copy">
+          <span class="fx-num">03</span>
+          <h3 class="fx-title">הלוגו וצבעי המערכת</h3>
+          <p>הלוגו שלך — לא שלי — פותח את האפליקציה ויושב בראש כל מסך, גם אצל המתאמנים שלך. מרגע שהעלית אותו, לחיצה אחת גוזרת ממנו את צבע המאמן, צבע המתאמן וצבע המערכת. לכל צבע באפליקציה תפקיד אחד: אתה בוחר את הגוון, המשמעות נשארת.</p>
+        </div>
+        <div class="fx-art tint-system" aria-hidden="true">
+          <svg class="fx-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#B0599A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#B0599A"/></svg>
+          <div class="fx-ui ui-kit"><div class="fx-screen">
+            <div class="fx-brandbar"><span class="mark">רן</span><span class="nm">רן פיטנס</span><span class="k-tbtn"><svg class="v-system"><use href="#i-bell"/></svg></span></div>
+            <div class="fx-bubs"><span class="c">איך היה אתמול? ראיתי שסיימת הכול 💪</span><span class="t">קשה אבל טוב 😅 בסקוואט האחרון כבר לא הרגשתי את הרגליים</span></div>
+            <div class="fx-roles">
+              <div class="fx-role"><i style="background:#6A4FB0"></i><span><b>צבע המאמן</b><small>כל מה שמגיע ממך: התוכנית, ההודעות שלך, הכפתורים שלך</small></span></div>
+              <div class="fx-role"><i style="background:#E2A93B"></i><span><b>צבע המתאמן</b><small>כל מה שהמתאמן עושה: ההודעות שלו, סימוני "בוצע"</small></span></div>
+            </div>
+            <div class="fx-pick"><span>קח את הצבעים מהלוגו</span></div>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- 04 · פגישות ותשלומים -->
+      <div class="fx-row scroll-reveal">
+        <div class="fx-copy">
+          <span class="fx-num">04</span>
+          <h3 class="fx-title">פגישות ותשלומים</h3>
+          <p>פגישה היא תיאום, לא הודעה: כל שלב מסומן, ואף אחד לא נשאר לנחש אם נקבע. קבועה נקבעת פעם אחת, ומאושרת נכנסת ליומן של הטלפון. תשלום הוא תקופה, לא סכום: כל רישום נסגר מול תקופה, ותמיד ברור מי שילם על מה.</p>
+        </div>
+        <div class="fx-art tint-ink" aria-hidden="true">
+          <svg class="fx-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>
+          <div class="fx-pair ui-kit">
+            <div class="n-card" style="padding: calc(16px * var(--k));"><div class="n-mhead"><span class="k-av ring-trainee pic" style="--s:44px"><i class="av-amber"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-michal"/></svg></i></span><span class="name">מיכל לוי</span><span class="n-dchip sm"><b>29</b><small>אוק׳</small></span></div>
+              <div class="n-topic">לקיחת מידות + תמונות</div>
+              <div class="n-facts cols3"><span><small>שעה</small><b>17:30</b></span><span><small>משך</small><b>45 דקות</b></span><span><small>פלטפורמה</small><b>פרונטלי</b></span></div>
+              <div class="n-gap16"></div><div class="n-center"><span class="n-opens"><svg class="bi"><use href="#i-event-note"/></svg>לפרטי הפגישה</span></div></div>
+            <div class="n-card"><div class="n-ctop"><span class="k-av ring-trainee pic" style="--s:46px"><i class="av-green"><svg class="k-face" viewBox="0 0 100 100"><use href="#a-or"/></svg></i></span><span class="name">אור בן דוד</span><span class="n-tag paid"><span class="t">שולם ✓</span></span></div>
+              <div class="n-gap16"></div>
+              <div class="n-facts cols2"><span><small>סכום תשלום</small><b>800 ₪</b></span><span><small>מועד התשלום</small><b>15/10/2026</b></span><span><small>שולם</small><b>800 ₪</b></span><span><small>חוב מחודשים קודמים</small><b>0 ₪</b></span></div></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 

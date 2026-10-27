@@ -989,3 +989,4 @@ p.k-center { display: block; margin: 0; }
 .scroll-btn:active { transform: scale(0.97); }
 .sides .scroll-btn { background: var(--dark-2); border-color: var(--dark-line); color: #FFFFFF; }
 .sides .scroll-btn svg { stroke: #FFFFFF; }
+.n-facts.cols2 { --cols: 2; } .n-facts.cols3 { --cols: 3; }
