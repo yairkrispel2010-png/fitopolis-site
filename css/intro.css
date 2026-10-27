@@ -10,13 +10,19 @@
   inset: 0;
   z-index: 200;
   pointer-events: none;
+  /* FIT ו-POLIS יוצאים מעבר לקצוות; כשהפתיח עולה עם הדף זה היה מרחיב את הדף לצדדים */
+  overflow: hidden;
 }
+/* אחרי העצירה הפתיח עולה עם הדף: הוא עובר לעמוד עצמו, במקום שבו עמד (top ו-height נקבעים ב-intro.js) */
+.intro-on .intro.is-scroll { position: absolute; bottom: auto; }
 .intro-on .intro.is-done { display: none; }
 
-/* המסלול: הפתיח והראש של הדף נעוצים במקום בזמן שה-O גדל */
+/* המסלול: הפתיח והראש של הדף נעוצים במקום בזמן שה-O גדל, ועוד קצת אחרי שנעצר */
 /* מקום ריק בתוך המיכל, לא ריפוד: אלמנט נעוץ לא נכנס לשטח הריפוד של ההורה */
-.intro-on .intro-pin::after { content: ""; display: block; height: var(--intro-run, 130vh); }
-.intro-on .intro-pinned { position: sticky; top: 0; }
+.intro-on .intro-pin::after { content: ""; display: block; height: var(--intro-run, 180vh); }
+.intro-on .intro-pinned { position: sticky; top: 0; display: flex; flex-direction: column; min-height: 100vh; }
+/* הראש של הדף ממלא לפחות מסך אחד: בזמן העצירה החלק הבא לא מציץ מלמטה, והפינות התחתונות יושבות בסופו */
+.intro-on .intro-pinned > .hero { flex: 1 0 auto; }
 
 .intro-veil { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
