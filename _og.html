@@ -1,19 +1,22 @@
 <!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#F0EFEC}iframe{border:0;display:block}</style></head>
 <body><script>
+// תמונת השיתוף (28/10): הכותרת והטלפון בתלת-ממד, במראה של דף הבית — עם קצוות הלוגו בפינות (המסגרת).
+// הדף נטען כביקור חוזר, אז הוא נפתח עם המסגרת ובלי הזום. מצולם ב-2x: 2400 × 1260.
+try { sessionStorage.setItem('fp-intro-seen', '1'); } catch (e) {}
 const f=document.createElement('iframe'); f.width=1200; f.height=630; f.src='/?og=1';
 f.onload=()=>{const d=f.contentDocument, s=d.createElement('style');
  s.textContent=`
-  .reveal,.dp-screen,.dp-screen *,.breathe,.drift-a,.drift-b,.drift-c{animation-play-state:paused !important;animation-delay:-0.3s !important}
-  header.topbar,.features,.sides,footer,.hero-chip,.note,.phone-caption,.hero .btn,.flip-btn,.demo-hint{display:none !important}
+  .dp-screen,.dp-screen *,.breathe,.drift-a,.drift-b,.drift-c{animation-play-state:paused !important;animation-delay:-0.3s !important}
+  header.topbar,.features,.sides,footer,.hero-chip,.note,.hero .sub,.hero .btn,.hero-cta,.phone-caption,.flip-btn,.demo-hint,.skip-link{display:none !important}
   html{overflow:hidden} body{overflow:hidden} .hero::after{display:none !important}
   .hero{height:630px;overflow:hidden} .dp-cover{display:none !important}
-  .hero-inner{padding:0 !important;height:630px;align-items:center;gap:40px}
-  .hero-copy{gap:26px;padding-inline-start:16px;margin-top:40px}
-  .hero h1{font-size:64px !important;line-height:1.12}
-  .hero .sub{font-size:20px;max-width:520px}
-  .hero .btn{font-size:19px;min-height:58px}
-  .phone-col{animation:none !important;opacity:1 !important;transform:scale(0.82) !important;transform-origin:center}
-  .og-mark{position:absolute;top:34px;right:48px;font-family:Fredoka,sans-serif;font-weight:600;font-size:34px;display:flex;gap:.06em;align-items:center;direction:ltr}
+  .intro-on .intro-pinned{min-height:0 !important}
+  .hero-inner{padding:0 !important;height:630px;align-items:center;gap:20px}
+  .hero-copy{gap:0;padding-inline-start:20px;margin-top:30px}
+  .hero h1{font-size:80px !important;line-height:1.1}
+  .phone-col{animation:none !important;opacity:1 !important;transform:translate(96px, 8px) scale(0.8) !important;transform-origin:center}
+  .hero .dp{rotate:y 22deg !important;transform:rotateX(-5deg) !important;--ry:22deg}
+  .og-mark{position:absolute;top:44px;right:64px;font-family:Fredoka,sans-serif;font-weight:600;font-size:36px;display:flex;gap:.06em;align-items:center;direction:ltr}
   .og-mark .fit{color:#12939D}.og-mark .polis{color:#F07C1A}.og-mark svg{width:.98em;height:.98em}
  `;
  d.head.appendChild(s);
@@ -21,6 +24,7 @@ f.onload=()=>{const d=f.contentDocument, s=d.createElement('style');
  d.querySelector('.hero').appendChild(m);
  d.querySelectorAll('.scroll-reveal').forEach(e=>e.classList.add('is-visible'));
  d.querySelectorAll('.dp [data-act="start"]').forEach(b=>b.click()); d.querySelectorAll('.dp').forEach(el=>el.classList.remove('is-idle'));
+ setTimeout(()=>d.querySelectorAll('.dp-clock').forEach(c=>{c.textContent='9:41';}), 300);   // שעה נקייה, לא השעה שבה צולם
 };
 document.body.appendChild(f);
 </script></body></html>
