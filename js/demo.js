@@ -978,7 +978,72 @@
     spin.finished.then(function () { if (!swapped) { swapped = true; swap(); } done(); }, function () { if (!swapped) { swapped = true; swap(); } done(); });
   }
 
-  function edges() { var s = ''; for (var i = 1; i <= 8; i++) s += '<i class="dp-edge" style="--i:' + i + '" aria-hidden="true"></i>'; return s + '<i class="dp-btn power" aria-hidden="true"></i><i class="dp-btn mute" aria-hidden="true"></i><i class="dp-btn vol-up" aria-hidden="true"></i><i class="dp-btn vol-down" aria-hidden="true"></i><i class="dp-tray" aria-hidden="true"></i>'; }
+  // ── הגוף בתלת-ממד (27/10 לילה): חלקים שטוחים, כל אחד במקום האמיתי שלו באותו מודל שממנו רונדרו התמונות ──
+  // טבעת של רצועות צרות סביב קו המתאר (בפינות — הרבה רצועות), כל אחת צבועה ברינדור של הדופן שלה; אי המצלמה —
+  // תמונת הגב שוב, מורמת, עם קיר סביבו; העדשות — מטבעות מוערמים; הלחצנים — קופסאות קטנות שבולטות מהדפנות.
+  // px של .dp (300 × 628 = 78 × 163.4 מ"מ). z: הזכוכית מקדימה ב-2.4, הגב ב-‎-32.85, ראש האי ב-‎-39.77
+  var BD = { w: 300, h: 628, r: 71, zf: 2.4, zb: -33.45, back: 32.85, plat: 39.77 };
+  function n2(v) { return Math.round(v * 100) / 100; }
+  // פינה של סופר-אליפסה (n = 4) מזווית t0 ל-t1: צפופה, ואז k צעדים באורך שווה; הקצוות בדיוק על הדפנות הישרות
+  function cornerPts(cx, cy, r, sx, sy, t0, t1, a, b, k) {
+    var pts = [], L = [0], i, j = 1, out = [a];
+    for (i = 0; i <= 96; i++) { var t = (t0 + (t1 - t0) * i / 96) * Math.PI / 180; pts.push([cx + sx * r * Math.sqrt(Math.max(Math.cos(t), 0)), cy + sy * r * Math.sqrt(Math.max(Math.sin(t), 0))]); }
+    pts[0] = a; pts[96] = b;
+    for (i = 1; i <= 96; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    for (i = 1; i < k; i++) {
+      var s = L[96] * i / k; while (L[j] < s) j++;
+      var f = (s - L[j - 1]) / (L[j] - L[j - 1]);
+      out.push([pts[j - 1][0] + (pts[j][0] - pts[j - 1][0]) * f, pts[j - 1][1] + (pts[j][1] - pts[j - 1][1]) * f]);
+    }
+    out.push(b); return out;
+  }
+  function arcPts(cx, cy, r, a0, a1, k) { var out = []; for (var i = 0; i <= k; i++) { var t = (a0 + (a1 - a0) * i / k) * Math.PI / 180; out.push([cx + r * Math.cos(t), cy + r * Math.sin(t)]); } return out; }
+  // חלק שטוח שעומד על קו המתאר מ-a ל-b (עם כיוון השעון = פונה החוצה), מ-z0 (קרוב לחזית) עד z1
+  function piece(cls, a, b, z0, z1, style) {
+    var dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy) + 2, d = z0 - z1;
+    return '<i class="' + cls + '" style="left:' + n2((a[0] + b[0]) / 2 - len / 2) + 'px;top:' + n2((a[1] + b[1]) / 2 - d / 2) + 'px;width:' + n2(len) + 'px;height:' + n2(d) +
+      'px;--th:' + n2(Math.atan2(dy, dx) * 180 / Math.PI) + 'deg;--zc:' + n2((z0 + z1) / 2) + 'px' + (style ? ';' + style : '') + '"></i>';
+  }
+  function body(back) {
+    var w = BD.w, h = BD.h, r = BD.r, e = 30, s = '<i class="dp-core"></i>', i;   // לוח כהה בתוך הגוף: דרך תפר בין רצועות רואים אותו, לא את הרקע
+    var T0 = 79.72, T1 = 10.28;   // זוויות הפינה 30px מכל דופן ישרה (cos t = (30/71)²) — עד שם הדופן הישרה סוטה פחות מ-0.6px
+    var rim = function (pts, pr) { for (var j = 0; j < pts.length - 1; j++) s += piece('dp-rim', pts[j], pts[j + 1], BD.zf, BD.zb, 'background-image:url(assets/prof-' + pr[j < (pts.length - 1) / 2 ? 0 : 1] + '.webp)'); };
+    s += piece('dp-rim dp-rim-t', [r - e, 0], [w - r + e, 0], BD.zf, BD.zb);
+    rim(cornerPts(w - r, r, r, 1, -1, T0, T1, [w - r + e, 0], [w, r - e], 10), 'tr');
+    s += piece('dp-rim dp-rim-r', [w, r - e], [w, h - r + e], BD.zf, BD.zb);
+    rim(cornerPts(w - r, h - r, r, 1, 1, T1, T0, [w, h - r + e], [w - r + e, h], 10), 'rb');
+    s += piece('dp-rim dp-rim-b', [w - r + e, h], [r - e, h], BD.zf, BD.zb);
+    rim(cornerPts(r, h - r, r, -1, 1, T0, T1, [r - e, h], [0, h - r + e], 10), 'bl');
+    s += piece('dp-rim dp-rim-l', [0, h - r + e], [0, r - e], BD.zf, BD.zb);
+    rim(cornerPts(r, r, r, -1, -1, T1, T0, [0, r - e], [r - e, 0], 10), 'lt');
+    // הלחצנים: בולטים 2.8px, ברוחב 10px סביב אמצע העובי (z ‎-11 עד ‎-21); הפנים שלהם — אותו רינדור של הדופן
+    [[-1, 117, 144], [-1, 164, 206], [-1, 214, 256], [1, 181, 247]].forEach(function (k) {
+      var x0 = k[0] < 0 ? 0 : w, x1 = x0 + k[0] * 2.8, yt = k[1], yb = k[2];
+      var pos = k[0] < 0 ? -(h - r + e - yb) : -(yt - r + e);
+      s += piece('dp-rim dp-key', k[0] < 0 ? [x1, yb] : [x1, yt], k[0] < 0 ? [x1, yt] : [x1, yb], -11, -21, 'background-image:url(assets/side-' + (k[0] < 0 ? 'l' : 'r') + '.webp);background-size:' + (h - 2 * (r - e)) + 'px 35.85px;background-position:' + n2(pos) + 'px -12.45px');
+      s += piece('dp-keycap', k[0] < 0 ? [x1, yt] : [x0, yt], k[0] < 0 ? [x0, yt] : [x1, yt], -11, -21);
+      s += piece('dp-keycap', k[0] < 0 ? [x0, yb] : [x1, yb], k[0] < 0 ? [x1, yb] : [x0, yb], -11, -21);
+      var box = 'left:' + Math.min(x0, x1) + 'px;top:' + yt + 'px;height:' + (yb - yt) + 'px';
+      s += '<i class="dp-keywall" style="' + box + ';--z:-11px"></i><i class="dp-keywall is-back" style="' + box + ';--z:-21px"></i>';
+    });
+    // אי המצלמה: מכוסה בתמונת הגב (מורמת ב-6.9px), קיר מסביב; בכיוון השעון במבט מלפנים
+    var P = [[71, 14.6], [229, 14.6]]
+      .concat(cornerPts(229, 71, 56.4, 1, -1, 90, 0, [229, 14.6], [285.4, 71], 8).slice(1))
+      .concat(arcPts(263.4, 156.8, 22, 0, 90, 5))
+      .concat(arcPts(36.6, 156.8, 22, 90, 180, 5))
+      .concat(cornerPts(71, 71, 56.4, -1, -1, 0, 90, [14.6, 71], [71, 14.6], 8).slice(1));
+    for (i = 0; i < P.length - 1; i++) s += piece('dp-platwall', P[i], P[i + 1], -BD.back, -BD.plat);
+    var clip = P.map(function (p) { return n2(BD.w - p[0] + 7) + 'px ' + n2(p[1] + 5) + 'px'; }).join(',');
+    // מבט מאחור: מיכל מסובב 180°, ובתוכו קואורדינטות של הגב (+7/+5 שולי התמונה)
+    var rear = '<div class="dp-rear" aria-hidden="true">' + back + '<i class="dp-plat" style="clip-path:polygon(' + clip + ')"></i>';
+    // העדשות: גליל (12 רצועות) שבולט 5.2px מהאי, ומעליו העדשה עצמה מתוך תמונת הגב
+    [[55, 55], [55, 128.8], [124.2, 91.9]].forEach(function (l) {
+      var cx = l[0] + 7, cy = l[1] + 5, ring = arcPts(cx, cy, 31, -90, 270, 12);
+      for (var k = 0; k < 12; k++) rear += piece('dp-lenswall', ring[k], ring[k + 1], BD.plat + 5.2, BD.plat);
+      rear += '<i class="dp-lens" style="left:' + n2(cx - 31) + 'px;top:' + n2(cy - 31) + 'px;--z:' + n2(BD.plat + 5.2) + 'px;background-position:' + n2(31 - cx) + 'px ' + n2(31 - cy) + 'px"></i>';
+    });
+    return s + rear + '</div>';
+  }
   function mount(root) {
     var ph = { root: root, side: root.getAttribute('data-side') || 'trainer', navOpen: false, presetIdx: 0, scrollTop: 0, openMeal: -1, openWo: -1, started: false };
     root.classList.add('is-idle'); root.parentNode.classList.add('is-idle');   // גם על העטיפה — כדי לא לסמוך על :has
@@ -990,7 +1055,7 @@
       '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden></div><div class="dp-sheen" aria-hidden="true"></div>' +
       '<div class="dp-cover"><span class="wm" dir="ltr">' + wordmark() + '</span><p>הדגמה חיה של הממשק</p><button class="dp-start" data-act="start">התחל הדגמה</button></div></div>' +
       '<i class="dp-face" aria-hidden="true"></i>' +   // המסגרת המרונדרת — מעל המסך, שקופה בחלון המסך
-      edges() +'<div class="dp-back" aria-hidden="true"><span class="dp-cam"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><b class="flash"></b><u class="lidar"></u><s class="mic"></s></span><svg viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><span class="brand">FIT<svg class="brand-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z"/></svg>POLIS</span></div>';
+      body('<div class="dp-back"><svg viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><span class="brand">FIT<svg class="brand-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z"/></svg>POLIS</span></div>');
     var ground = document.createElement('div'); ground.className = 'dp-ground'; ground.setAttribute('aria-hidden', 'true');
     root.parentNode.insertBefore(ground, root);
     var placeGround = function () { ground.style.top = (root.offsetTop + root.offsetHeight - 12) + 'px'; };
