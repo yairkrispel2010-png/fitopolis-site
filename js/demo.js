@@ -6,7 +6,7 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var coarse = window.matchMedia('(hover: none) and (pointer: coarse)').matches;   // במסך מגע הגליל הפנימי סגור לאצבע
 
-  /* ── נתוני הדמו (mock_data.dart / trainee_mock.dart / menu_mock.dart) ── */
+  /* ── נתוני הדמו (כמו נתוני הדוגמה של האפליקציה) ── */
   var CLIENTS = [
     { id: 'or',     name: 'אור בן דוד',  ini: 'אב', c: 'green',  goal: 'מסה',      since: '15/01/2025', pic: 'or' },
     { id: 'daniel', name: 'דניאל כהן',   ini: 'דכ', c: 'blue',   goal: 'חיטוב',    since: '15/10/2025', pic: 'daniel' },
@@ -94,7 +94,7 @@
   function requestsCount() { return 1 + (S.ronPending ? 1 : 0) + (S.traineeRequestSent ? 1 : 0); }   // 1 = ההצעה החלופית של שירה, שממתינה תמיד
   function lastTrainerText() { for (var i = S.chat.length - 1; i >= 0; i--) if (S.chat[i].from === 'trainer') return S.chat[i].card ? 'תיאום פגישה · בדיקת התקדמות' : S.chat[i].text; return ''; }
   function lastDanielPreview() { var m = S.chat[S.chat.length - 1]; return m.card ? 'תיאום פגישה · ' + (S.proposalApproved ? 'אושרה ✓' : 'ממתין לאישור המתאמן') : m.text; }
-  // מאקרו של ארוחה: קבוצה שנענתה — ערך הנבחרת; אחרת אמצע הטווח בין האפשרויות (trainee.dart)
+  // מאקרו של ארוחה: קבוצה שנענתה — ערך הנבחרת; אחרת אמצע הטווח בין האפשרויות (כמו באפליקציה)
   function mealMacros(m) {
     var mi = S.meals.indexOf(m), t = { p: 0, c: 0, f: 0, klo: 0, khi: 0, open: false };
     m.groups.forEach(function (g, gi) {
@@ -198,7 +198,7 @@
   }
   var FOOTNOTE = '<p class="k-footnote">הגרפים נבנים מהנתונים שמוזנים — שלך ושל המאמן. ככל שמזינים יותר, הם ברורים ומדויקים יותר.</p>';
 
-  /* ── כרטיסי פגישה (meeting_card.dart) ─────────────────────────────── */
+  /* ── כרטיסי פגישה (כמו כרטיס הפגישה באפליקציה) ─────────────────────── */
   function clientHeader(cl, dd, mon) { return '<div class="k-chead">' + cav(cl, 44, 'trainee') + '<b>' + cl.name + '</b>' + dateBadge(dd, mon) + '</div>'; }
   function meetingCard(id, opts) {
     var m = MEETINGS[id], cl = client(m.cl); opts = opts || {};
