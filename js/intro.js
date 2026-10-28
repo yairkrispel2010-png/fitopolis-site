@@ -32,6 +32,9 @@
   var hv = 0;         // הגובה שרואים עכשיו (בטלפון — עם שורת הכתובת או בלעדיה): לפיו המסגרת
   var mode = '';      // 'fixed' נעוצה למסך · 'scroll' עולה עם הבלוק הכהה · 'done' כבר מעל המסך
   var framed = false; // אחרי הזום: שתי שכבות הקצוות במקום הלוח הלבן
+  // הזום הולך רק קדימה: כשהקצוות הגיעו לפינות, גלילה חזרה למעלה לא סוגרת את האתר ולא מחזירה את הלוגו
+  // (הבעלים, 29/10). מכאן המסלול של הגדילה יוצא מהדף, והמסגרת נשארת — כמו בחזרה לדף הבית
+  var locked = false;
 
   // הגובה של הזום: המסך הגדול (100lvh) — בטלפון זה המסך בלי שורת הכתובת, ולכן הלוח הלבן מכסה עד התחתית
   // גם כשהשורה נעלמת (נמדד בטלפון של הבעלים: בלי זה 60px בתחתית נשארו בלי כיסוי). הגובה הזה לא משתנה
@@ -62,7 +65,7 @@
     H = boxH();
     hv = window.innerHeight;
     top0 = pin.getBoundingClientRect().top + (window.scrollY || 0);
-    run = frameOnly ? 0 : Math.round(H * 1.2);     // ה-O גדל
+    run = (frameOnly || locked) ? 0 : Math.round(H * 1.2);     // ה-O גדל
     stay = frameOnly ? 0 : Math.round(H * 0.6);    // האתר עומד במקום, וקצוות ה-O בפינות
     root.style.setProperty('--intro-run', (run + stay) + 'px');
     // מקום ה-O בלוגו, יחסית לראש הפתיח (הלוגו במרכז המסך הקטן — svh — אז הוא לא זז כששורת הכתובת זזה)
@@ -159,6 +162,16 @@
   function paint() {
     raf = null;
     var sy = window.scrollY || 0;
+    // הקצוות הגיעו לפינות (או שהדף כבר מעבר לזה): נועלים. המסלול של הגדילה יורד מראש הדף, והגלילה זזה
+    // אחורה באותו מרחק — מה שרואים לא זז בפיקסל. העצירה שאחריו (האתר עומד במקום) נשארת כמו שהיא
+    if (!frameOnly && !locked && run > 0 && sy >= top0 + run) {
+      locked = true;
+      var back = run;
+      measure();
+      window.scrollTo({ top: Math.max(0, sy - back), behavior: 'instant' });
+      schedule();
+      return;
+    }
     // כשהמסגרת נעוצה — לפי מה שרואים עכשיו; כשהיא כבר עולה עם הדף — הגובה שהיה ברגע המעבר
     if (mode === 'fixed' || mode === '') { hv = window.innerHeight; }
     // המקום בדף שבו הבלוק הכהה נוגע בתחתית המסך: עד שם המסגרת נעוצה (קוראים לפני שכותבים משהו).
@@ -170,7 +183,7 @@
     if (sy < stopAt) {
       setMode('fixed');
       hv = window.innerHeight;
-      var p = frameOnly ? 1 : clamp((sy - top0) / run);
+      var p = (frameOnly || locked) ? 1 : clamp((sy - top0) / run);
       if (p < 1) {
         setFramed(false);
         // התוכן שמאחורי הלוח הלבן לא נגיש למקלדת עד שהחור כבר גדול
