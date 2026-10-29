@@ -67,9 +67,8 @@ const PARTIAL_NOTE = {
 // the run says so, and fails if the text is not found (the draft changed - look again). Empty the list when planning says it is true.
 const WITHHELD = {
   privacy: [
-    // §3.9 Hebrew and English: the phone also removes the location from a photo, and from a photo attached to a report
-    ', ומוחק ממנה את המיקום שבו צולמה. כך גם בתמונות שמצרפים לפנייה לצוות',
-    ', and removes the location where it was taken. The same goes for photos attached to a request to the team',
+    // 30/10/2026: the photo-location sentence (section 3.9) was released - builds 356-358 carry the fix (planning), so the list is empty.
+    // A line to hold again goes here as a pair of exact strings, Hebrew and English.
   ],
 };
 
