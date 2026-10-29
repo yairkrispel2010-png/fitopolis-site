@@ -62,6 +62,17 @@ const PARTIAL_NOTE = {
   en: 'The remaining sections of this policy will be added here in the coming days.',
 };
 
+// Text the owner approved that must not go up yet, because it becomes true only with a later build (planning, 29/10/2026:
+// the photo's location is removed only from build 356 on). Each entry is cut out of the draft text before it is rendered;
+// the run says so, and fails if the text is not found (the draft changed - look again). Empty the list when planning says it is true.
+const WITHHELD = {
+  privacy: [
+    // §3.9 Hebrew and English: the phone also removes the location from a photo, and from a photo attached to a report
+    ', ומוחק ממנה את המיקום שבו צולמה. כך גם בתמונות שמצרפים לפנייה לצוות',
+    ', and removes the location where it was taken. The same goes for photos attached to a request to the team',
+  ],
+};
+
 const MONTHS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const LOGO = '<span class="logotype" aria-label="FITOPOLIS">\n        <span class="fit">FIT</span>\n        <svg aria-hidden="true" class="o-mark" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>\n        <span class="polis">POLIS</span>\n      </span>';
@@ -275,7 +286,12 @@ const date = parseDate();
 leftoverBrackets = 0; // counted on the pages that are written, not on the whole draft
 const built = [];
 for (const [key, cfg] of Object.entries(DOCS)) {
-  const src = execFileSync('git', ['-C', APP_REPO, 'show', `origin/main:${cfg.draft}`], { encoding: 'utf8' });
+  let src = execFileSync('git', ['-C', APP_REPO, 'show', `origin/main:${cfg.draft}`], { encoding: 'utf8' });
+  for (const cut of WITHHELD[key] || []) {
+    if (!src.includes(cut)) throw new Error(`${key}: a withheld text is not in the draft any more: ${cut.slice(0, 40)}...`);
+    src = src.split(cut).join('');
+    console.log(`${key}: withheld ${cut.slice(0, 30)}...`);
+  }
   const blocks = src.split(/\n---\n/);
   const banner = blocks[0].startsWith('>') ? blocks[0] : '';
   const ap = approvedOf(banner);
