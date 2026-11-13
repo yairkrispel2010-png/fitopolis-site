@@ -56,6 +56,9 @@
   --font-digits: "Secular One", "Rubik", sans-serif;
 }
 
+/* Text selection in the trainee orange, dark ink on it (owner, 13/11/2026) */
+::selection { background: var(--trainee); color: var(--trainee-ink); }
+
 * { box-sizing: border-box; }
 
 html {
@@ -548,6 +551,65 @@ img, svg { max-width: 100%; }
   font-weight: 600;
   font-size: 22px;
 }
+
+/* Home page FAQ (13/11/2026) — one button inside the dark band (.sides), the list opens under it */
+.faq { padding-top: 56px; }
+.faq-all { text-align: center; }
+.faq-open {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  border: 1.5px solid #FFFFFF;
+  color: #FFFFFF;
+  background: transparent;
+}
+.faq-open::-webkit-details-marker { display: none; }
+.faq-open .when-open { display: none; }
+.faq-all[open] > .faq-open .when-open { display: inline; }
+.faq-all[open] > .faq-open .when-closed { display: none; }
+.faq-all[open] > .faq-list { margin-top: 32px; }
+.faq-list { text-align: start; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.faq-list details {
+  background: var(--dark-2);
+  border: 1px solid var(--dark-line);
+  border-radius: 20px;
+  padding: 0 24px;
+}
+.faq-list summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: 64px;
+  padding-block: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  color: #FFFFFF;
+}
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary::after {
+  content: "+";
+  flex: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(255, 255, 255, 0.10);
+  color: #FFFFFF;
+  font-size: 22px; line-height: 1;
+  transition: transform 0.2s ease;
+}
+.faq-list details[open] summary::after { transform: rotate(45deg); }
+.faq-list details p { margin: 0 0 22px; font-size: 17px; line-height: 1.7; color: var(--dark-ink); }
+.faq-list details p a { color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 560px) {
+  .faq { padding-top: 40px; }
+  .faq-list details { padding: 0 18px; }
+  .faq-list summary { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) { .faq-list summary::after { transition: none; } }
 /* הפוטר של הדפים הפנימיים — זהה לזה של דף הבית, בלי בלוק הסגירה */
 .inner-footer { margin-top: auto; padding-block: 0 40px; }
 .inner-footer .footer-bar { border-top: none; padding-top: 40px; }
@@ -1269,13 +1331,14 @@ a.logotype { min-height: 44px; }
 .flow-label { font-size: 11.5px; font-weight: 700; color: var(--pf-muted); margin: 0 2px -4px; }
 
 /* ── סנכרון: הפריסה של הסקשן הכהה ─────────────────────────── */
-.sides-layout { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 56px; align-items: center; }
-.sides-cards { display: grid; gap: 24px; }
+/* The lower demo phone was removed (owner, 13/11/2026): the two cards sit side by side */
+.sides-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; align-items: center; }
+.sides-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .sides-intro { max-width: 560px; margin: -24px auto 40px; text-align: center; font-size: 18px; line-height: 1.6; color: var(--dark-soft); }
 @media (max-width: 920px) {
   .sides-layout { grid-template-columns: 1fr; gap: 44px; justify-items: center; }
   .sides-phone { order: -1; }         /* במובייל הטלפון קודם — הוא ההדגמה */
-  .sides-cards { width: 100%; }
+  .sides-cards { width: 100%; grid-template-columns: 1fr; }
   .struct-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
