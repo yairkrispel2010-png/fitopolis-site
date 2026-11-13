@@ -76,6 +76,8 @@ body {
 }
 
 a { color: var(--trainer-text); text-decoration: none; }
+/* A link inside running text is underlined, not told apart by colour only (WCAG 1.4.1; axe link-in-text-block, 13/11/2026) */
+main p a:not(.btn), main li > span a, main dd a, .faq-list p a { text-decoration: underline; text-underline-offset: 3px; }
 
 @media (hover: hover) and (pointer: fine) {
   a:hover { color: #0B6068; }

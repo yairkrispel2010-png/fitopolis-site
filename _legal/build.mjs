@@ -74,7 +74,7 @@ const WITHHELD = {
 
 const MONTHS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-const LOGO = '<span class="logotype" aria-label="FITOPOLIS">\n        <span class="fit">FIT</span>\n        <svg aria-hidden="true" class="o-mark" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>\n        <span class="polis">POLIS</span>\n      </span>';
+const LOGO = '<span class="logotype" role="img" aria-label="FITOPOLIS">\n        <span class="fit">FIT</span>\n        <svg aria-hidden="true" class="o-mark" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg>\n        <span class="polis">POLIS</span>\n      </span>';
 
 // ── the date ────────────────────────────────────────────────────────────────
 function parseDate() {
