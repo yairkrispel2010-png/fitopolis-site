@@ -284,7 +284,7 @@
 
   /* ── ממשק המאמן ────────────────────────────────────────────────────── */
   var trainer = {
-    tabs: [['home', 'home', 'בית'], ['clients', 'people', 'לקוחות'], ['chat', 'chat', "צ'אט"], ['meetings', 'calendar', 'פגישות'], ['payments', 'card', 'תשלום']],
+    tabs: [['home', 'home', 'בית'], ['clients', 'people', 'מתאמנים'], ['chat', 'chat', "צ'אט"], ['meetings', 'calendar', 'פגישות'], ['payments', 'card', 'תשלום']],
     topbar: function (ph) {
       if (ph.screen === 'profile' || ph.screen === 'thread') return '';        // שכבת-על מסך מלא — בלי סרגל עליון
       return '<span class="k-wm" dir="ltr">' + wordmark() + '</span>' +
@@ -328,7 +328,7 @@
           var body = m ? '<div class="n-mini"><div class="row">' + chipDate(m.dd, m.wd) + '<span class="col"><small>פגישה קרובה</small><b>' + m.topic + '</b></span></div><i class="sep"></i>' + opens('לפרטי הפגישה', 'event-note', cl.id === 'daniel' ? 'go:profile:connection' : 'sheet:tmeeting:' + mk) + '</div>' : '';
           return clientCard(cl, { body: body }, cl.id === 'daniel' ? 'go:profile' : 'noop');
         }).join('');
-        return screenTitle('לקוחות') + '<div class="k-gap8"></div>' + search('חפש לפי שם...') +
+        return screenTitle('מתאמנים') + '<div class="k-gap8"></div>' + search('חפש לפי שם...') +
           '<div class="n-segrow">' + seg([['needs', 'נדרש טיפול', nNeeds], ['all', 'כולם', CLIENTS.length]], needsOnly ? 'needs' : 'all', 'cseg') + '<button class="n-arch" aria-label="ארכיון">' + icon('archive', 'bi') + '</button></div>' + list;
       },
       profile: function (ph) {
@@ -358,7 +358,7 @@
           body = (S.traineeRequestSent ? '<h3 class="n-psec">בקשות</h3>' + requestCard2({ cl: cl, off: 2, status: 'ממתין לאישורך', topic: 'עדכון תפריט', time: '18:00', dur: 30, platform: 'טלפון', received: dm(0) + ' · ' + now(), act: 'sheet:coord2' }) : '') +
             '<h3 class="n-psec">פגישה קרובה</h3>' + meetingCard2('daniel', { tags: S.attendance ? tag('אישר הגעה ✓', 'ok') : '' }) +
             '<h3 class="n-psec later">פגישה חוזרת</h3><div class="k-infobox"><div class="k-row-ic">' + icon('repeat', 'bi v-coach') + '<b>כל שבוע · ' + MEETINGS.danielrec.wd + ' · 10:00 · טלפון</b></div></div>' +
-            '<h3 class="n-psec later">תזכורת קצרה</h3><div class="k-infobox"><small class="k-hint center">הערה פרטית שלך על הלקוח. המתאמן לא רואה אותה.</small><p class="k-center">לוודא עדכון משקל לפני הפגישה</p></div>';
+            '<h3 class="n-psec later">תזכורת קצרה</h3><div class="k-infobox"><small class="k-hint center">הערה פרטית שלך על המתאמן. הוא לא רואה אותה.</small><p class="k-center">לוודא עדכון משקל לפני הפגישה</p></div>';
         } else {
           body = '<h3 class="n-psec">מבנה תשלום</h3><div class="n-card">' + facts([['סכום תשלום', '800 ₪'], ['מועד התשלום', '15/' + two(dayAt(0).getMonth() + 1) + '/' + dayAt(0).getFullYear()], ['שולם', S.danielPaid ? '800 ₪' : '0 ₪'], ['חוב מחודשים קודמים', '0 ₪']], 2) +
             '<div class="n-gap16"></div><div class="n-center">' + (S.danielPaid ? tag('שולם ✓', 'paid') : tag('טרם שולם', 'quiet')) + '</div>' +
@@ -421,7 +421,7 @@
             CLIENTS.filter(function (c) { var p = P[c.id]; return !onlyUnpaid || (p && p[1] !== 'paid'); }).map(function (cl) {
               var p = P[cl.id], act = cl.id === 'daniel' ? 'go:profile:payments' : 'noop';
               if (!p) return clientCard(cl, { tag: tag('לא הוגדר עדיין', 'quiet'), body: '<div class="n-gap16"></div>' + opens('הגדרת תשלום', 'edit', act) }, act);
-              return clientCard(cl, { tag: tag(p[0], p[1]), body: '<div class="n-gap16"></div>' + facts([['סכום תשלום', p[2]], ['מועד התשלום', due], ['שולם', p[3]], ['חוב מחודשים קודמים', p[4], p[4] !== '0 ₪' ? 'neg' : '']], 2) + '<div class="n-gap16"></div>' + opens('לתשלומי הלקוח', 'payments', act) }, act);
+              return clientCard(cl, { tag: tag(p[0], p[1]), body: '<div class="n-gap16"></div>' + facts([['סכום תשלום', p[2]], ['מועד התשלום', due], ['שולם', p[3]], ['חוב מחודשים קודמים', p[4], p[4] !== '0 ₪' ? 'neg' : '']], 2) + '<div class="n-gap16"></div>' + opens('לתשלומי המתאמן', 'payments', act) }, act);
             }).join('');
         } else {
           body = '<p class="n-month">כל התשלומים שנרשמו, מהאחרון</p>' + search('חפש לפי שם...') +
@@ -588,7 +588,7 @@
       if (t === 'home' || t === 'profile' || t === 'thread') return null;
       if (t === 'meetings') return { icon: 'plus', cls: 'v-coach', act: 'sheet:newMeeting', label: 'פגישה חדשה' };
       if (t === 'chat') return { icon: 'plus', cls: 'v-coach', act: 'sheet:newChat', label: 'שיחה חדשה' };
-      return { icon: 'plus', cls: 'v-coach', act: 'sheet:addClient', label: 'הוסף לקוח' };
+      return { icon: 'plus', cls: 'v-coach', act: 'sheet:addClient', label: 'הוסף מתאמן' };
     }
     if (t === 'workout') return null;
     if (t === 'chat') return ph.typing ? null : { icon: 'keyboard', cls: 'small', act: 'typing', label: 'מצב הקלדה' };
@@ -635,9 +635,9 @@
     if (kind === 'coord2') return '<div class="k-detsheet"><b class="ttl">פרטי תיאום</b>' + heading('עדכון תפריט') + '<div class="k-tags">' + statusTag('ממתין לאישורך', 'coach') + '</div>' + factPair(inline('תאריך', '16/09/2026'), inline('שעה', '18:00')) + factPair(inline('משך', '30 דקות'), inline('פלטפורמה', 'טלפון')) +
       '<p class="k-center muted">נפתח על ידי: דניאל כהן ב-09/09/2026</p><div class="k-actions"><div class="row">' + primary('אישור', 'sheetdone:הפגישה אושרה ✓', 'coach') + secondary('דחייה', 'sheetclose') + '</div>' + secondary('הצע פגישה חלופית', 'sheetclose', null, 'edit-cal') + secondary("לצ'אט", 'go:thread', null, 'chat') + '</div>' +
       timeline([['trainee', 'event', 'התיאום נפתח ע"י המתאמן', '09/09/2026 · ' + now()]]) + '</div>';
-    if (kind === 'addClient') return formSheet('הוספת לקוח חדש', labeled('שם מלא', 'נועה ברק', '') + labeled('תאריך תחילת ליווי', '09/09/2026', '') + primary('שמירה', 'sheetdone:נועה נוספה — עכשיו עורך הלקוח', 'coach'));
-    if (kind === 'newMeeting') return formSheet('שליחת הצעת פגישה', '<p class="k-lblp">בחר לקוח:</p>' + CLIENTS.map(function (cl) { return '<button class="k-pick" data-act="sheetdone:ההצעה נשלחה ל' + cl.name.split(' ')[0] + '">' + cav(cl, 40, 'trainee') + '<b>' + cl.name + '</b>' + icon('chev-l', 'bi v-faint') + '</button>'; }).join(''));
-    if (kind === 'newChat') return formSheet('שיחה חדשה', '<p class="k-lblp">בחר לקוח:</p><button class="k-pick" data-act="sheetdone:נפתחה שיחה עם יוסי">' + cav(client('yossi'), 40, 'trainee') + '<b>יוסי מזרחי</b>' + icon('chev-l', 'bi v-faint') + '</button>');
+    if (kind === 'addClient') return formSheet('הוספת מתאמן חדש', labeled('שם מלא', 'נועה ברק', '') + labeled('תאריך תחילת ליווי', '09/09/2026', '') + primary('שמירה', 'sheetdone:נועה נוספה — עכשיו הפרטים שלה', 'coach'));
+    if (kind === 'newMeeting') return formSheet('שליחת הצעת פגישה', '<p class="k-lblp">בחר מתאמן:</p>' + CLIENTS.map(function (cl) { return '<button class="k-pick" data-act="sheetdone:ההצעה נשלחה ל' + cl.name.split(' ')[0] + '">' + cav(cl, 40, 'trainee') + '<b>' + cl.name + '</b>' + icon('chev-l', 'bi v-faint') + '</button>'; }).join(''));
+    if (kind === 'newChat') return formSheet('שיחה חדשה', '<p class="k-lblp">בחר מתאמן:</p><button class="k-pick" data-act="sheetdone:נפתחה שיחה עם יוסי">' + cav(client('yossi'), 40, 'trainee') + '<b>יוסי מזרחי</b>' + icon('chev-l', 'bi v-faint') + '</button>');
     if (kind === 'pay') return formSheet('רישום תשלום חדש', labeled('אמצעי תשלום', 'ביט', '') + labeled('לאיזה חודש', 'ספטמבר 2026 (החודש)', '') + labeled('תאריך תשלום (אופציונלי)', '09/09/2026', '') + primary('שמור', 'paysave', 'coach'));
     return '';
   }
