@@ -621,7 +621,7 @@
     if (kind === 'meeting') return '<div class="k-detsheet"><b class="ttl">פרטי הפגישה</b>' + heading('בדיקת התקדמות + עדכון תפריט') + factPair(inline('תאריך', '21/09/2026'), inline('שעה', '10:00')) + factPair(inline('משך', '60 דקות'), inline('פלטפורמה', 'טלפון')) +
       '<div class="k-calrow">' + icon(S.calendarSynced ? 'event-ok' : 'event-busy', 'bi ' + (S.calendarSynced ? 'v-positive' : 'v-negative')) + inline('יומן', S.calendarSynced ? 'מסונכרן ✓' : 'לא מסונכרן') + '</div>' + (S.calendarSynced ? '' : secondary('הוסף ליומן', 'calsync', 'trainee', 'calendar-today')) +
       (S.attendance ? '<p class="k-center good">אישרת שאתה מגיע ✓</p><div class="k-attend"><button class="k-textbtn muted" data-act="unconfirm">' + icon('undo', 'bi') + 'ביטול האישור</button></div>' : '<div class="k-attend"><button class="k-textbtn good" data-act="confirm">' + icon('check-circle', 'bi') + 'אני בוודאות מגיע</button><button class="k-textbtn bad" data-act="sheetclose">' + icon('event-busy', 'bi') + 'לא אוכל להגיע</button></div>') +
-      timeline([['coach', 'event', 'התיאום נפתח ע"י המאמן', '26/08/2026 · 14:02'], ['trainee', 'check-circle', 'אושרה ע"י המתאמן', '26/08/2026 · 18:40']].concat(S.attendance ? [['trainee', 'check-circle', 'המתאמן אישר סופית הגעה', 'היום · ' + now()]] : [])) + '</div>';
+      timeline([['coach', 'event', 'התיאום נפתח על ידי המאמן', '26/08/2026 · 14:02'], ['trainee', 'check-circle', 'אושרה על ידי המתאמן', '26/08/2026 · 18:40']].concat(S.attendance ? [['trainee', 'check-circle', 'המתאמן אישר סופית הגעה', 'היום · ' + now()]] : [])) + '</div>';
     if (kind === 'tmeeting') {
       var m = MEETINGS[ph.sheetArg] || MEETINGS.michal;
       return '<div class="k-detsheet">' + heading(m.topic) + factPair(inline('תאריך', m.date), inline('שעה', m.time)) + factPair(inline('משך', m.dur + ' דקות'), inline('פלטפורמה', m.platform)) + (m.place ? '<div class="k-center">' + inline('מיקום', m.place) + '</div>' : '') +
@@ -631,10 +631,10 @@
     }
     if (kind === 'coord') return '<div class="k-detsheet"><b class="ttl">פרטי תיאום</b>' + heading('עדכון תוכנית אימונים') + '<div class="k-tags">' + statusTag('ממתין לאישורך', 'coach') + '</div>' + factPair(inline('תאריך', '17/09/2026'), inline('שעה', '08:30')) + factPair(inline('משך', '30 דקות'), inline('פלטפורמה', 'טלפון')) +
       '<p class="k-center muted">נפתח על ידי: רון גולדברג ב-08/09/2026</p><div class="k-actions"><div class="row">' + primary('אישור', 'ronapprove', 'coach') + secondary('דחייה', 'sheetclose') + '</div>' + secondary('הצע פגישה חלופית', 'sheetclose', null, 'edit-cal') + secondary("לצ'אט", 'sheetclose', null, 'chat') + '</div>' +
-      timeline([['trainee', 'event', 'התיאום נפתח ע"י המתאמן', '08/09/2026 · 09:40']]) + '</div>';
+      timeline([['trainee', 'event', 'התיאום נפתח על ידי המתאמן', '08/09/2026 · 09:40']]) + '</div>';
     if (kind === 'coord2') return '<div class="k-detsheet"><b class="ttl">פרטי תיאום</b>' + heading('עדכון תפריט') + '<div class="k-tags">' + statusTag('ממתין לאישורך', 'coach') + '</div>' + factPair(inline('תאריך', '16/09/2026'), inline('שעה', '18:00')) + factPair(inline('משך', '30 דקות'), inline('פלטפורמה', 'טלפון')) +
       '<p class="k-center muted">נפתח על ידי: דניאל כהן ב-09/09/2026</p><div class="k-actions"><div class="row">' + primary('אישור', 'sheetdone:הפגישה אושרה ✓', 'coach') + secondary('דחייה', 'sheetclose') + '</div>' + secondary('הצע פגישה חלופית', 'sheetclose', null, 'edit-cal') + secondary("לצ'אט", 'go:thread', null, 'chat') + '</div>' +
-      timeline([['trainee', 'event', 'התיאום נפתח ע"י המתאמן', '09/09/2026 · ' + now()]]) + '</div>';
+      timeline([['trainee', 'event', 'התיאום נפתח על ידי המתאמן', '09/09/2026 · ' + now()]]) + '</div>';
     if (kind === 'addClient') return formSheet('הוספת מתאמן חדש', labeled('שם מלא', 'נועה ברק', '') + labeled('תאריך תחילת ליווי', '09/09/2026', '') + primary('שמירה', 'sheetdone:נועה נוספה — עכשיו הפרטים שלה', 'coach'));
     if (kind === 'newMeeting') return formSheet('שליחת הצעת פגישה', '<p class="k-lblp">בחר מתאמן:</p>' + CLIENTS.map(function (cl) { return '<button class="k-pick" data-act="sheetdone:ההצעה נשלחה ל' + cl.name.split(' ')[0] + '">' + cav(cl, 40, 'trainee') + '<b>' + cl.name + '</b>' + icon('chev-l', 'bi v-faint') + '</button>'; }).join(''));
     if (kind === 'newChat') return formSheet('שיחה חדשה', '<p class="k-lblp">בחר מתאמן:</p><button class="k-pick" data-act="sheetdone:נפתחה שיחה עם יוסי">' + cav(client('yossi'), 40, 'trainee') + '<b>יוסי מזרחי</b>' + icon('chev-l', 'bi v-faint') + '</button>');
@@ -885,7 +885,7 @@
     if (p[0] === 'reset') phones.forEach(function (x) { if (x.cdStop) x.cdStop(); });
     // "התחל אימון" מהמסכים של המתאמן: קודם הספירה לאחור, והיא עוברת למסך האימון כשהצבע מכסה הכל
     if (p[0] === 'go' && p[1] === 'workout' && ph.side === 'trainee' && !ph.counting && ph.screen !== 'workout' && countdown(ph, ph.lastBtn)) return;
-    if (p[0] === 'noop') { ph.hint = 'בדמו הזה זה עוצר כאן — באפליקציה זה ממשיך'; }
+    if (p[0] === 'noop') { ph.hint = 'בהדגמה זה עוצר כאן — באפליקציה זה ממשיך'; }
     else if (p[0] === 'noopcoach') { ph.hint = 'באפליקציה נפתח כאן דף המאמן'; }
     else if (p[0] === 'go') {
       ph.screen = p[1]; ph.scrollTop = 0; ph.navOpen = false; ph.catOpen = false;
@@ -910,7 +910,7 @@
     else if (p[0] === 'choose') { var key = p[1] + ':' + p[2]; S.choice[key] = S.choice[key] === +p[3] ? undefined : +p[3]; }
     else if (p[0] === 'xm') { ph.openMeal = ph.openMeal === +p[1] ? -1 : +p[1]; }
     else if (p[0] === 'xw') { ph.openWo = ph.openWo === +p[1] ? -1 : +p[1]; }
-    else if (p[0] === 'xp') { if (p[1] === 'wo') ph.openPwo = !ph.openPwo; else if (p[1] === 'me') ph.openMe = !ph.openMe; else ph.hint = 'טאב התזונה נשאר פתוח בדמו'; }
+    else if (p[0] === 'xp') { if (p[1] === 'wo') ph.openPwo = !ph.openPwo; else if (p[1] === 'me') ph.openMe = !ph.openMe; else ph.hint = 'טאב התזונה נשאר פתוח בהדגמה'; }
     else if (p[0] === 'cfilter') { ph.clientsNeeds = !ph.clientsNeeds; ph.scrollTop = 0; }
     else if (p[0] === 'htile') { ph.homeTile = p[1]; }                                   // מסך הבית של המאמן: איזה מונה פתוח
     else if (p[0] === 'ttile') { ph.tTile = p[1]; if (ph.screen !== 'today') { ph.screen = 'today'; ph.scrollTop = 0; } }   // ושל המתאמן
@@ -1053,7 +1053,7 @@
       '<button class="dp-more" type="button" hidden aria-label="להמשך המסך">' + icon('nav-down', 'bi') + '</button>' +
       '<div class="dp-navwrap"><div class="dp-nav" role="tablist"></div></div>' +
       '<div class="dp-toast" role="status" aria-live="polite"></div><div class="dp-sheet" hidden></div><div class="dp-sheen" aria-hidden="true"></div>' +
-      '<div class="dp-cover"><span class="wm" dir="ltr">' + wordmark() + '</span><p>הדגמה חיה של הממשק</p><button class="dp-start" data-act="start">התחל הדגמה</button></div></div>' +
+      '<div class="dp-cover"><span class="wm" dir="ltr">' + wordmark() + '</span><p>הדגמה חיה של חלק מהממשק</p><button class="dp-start" data-act="start">התחל הדגמה</button></div></div>' +
       '<i class="dp-face" aria-hidden="true"></i>' +   // המסגרת המרונדרת — מעל המסך, שקופה בחלון המסך
       body('<div class="dp-back"><svg viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z" fill="#F07C1A"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z" fill="#12939D"/></svg><span class="brand">FIT<svg class="brand-o" viewBox="0 0 100 100"><path d="M47 9.61A40.5 40.5 0 0 0 47 90.39L47 73.31A23.5 23.5 0 0 1 47 26.69Z"/><path d="M53 9.61A40.5 40.5 0 0 1 53 90.39L53 73.31A23.5 23.5 0 0 0 53 26.69Z"/></svg>POLIS</span></div>');
     var ground = document.createElement('div'); ground.className = 'dp-ground'; ground.setAttribute('aria-hidden', 'true');
