@@ -336,7 +336,7 @@
         var head = '<div class="n-phead"><button class="back" data-act="go:clients" aria-label="חזרה">' + icon('arrow', 'bi') + '</button><b>' + cl.name + '</b><button class="n-edit" data-act="noop">' + icon('edit', 'bi') + 'עריכה</button></div>';
         var hero = '<div class="n-hero"><div class="who">' + bigAv(cl, 92) + facts([['גיל', '28 שנה'], ['גובה', '180 ס"מ'], ['משקל', (S.weightLogged ? '76.5' : '76.8') + ' ק"ג'], ['מאז', cl.since]], 2) + '</div>' +
           '<div class="n-tbox"><div class="pan"><b>מוגדר:</b><span class="it">מזין ארוחות' + icon('check', 'bi') + '</span><span class="it">מזין אימונים' + icon('check', 'bi') + '</span></div>' +
-          '<div class="pan"><b>סטטוס:</b><span class="it">' + (reasons.length ? tag('נדרש טיפול') : tag('הכל תקין ✓', 'ok')) + '</span><span class="it"><span class="lbl">תפריט:</span><span class="n-goalpill">חיטוב</span></span></div></div></div>';
+          '<div class="pan"><b>סטטוס:</b><span class="it">' + (reasons.length ? tag('נדרש טיפול') : tag('הכל תקין ✓', 'ok')) + '</span><span class="it"><span class="lbl">כיוון:</span><span class="n-goalpill">חיטוב</span></span></div></div></div>';
         var alert = reasons.length ? '<div class="n-alert">' + reasons.map(function (r) { return '<div class="r"><span>' + r + '</span><button data-act="go:thread">' + "לצ'אט" + icon('chev-l', 'bi') + '</button></div>'; }).join('') + '</div>' : '';
         var tabs = '<div class="n-tabs">' + [['progress', 'מעקב'], ['connection', 'יצירת קשר'], ['payments', 'תשלומים']].map(function (t) { return '<button class="' + (t[0] === tab ? 'on' : '') + '" data-act="ptab:' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
         var body = '';
