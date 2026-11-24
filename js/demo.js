@@ -626,7 +626,7 @@
       var m = MEETINGS[ph.sheetArg] || MEETINGS.michal;
       return '<div class="k-detsheet">' + heading(m.topic) + factPair(inline('תאריך', m.date), inline('שעה', m.time)) + factPair(inline('משך', m.dur + ' דקות'), inline('פלטפורמה', m.platform)) + (m.place ? '<div class="k-center">' + inline('מיקום', m.place) + '</div>' : '') +
         (m.past ? '' : '<i class="k-div"></i><div class="k-calrow">' + icon(m.synced ? 'event-ok' : 'event-busy', 'bi ' + (m.synced ? 'v-positive' : 'v-negative')) + inline('יומן', m.synced ? 'מסונכרן ✓' : 'לא מסונכרן') + '</div>' + (m.synced ? '' : secondary('הוסף ליומן', 'sheetdone:הפגישה נוספה ליומן', null, 'calendar-today')) +
-          '<i class="k-div"></i>' + primary('פתח פרופיל ←', m.cl === 'daniel' ? 'go:profile:connection' : 'noop', 'coach') + '<button class="k-secondary v-negative" data-act="sheetclose">' + icon('event-busy', 'bi') + 'בטל פגישה</button>') +
+          '<i class="k-div"></i>' + primary('פתח דף מתאמן ←', m.cl === 'daniel' ? 'go:profile:connection' : 'noop', 'coach') + '<button class="k-secondary v-negative" data-act="sheetclose">' + icon('event-busy', 'bi') + 'בטל פגישה</button>') +
         '<i class="k-div"></i><p class="k-center muted">הפגישה נקבעה ישירות — לא קדמה לה בקשה</p></div>';
     }
     if (kind === 'coord') return '<div class="k-detsheet"><b class="ttl">פרטי תיאום</b>' + heading('עדכון תוכנית אימונים') + '<div class="k-tags">' + statusTag('ממתין לאישורך', 'coach') + '</div>' + factPair(inline('תאריך', '17/09/2026'), inline('שעה', '08:30')) + factPair(inline('משך', '30 דקות'), inline('פלטפורמה', 'טלפון')) +
