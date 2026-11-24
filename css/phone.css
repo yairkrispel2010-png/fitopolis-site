@@ -344,7 +344,7 @@ p.k-center { display: block; margin: 0; }
 .k-cat.on { background: var(--coach); color: #fff; } .k-cat.on.v-trainee { background: var(--trainee); color: var(--onTrainee); }
 .k-catbar:not(.is-open) .k-cat:not(.on) { display: none; }
 
-/* פרופיל המתאמן */
+/* דף המתאמן */
 .k-profile { display: flex; flex-direction: column; min-height: 100%; }
 .k-phead { display: flex; align-items: center; gap: calc(4px * var(--k)); padding: calc(8px * var(--k)) calc(16px * var(--k)) calc(4px * var(--k)) calc(8px * var(--k)); }
 .k-phead b { flex: 1; font-family: var(--fd); font-weight: 600; font-size: calc(20px * var(--k)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
