@@ -17,14 +17,14 @@
   ];
   function client(id) { for (var i = 0; i < CLIENTS.length; i++) if (CLIENTS[i].id === id) return CLIENTS[i]; return CLIENTS[1]; }
   var MEETINGS = {                                                  // פגישות המאמן (mock_data) — לגיליון "לפרטי הפגישה"
-    michal: { cl: 'michal', dd: '14', mon: 'ספט׳', date: '14/09/2026', topic: 'לקיחת מידות + תמונות', time: '17:30', dur: 45, platform: 'פרונטלי', place: 'הרצליה פיתוח', synced: true },
-    yossi:  { cl: 'yossi',  dd: '20', mon: 'ספט׳', date: '20/09/2026', topic: 'עדכון תוכנית אימון', time: '11:00', dur: 30, platform: 'טלפון' },
+    michal: { cl: 'michal', dd: '14', mon: 'ספט׳', date: '14/09/2026', topic: 'לקיחת היקפים + תמונות', time: '17:30', dur: 45, platform: 'פרונטלי', place: 'הרצליה פיתוח', synced: true },
+    yossi:  { cl: 'yossi',  dd: '20', mon: 'ספט׳', date: '20/09/2026', topic: 'עדכון תוכנית אימונים', time: '11:00', dur: 30, platform: 'טלפון' },
     daniel: { cl: 'daniel', dd: '21', mon: 'ספט׳', date: '21/09/2026', topic: 'בדיקת התקדמות + עדכון תפריט', time: '10:00', dur: 60, platform: 'טלפון' },
     danielrec: { cl: 'daniel', dd: '14', mon: 'ספט׳', date: '14/09/2026', topic: 'פגישת מעקב', time: '10:00', dur: 30, platform: 'טלפון', footer: 'פגישה קבועה, כל שבוע. יש עוד 8 כאלה ביומן.' },
     orh:    { cl: 'or',     dd: '26', mon: 'אוג׳', date: '26/08/2026', topic: 'בדיקת התקדמות חודשית', time: '09:00', dur: 45, platform: 'טלפון', past: true },
     danielh:{ cl: 'daniel', dd: '10', mon: 'אוג׳', date: '10/08/2026', topic: 'מדידות + עדכון תפריט', time: '10:00', dur: 60, platform: 'טלפון', past: true }
   };
-  var trainerPresets = ['עדכנתי לך את התפריט — תיכנס לטאב תזונה', 'תזכור לעדכן משקל היום', 'כל הכבוד על השבוע 💪'];
+  var trainerPresets = ['עדכנתי לך את התפריט — תיכנס ללשונית תזונה', 'תזכור לעדכן משקל היום', 'כל הכבוד על השבוע 💪'];
   var traineePresets = ['תודה! הבנתי את ההנחיות 💪', 'סיימתי את הצהריים, היה טעים', 'אפשר להזיז את הפגישה לשבוע הבא?'];
   var WEIGHTS = [79.0, 78.4, 77.9, 77.3, 76.8];                       // שקילה שבועית, כמו שהמאמן ביקש
   var WDATES = ['05/08', '12/08', '19/08', '26/08', '02/09'];
@@ -357,7 +357,7 @@
         } else if (tab === 'connection') {
           body = (S.traineeRequestSent ? '<h3 class="n-psec">בקשות</h3>' + requestCard2({ cl: cl, off: 2, status: 'ממתין לאישורך', topic: 'עדכון תפריט', time: '18:00', dur: 30, platform: 'טלפון', received: dm(0) + ' · ' + now(), act: 'sheet:coord2' }) : '') +
             '<h3 class="n-psec">פגישה קרובה</h3>' + meetingCard2('daniel', { tags: S.attendance ? tag('אישר הגעה ✓', 'ok') : '' }) +
-            '<h3 class="n-psec later">פגישה חוזרת</h3><div class="k-infobox"><div class="k-row-ic">' + icon('repeat', 'bi v-coach') + '<b>כל שבוע · ' + MEETINGS.danielrec.wd + ' · 10:00 · טלפון</b></div></div>' +
+            '<h3 class="n-psec later">פגישה קבועה</h3><div class="k-infobox"><div class="k-row-ic">' + icon('repeat', 'bi v-coach') + '<b>כל שבוע · ' + MEETINGS.danielrec.wd + ' · 10:00 · טלפון</b></div></div>' +
             '<h3 class="n-psec later">תזכורת קצרה</h3><div class="k-infobox"><small class="k-hint center">הערה פרטית שלך על המתאמן. הוא לא רואה אותה.</small><p class="k-center">לוודא עדכון משקל לפני הפגישה</p></div>';
         } else {
           body = '<h3 class="n-psec">מבנה תשלום</h3><div class="n-card">' + facts([['סכום תשלום', '800 ₪'], ['מועד התשלום', '15/' + two(dayAt(0).getMonth() + 1) + '/' + dayAt(0).getFullYear()], ['שולם', S.danielPaid ? '800 ₪' : '0 ₪'], ['חוב מחודשים קודמים', '0 ₪']], 2) +
@@ -396,7 +396,7 @@
             '<div class="k-gap8"></div>' + sectionTitle('פגישות קבועות') + meetingCard2('danielrec');
         } else if (cat === 'requests') {
           var f = ph.reqFilter || 'trainees';
-          body = '<div class="n-segrow">' + seg([['trainees', 'בקשות מתאמנים', requestsCount()], ['mine', 'בקשות שלי', 1]], f, 'mseg') + '</div>' +
+          body = '<div class="n-segrow">' + seg([['trainees', 'בקשות מתאמנים', requestsCount()], ['mine', 'הבקשות שלי', 1]], f, 'mseg') + '</div>' +
             (f === 'trainees'
               ? (S.traineeRequestSent ? requestCard2({ cl: client('daniel'), off: 2, status: 'ממתין לאישורך', topic: 'עדכון תפריט', time: '18:00', dur: 30, platform: 'טלפון', received: dm(0) + ' · ' + now(), act: 'sheet:coord2' }) : '') +
                 (S.ronPending ? requestCard2({ cl: client('ron'), off: 1, status: 'ממתין לאישורך', topic: 'עדכון תוכנית אימונים', time: '08:30', dur: 30, platform: 'טלפון', received: dm(-1) + ' · 09:40' }) : '') +
@@ -638,7 +638,7 @@
     if (kind === 'addClient') return formSheet('הוספת מתאמן חדש', labeled('שם מלא', 'נועה ברק', '') + labeled('תאריך תחילת ליווי', '09/09/2026', '') + primary('שמירה', 'sheetdone:נועה נוספה — עכשיו הפרטים שלה', 'coach'));
     if (kind === 'newMeeting') return formSheet('שליחת הצעת פגישה', '<p class="k-lblp">בחר מתאמן:</p>' + CLIENTS.map(function (cl) { return '<button class="k-pick" data-act="sheetdone:ההצעה נשלחה ל' + cl.name.split(' ')[0] + '">' + cav(cl, 40, 'trainee') + '<b>' + cl.name + '</b>' + icon('chev-l', 'bi v-faint') + '</button>'; }).join(''));
     if (kind === 'newChat') return formSheet('שיחה חדשה', '<p class="k-lblp">בחר מתאמן:</p><button class="k-pick" data-act="sheetdone:נפתחה שיחה עם יוסי">' + cav(client('yossi'), 40, 'trainee') + '<b>יוסי מזרחי</b>' + icon('chev-l', 'bi v-faint') + '</button>');
-    if (kind === 'pay') return formSheet('רישום תשלום חדש', labeled('אמצעי תשלום', 'ביט', '') + labeled('לאיזה חודש', 'ספטמבר 2026 (החודש)', '') + labeled('תאריך תשלום (אופציונלי)', '09/09/2026', '') + primary('שמור', 'paysave', 'coach'));
+    if (kind === 'pay') return formSheet('רישום תשלום חדש', labeled('אמצעי תשלום', 'ביט', '') + labeled('לאיזה חודש', 'ספטמבר 2026 (החודש)', '') + labeled('תאריך תשלום (לא חובה)', '09/09/2026', '') + primary('שמור', 'paysave', 'coach'));
     return '';
   }
 
@@ -667,7 +667,7 @@
     var lab = ph.root.parentNode.querySelector('.flip-btn');
     if (lab) lab.querySelector('span').textContent = ph.side === 'trainer' ? 'לממשק המתאמן' : 'לממשק המאמן';
     ph.root.setAttribute('data-side', ph.side);
-    ph.root.setAttribute('aria-label', 'הדגמה אינטראקטיבית של ' + (ph.side === 'trainer' ? 'ממשק המאמן' : 'ממשק המתאמן'));
+    ph.root.setAttribute('aria-label', 'הדגמה חיה של ' + (ph.side === 'trainer' ? 'ממשק המאמן' : 'ממשק המתאמן'));
     syncMore(ph);
   }
   // הכפתור מופיע רק כשבאמת יש עוד מה לראות, ומתהפך לחזרה למעלה בסוף המסך
@@ -910,7 +910,7 @@
     else if (p[0] === 'choose') { var key = p[1] + ':' + p[2]; S.choice[key] = S.choice[key] === +p[3] ? undefined : +p[3]; }
     else if (p[0] === 'xm') { ph.openMeal = ph.openMeal === +p[1] ? -1 : +p[1]; }
     else if (p[0] === 'xw') { ph.openWo = ph.openWo === +p[1] ? -1 : +p[1]; }
-    else if (p[0] === 'xp') { if (p[1] === 'wo') ph.openPwo = !ph.openPwo; else if (p[1] === 'me') ph.openMe = !ph.openMe; else ph.hint = 'טאב התזונה נשאר פתוח בהדגמה'; }
+    else if (p[0] === 'xp') { if (p[1] === 'wo') ph.openPwo = !ph.openPwo; else if (p[1] === 'me') ph.openMe = !ph.openMe; else ph.hint = 'לשונית התזונה נשארת פתוחה בהדגמה'; }
     else if (p[0] === 'cfilter') { ph.clientsNeeds = !ph.clientsNeeds; ph.scrollTop = 0; }
     else if (p[0] === 'htile') { ph.homeTile = p[1]; }                                   // מסך הבית של המאמן: איזה מונה פתוח
     else if (p[0] === 'ttile') { ph.tTile = p[1]; if (ph.screen !== 'today') { ph.screen = 'today'; ph.scrollTop = 0; } }   // ושל המתאמן
