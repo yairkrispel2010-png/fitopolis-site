@@ -344,7 +344,7 @@ p.k-center { display: block; margin: 0; }
 .k-cat.on { background: var(--coach); color: #fff; } .k-cat.on.v-trainee { background: var(--trainee); color: var(--onTrainee); }
 .k-catbar:not(.is-open) .k-cat:not(.on) { display: none; }
 
-/* פרופיל הלקוח */
+/* פרופיל המתאמן */
 .k-profile { display: flex; flex-direction: column; min-height: 100%; }
 .k-phead { display: flex; align-items: center; gap: calc(4px * var(--k)); padding: calc(8px * var(--k)) calc(16px * var(--k)) calc(4px * var(--k)) calc(8px * var(--k)); }
 .k-phead b { flex: 1; font-family: var(--fd); font-weight: 600; font-size: calc(20px * var(--k)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -791,7 +791,7 @@ p.k-center { display: block; margin: 0; }
 .n-arch { flex: none; width: calc(46px * var(--k)); height: calc(46px * var(--k)); border-radius: calc(16px * var(--k)); background: var(--card); border: 1px solid var(--border); box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); }
 .n-arch svg { width: calc(22px * var(--k)); height: calc(22px * var(--k)); }
 
-/* כרטיס (app_card) וכרטיס הלקוח (client_card) */
+/* כרטיס (app_card) וכרטיס המתאמן (client_card) */
 .n-card { background: var(--card); border: 1px solid var(--border); border-radius: calc(18px * var(--k)); box-shadow: var(--sh-card); padding: calc(20px * var(--k)); margin-bottom: calc(16px * var(--k)); box-sizing: border-box; }
 .n-ctop { display: flex; align-items: center; gap: calc(16px * var(--k)); }
 .n-ctop .name { flex: 1 0 auto; font-family: var(--fd); font-weight: 600; font-size: calc(20px * var(--k)); line-height: 1.25; white-space: nowrap; text-align: start; }
@@ -854,7 +854,7 @@ p.k-center { display: block; margin: 0; }
 .k-cat .bi { width: calc(18px * var(--k)); height: calc(18px * var(--k)); }
 .n-catwrap { display: flex; justify-content: center; margin-bottom: calc(12px * var(--k)); }
 
-/* דף הלקוח (client_profile_screen) */
+/* דף המתאמן (client_profile_screen) */
 .n-phead { display: flex; align-items: center; gap: calc(4px * var(--k)); padding: calc(8px * var(--k)) calc(16px * var(--k)) calc(4px * var(--k)) calc(8px * var(--k)); }
 .n-phead .back { width: calc(48px * var(--k)); height: calc(48px * var(--k)); display: inline-flex; align-items: center; justify-content: center; color: var(--ink); flex: none; }
 .n-phead .back svg, .n-chead .back svg { width: calc(24px * var(--k)); height: calc(24px * var(--k)); transform: scaleX(-1); }   /* arrow_back ב-RTL מצביע ימינה */

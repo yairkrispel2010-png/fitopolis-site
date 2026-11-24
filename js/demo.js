@@ -373,7 +373,7 @@
           { cl: client('ron'), pv: 'תיאום פגישה · ' + (S.ronPending ? 'ממתין לאישורך' : 'אושרה ✓'), t: 'אתמול', n: S.ronUnread },
           { cl: client('or'), pv: 'סיימתי את האימון של היום, היה קשה 😅', t: 'אתמול', n: 0 },
           { cl: client('michal'), pv: 'אישרתי את הפגישה ליום ' + MEETINGS.michal.wd + ' 👍', t: '09:12', n: 0 },
-          { cl: client('shira'), pv: 'תיאום פגישה · הצעת חלופית - ממתין לאישור', t: 'אתמול', n: 0 }
+          { cl: client('shira'), pv: 'תיאום פגישה · הצעה חלופית - ממתין לאישור', t: 'אתמול', n: 0 }
         ];
         var unreadOnly = ph.chatSeg === 'unread', nUnread = rows.filter(function (r) { return r.n; }).length;
         return screenTitle("צ'אט") + '<div class="k-gap8"></div>' + '<div class="n-segrow">' + seg([['all', 'הכל', rows.length], ['unread', 'לא נקראו', nUnread]], unreadOnly ? 'unread' : 'all', 'chatseg') + '</div>' +
@@ -400,7 +400,7 @@
             (f === 'trainees'
               ? (S.traineeRequestSent ? requestCard2({ cl: client('daniel'), off: 2, status: 'ממתין לאישורך', topic: 'עדכון תפריט', time: '18:00', dur: 30, platform: 'טלפון', received: dm(0) + ' · ' + now(), act: 'sheet:coord2' }) : '') +
                 (S.ronPending ? requestCard2({ cl: client('ron'), off: 1, status: 'ממתין לאישורך', topic: 'עדכון תוכנית אימונים', time: '08:30', dur: 30, platform: 'טלפון', received: dm(-1) + ' · 09:40' }) : '') +
-                requestCard2({ cl: client('shira'), off: 5, status: 'הצעת חלופית - ממתין לאישורך', topic: 'פגישת היכרות + מדידות ראשוניות', time: '11:00', dur: 60, platform: 'פרונטלי', place: 'הסטודיו, רחוב הרצל 5', received: dm(-1) + ' · 14:20', act: 'noop' })
+                requestCard2({ cl: client('shira'), off: 5, status: 'הצעה חלופית - ממתין לאישורך', topic: 'פגישת היכרות + מדידות ראשוניות', time: '11:00', dur: 60, platform: 'פרונטלי', place: 'הסטודיו, רחוב הרצל 5', received: dm(-1) + ' · 14:20', act: 'noop' })
               : requestCard2({ cl: client('daniel'), off: 3, status: S.proposalApproved ? 'אושרה ✓' : 'ממתין לאישור המתאמן', cls: S.proposalApproved ? 'ok' : 'big', topic: 'בדיקת התקדמות', time: '17:30', dur: 45, platform: 'טלפון', received: dm(0) + ' · 13:55', act: 'noop' }));
         } else {
           body = search('חפש לפי שם...') + meetingCard2('orh', { tags: tag('התקיימה', 'ok'), act: 'noop' }) + meetingCard2('danielh', { tags: tag('התקיימה', 'ok'), act: 'noop' });
